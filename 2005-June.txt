@@ -1,0 +1,4305 @@
+From nobody at sheep.berlios.de  Thu Jun 16 01:47:32 2005
+From: nobody at sheep.berlios.de (lloydkinsella)
+Date: Thu, 16 Jun 2005 01:47:32 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.RTL Globals.pas,1.4,1.5 SysUtils.pas,1.10,1.11 System.pas,1.8,1.9 Types.pas,1.8,1.9
+Message-ID: <200506152347.j5FNlWI31252@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv11283/ShineOn.RTL
+
+Modified Files:
+	Globals.pas SysUtils.pas System.pas Types.pas 
+Log Message:
+
+
+Index: Globals.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Globals.pas,v
+retrieving revision 1.4
+retrieving revision 1.5
+diff -C2 -d -r1.4 -r1.5
+*** Globals.pas	29 May 2005 19:47:57 -0000	1.4
+--- Globals.pas	15 Jun 2005 23:47:26 -0000	1.5
+***************
+*** 8,12 ****
+--- 8,14 ----
+  
+  // $Id$
++ 
+  namespace ShineOn.RTL;
++ 
+  // NOTES FOR THIS UNIT:
+  // This unit should only contain global variables and constants (except string constants used in messages which
+***************
+*** 20,23 ****
+--- 22,26 ----
+  
+  interface
++ 
+  uses
+    System.Windows.Forms;
+***************
+*** 28,45 ****
+      class var ApplicationMainForm:Form := nil; // used by TThread.Synchronize();
+    public
+!     class const MaxInt:integer = Int16.MaxValue;
+!     class const MaxLongint:Longint = UInt32.MaxValue;
+      class const MaxListSize = MaxInt div 16;
+!     class const MaxComp:Int64 = Int64.MaxValue;
+      class const MaxDouble: Double = Double.MaxValue;
+      class const MaxExtended: Extended = Extended.MaxValue;
+!     class const MaxSingle:Single = Single.MaxValue;
+!     class const MinComp:Int64 = Int64.MinValue;
+      class const MinDouble: Double = Double.MinValue;
+      class const MinExtended: Extended = Extended.MinValue;
+      class const MinSingle: Single = Single.MinValue;
+      // TODO: figure out how to declare these as consts isto vars:
+!     class var MaxDateTime:TDateTime := new TDateTime(2958465.99999);
+!     class var MinDateTime:TDateTime := new TDateTime(-657434.0);
+      class const soFromBeginning = 0;
+      class const soFromCurrent = 1;
+--- 31,48 ----
+      class var ApplicationMainForm:Form := nil; // used by TThread.Synchronize();
+    public
+!     class const MaxInt: Integer = Int16.MaxValue;
+!     class const MaxLongint: Longint = UInt32.MaxValue;
+      class const MaxListSize = MaxInt div 16;
+!     class const MaxComp: Int64 = Int64.MaxValue;
+      class const MaxDouble: Double = Double.MaxValue;
+      class const MaxExtended: Extended = Extended.MaxValue;
+!     class const MaxSingle: Single = Single.MaxValue;
+!     class const MinComp: Int64 = Int64.MinValue;
+      class const MinDouble: Double = Double.MinValue;
+      class const MinExtended: Extended = Extended.MinValue;
+      class const MinSingle: Single = Single.MinValue;
+      // TODO: figure out how to declare these as consts isto vars:
+!     class var MaxDateTime: TDateTime := new TDateTime(MaxDateTimeAsDouble);
+!     class var MinDateTime: TDateTime := new TDateTime(MinDateTimeAsDouble);
+      class const soFromBeginning = 0;
+      class const soFromCurrent = 1;
+***************
+*** 114,117 ****
+--- 117,122 ----
+      class const bl128 = TBucketListSizes.BucketSize128;
+      class const bl256 = TBucketListSizes.BucketSize256;
++     class const loInvariantLocale = TLocaleOptions.InvariantLocale;
++     class const loUserLocale = TLocaleOptions.UserLocale;
+    end;
+  
+
+Index: SysUtils.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/SysUtils.pas,v
+retrieving revision 1.10
+retrieving revision 1.11
+diff -C2 -d -r1.10 -r1.11
+*** SysUtils.pas	4 Jun 2005 18:01:35 -0000	1.10
+--- SysUtils.pas	15 Jun 2005 23:47:29 -0000	1.11
+***************
+*** 9,31 ****
+  // $Id$
+  
+  namespace ShineOn.RTL;
+- // HISTORY:
+- // May 10 2005   :   Jeroen Vandezande   : Implemented StringReplace
+  
+  interface
+! uses
+!   System.Globalization;
+  
+  type
+-   EShineOnError = public class(Exception);
+    TReplaceFlags = public set of (ReplaceAll, IgnoreCase);
+    
+  type
+    SysUtils = public sealed class
+    public
+      class function AnsiUpperCase(S: string): string;
+      class function AnsiLowerCase(S: string): string;
+!     class function AnsiCompareStr(S1, S2: string): Integer;
+!     class function AnsiSameStr(S1, S2: string): Boolean;
+      class function AnsiCompareText(S1, S2: string): Integer;
+      class function AnsiSameText(S1, S2: string): Boolean;
+--- 9,123 ----
+  // $Id$
+  
++ // History:
++ //
++ // 2005-05-10   :   Jeroen Vandezande   :   Implemented StringReplace
++ // 2005-06-04   :   Lloyd Kinsella      :   More complete implementation of TDateTime
++ // 2005-06-05   :   Lloyd Kinsella      :   Moved NotImplemented to System
++ //                                          Implemented a wad of routines...
++ 
+  namespace ShineOn.RTL;
+  
+  interface
+! 
+! uses System,
+!      System.Collections,
+!      System.Globalization,
+!      System.IO,
+!      System.Text,
+!      System.Threading,
+!      System.Windows.Forms;
+  
+  type
+    TReplaceFlags = public set of (ReplaceAll, IgnoreCase);
+    
++   SeparatorType = public string;
++ 
++   TSysLocale = public record
++     DefaultLCID: LCID;
++     PriLangID: LANGID;
++     SubLangID: LANGID;
++     FarEast: Boolean;
++     MiddleEast: Boolean;
++   end;
++   
++   TFormatSettings = public record
++     CurrencyFormat: Byte;
++     NegCurrFormat: Byte;
++     ThousandSeparator: SeparatorType;
++     DecimalSeparator: SeparatorType;
++     CurrencyDecimals: Byte;
++     DateSeparator: SeparatorType;
++     TimeSeparator: SeparatorType;
++     ListSeparator: SeparatorType;
++     CurrencyString: string;
++     ShortDateFormat: string;
++     LongDateFormat: string;
++     TimeAMString: string;
++     TimePMString: string;
++     ShortTimeFormat: string;
++     LongTimeFormat: string;
++     ShortMonthNames: array [1..12] of string;
++     LongMonthNames: array [1..12] of string;
++     ShortDayNames: array [1..7] of string;
++     LongDayNames: array [1..7] of string;
++     TwoDigitYearCenturyWindow: Word;
++   end;
++ 
++ // Should these be members of the SysUtils class? - LK
++ var
++   SysLocale: TSysLocale;
++ 
++   CurrencyString: string;
++   CurrencyFormat: System.Byte;
++   NegCurrFormat: Byte;
++   ThousandSeparator: SeparatorType;
++   DecimalSeparator: SeparatorType;
++   CurrencyDecimals: Byte;
++   DateSeparator: SeparatorType;
++   ShortDateFormat: string;
++   LongDateFormat: string;
++   TimeSeparator: SeparatorType;
++   TimeAMString: string;
++   TimePMString: string;
++   ShortTimeFormat: string;
++   LongTimeFormat: string;
++   ShortMonthNames: array [1..12] of string;
++   LongMonthNames: array [1..12] of string;
++   ShortDayNames: array [1..7] of string;
++   LongDayNames: array [1..7] of string;
++   TwoDigitYearCenturyWindow: Word;
++   ListSeparator: SeparatorType;
++ 
++ type
++   TLocaleOptions = public (InvariantLocale, UserLocale);
++   
+  type
+    SysUtils = public sealed class
++   private
++     class function _CompareText(const S1, S2: string; Culture: CultureInfo): Integer;
+    public
++     class function UpperCase(const S: string): string; 
++     class function UpperCase(const S: string; LocaleOptions: TLocaleOptions): string; 
++ 
++     class function LowerCase(const S: string): string;
++     class function LowerCase(const S: string; LocaleOptions: TLocaleOptions): string; 
++ 
++     class function CompareStr(const S1, S2: string): Integer; 
++     class function CompareStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer; 
++ 
++     class function SameStr(const S1, S2: string): Boolean; 
++     class function SameStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean; 
++ 
++     class function CompareText(const S1, S2: string): Integer; 
++     class function CompareText(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer; 
++ 
++     class function SameText(const S1, S2: string): Boolean; 
++     class function SameText(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean; 
++ 
+      class function AnsiUpperCase(S: string): string;
+      class function AnsiLowerCase(S: string): string;
+!     
+!     class function AnsiCompareStr(S1, S2: string): Integer;  
+!     class function AnsiSameStr(S1, S2: string): Boolean;  
+      class function AnsiCompareText(S1, S2: string): Integer;
+      class function AnsiSameText(S1, S2: string): Boolean;
+***************
+*** 38,41 ****
+--- 130,134 ----
+      class function AnsiLastChar(S: string): string;
+      class function AnsiStrLastChar(P: string): string;
++     
+      class function WideUpperCase(S: WideString): WideString;
+      class function WideLowerCase(S: WideString): WideString;
+***************
+*** 44,53 ****
+      class function WideCompareText(S1, S2: WideString): Integer;
+      class function WideSameText(S1, S2: WideString): Boolean;
+      class function Trim(S: string): string; 
+      class function TrimLeft(S: string): string; 
+      class function TrimRight(S: string): string; 
+!     class function AnsiQuotedStr(S: string; AQuote: Char): string;
+!     class function AnsiExtractQuotedStr(var Src: string; AQuote: Char): string;
+!     class function AnsiDequotedStr(S: string; AQuote: Char): string;
+      class function IntToStr(Value: Integer): string; 
+      class function IntToHex(Value: Integer; Digits: Integer): string; 
+--- 137,160 ----
+      class function WideCompareText(S1, S2: WideString): Integer;
+      class function WideSameText(S1, S2: WideString): Boolean;
++     
+      class function Trim(S: string): string; 
+      class function TrimLeft(S: string): string; 
+      class function TrimRight(S: string): string; 
+!     
+!     class function AnsiPos(const SubS, S: string): Integer;
+!     
+!     class function QuotedStr(const S: string): string;
+!     class function QuotedStr(const S: string; QuoteChar: Char): string;
+!     
+!     class function AnsiQuotedStr(const S: string; Quote: Char): string;
+!     
+!     class function DequotedStr(const S: string): string;
+!     class function DequotedStr(const S: string; QuoteChar: Char): string;
+!     class function DequotedStr(const S: string; QuoteChar: Char; var p: integer): string;
+!     
+!     class function AnsiDequotedStr(const S: string; Quote: Char): string;
+!     class function AdjustLineBreaks(const S: string; Style: TTextLineBreakStyle): string;
+!     class function IsValidIdent(const Ident: string; AllowDots: Boolean): Boolean;    
+! 
+      class function IntToStr(Value: Integer): string; 
+      class function IntToHex(Value: Integer; Digits: Integer): string; 
+***************
+*** 102,106 ****
+      class function AnsiLowerCaseFileName(S: string): string;
+      class function AnsiUpperCaseFileName(S: string): string;
+-     class function AnsiPos(Substr, S: string): Integer;
+      class function AnsiStrPos(Str, SubStr: string): string;
+      class function AnsiStrRScan(Str: string; Chr: Char): string;
+--- 209,212 ----
+***************
+*** 110,113 ****
+--- 216,237 ----
+    end;
+    
++ function UpperCase(const S: string): string;
++ function UpperCase(const S: string; LocaleOptions: TLocaleOptions): string;
++ 
++ function LowerCase(const S: string): string;
++ function LowerCase(const S: string; LocaleOptions: TLocaleOptions): string;
++ 
++ function CompareStr(const S1, S2: string): Integer;
++ function CompareStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer;
++ 
++ function SameStr(const S1, S2: string): Boolean;
++ function SameStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean;
++ 
++ function CompareText(const S1, S2: string): Integer;
++ function CompareText(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer;
++ 
++ function SameText(const S1, S2: string): Boolean;
++ function SameText(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean;
++    
+  function AnsiUpperCase(S: string): string;
+  function AnsiLowerCase(S: string): string;
+***************
+*** 124,127 ****
+--- 248,252 ----
+  function AnsiLastChar(S: string): string;
+  function AnsiStrLastChar(P: string): string;
++ 
+  function WideUpperCase(S: WideString): WideString;
+  function WideLowerCase(S: WideString): WideString;
+***************
+*** 130,139 ****
+  function WideCompareText(S1, S2: WideString): Integer;
+  function WideSameText(S1, S2: WideString): Boolean;
+  function Trim(S: string): string; 
+  function TrimLeft(S: string): string; 
+  function TrimRight(S: string): string; 
+! function AnsiQuotedStr(S: string; AQuote: Char): string;
+! function AnsiExtractQuotedStr(var Src: string; AQuote: Char): string;
+! function AnsiDequotedStr(S: string; AQuote: Char): string;
+  function IntToStr(Value: Integer): string; 
+  function IntToHex(Value: Integer; Digits: Integer): string; 
+--- 255,279 ----
+  function WideCompareText(S1, S2: WideString): Integer;
+  function WideSameText(S1, S2: WideString): Boolean;
++ 
+  function Trim(S: string): string; 
+  function TrimLeft(S: string): string; 
+  function TrimRight(S: string): string; 
+! 
+! function AnsiPos(const SubS, S: string): Integer;
+! 
+! function QuotedStr(const S: string): string;
+! function QuotedStr(const S: string; QuoteChar: Char): string;
+! 
+! function AnsiQuotedStr(const S: string; Quote: Char): string;
+! 
+! function DequotedStr(const S: string): string;
+! function DequotedStr(const S: string; QuoteChar: Char): string;
+! function DequotedStr(const S: string; QuoteChar: Char; var p: integer): string;
+! 
+! function AnsiDequotedStr(const S: string; Quote: Char): string;
+! 
+! function AdjustLineBreaks(const S: string; Style: TTextLineBreakStyle): string;
+! function IsValidIdent(const Ident: string; AllowDots: Boolean): Boolean;
+! 
+  function IntToStr(Value: Integer): string; 
+  function IntToHex(Value: Integer; Digits: Integer): string; 
+***************
+*** 188,192 ****
+  function AnsiLowerCaseFileName(S: string): string;
+  function AnsiUpperCaseFileName(S: string): string;
+- function AnsiPos(Substr, S: string): Integer;
+  function AnsiStrPos(Str, SubStr: string): string;
+  function AnsiStrRScan(Str: string; Chr: Char): string;
+--- 328,331 ----
+***************
+*** 195,210 ****
+  function GetEnvironmentVariable(Name: string): string;   
+  
+-  
+- procedure NotImplemented;
+- 
+  implementation
+  uses
+    System.Text, System.Text.RegularExpressions;
+!   
+! procedure NotImplemented;
+  begin
+!   {$IFNDEF SHINEON_DISABLE_NOTIMPLEMENTED_ERROR}
+!   raise EShineOnError.Create('Not implemented');
+!   {$ENDIF} 
+  end;
+  
+--- 334,470 ----
+  function GetEnvironmentVariable(Name: string): string;   
+  
+  implementation
++ 
+  uses
+    System.Text, System.Text.RegularExpressions;
+! 
+! class function SysUtils.UpperCase(const S: string): string;
+  begin
+!   if S <> nil then
+!     Result := S.ToUpper
+!   else
+!     Result := '';
+! end;
+! 
+! class function SysUtils.UpperCase(const S: string; LocaleOptions: TLocaleOptions): string;
+! var
+!   Culture: CultureInfo;
+! begin
+!   if S <> nil then
+!     begin
+!       Culture := System.Threading.Thread.CurrentThread.CurrentCulture;
+!       
+!       if LocaleOptions = TLocaleOptions.UserLocale then
+!         Result := S.ToUpper
+!       else
+!         Result := S.ToUpper(Culture.InvariantCulture)
+!     end
+!   else
+!     Result := '';
+! end;
+! 
+! class function SysUtils.LowerCase(const S: string): string;
+! begin
+!   if S <> nil then
+!     Result := S.ToLower
+!   else
+!     Result := '';
+! end;
+! 
+! class function SysUtils.LowerCase(const S: string; LocaleOptions: TLocaleOptions): string;
+! var
+!   Culture: CultureInfo;
+! begin
+!   if S <> nil then
+!     begin
+!       Culture := System.Threading.Thread.CurrentThread.CurrentCulture;
+! 
+!       if LocaleOptions = TLocaleOptions.UserLocale then
+!         Result := S.ToLower
+!       else
+!         Result := S.ToLower(Culture.InvariantCulture)
+!     end
+!   else
+!     Result := '';
+! end;
+! 
+! class function SysUtils.CompareStr(const S1, S2: string): Integer;
+! begin
+!   Result := System.String.Compare(S1,S2,False);
+! end;
+! 
+! class function SysUtils.CompareStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer;
+! var
+!   Culture: CultureInfo;
+! begin
+!   Culture := System.Threading.Thread.CurrentThread.CurrentCulture;
+! 
+!   if LocaleOptions = TLocaleOptions.UserLocale then
+!     Result := System.String.Compare(S1, S2, False)
+!   else
+!     Result := System.String.Compare(S1,S2,False,Culture.InvariantCulture);
+! end;
+! 
+! class function SysUtils.SameStr(const S1, S2: string): Boolean;
+! begin
+!   Result := (CompareStr(S1,S2) = 0);
+! end;
+! 
+! class function SysUtils.SameStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean;
+! begin
+!   Result := (CompareStr(S1,S2,LocaleOptions) = 0);
+! end;
+! 
+! class function SysUtils._CompareText(const S1, S2: string; Culture: CultureInfo): Integer;
+! var
+!   I, LA, LB: Integer;
+! begin
+!   LA := Length(S1);
+!   LB := Length(S2);
+! 
+!   for I := 1 to LA do
+!     begin
+!       if I > LB then
+!         begin
+!           Result := 1;
+!           Exit;
+!         end;
+! 
+!       Result := Ord(System.Char.ToUpper(S1[I],Culture)) - Ord(System.Char.ToUpper(S2[I],Culture));
+! 
+!       if Result <> 0 then Exit;
+!     end;
+! 
+!   Result := LA - LB;
+! end;
+! 
+! class function SysUtils.CompareText(const S1, S2: string): Integer;
+! var
+!   Culture: CultureInfo;
+! begin
+!   Culture := System.Threading.Thread.CurrentThread.CurrentCulture;
+!   Result := _CompareText(S1,S2,Culture);
+! end;
+! 
+! class function SysUtils.CompareText(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer;
+! var
+!   Culture: CultureInfo;
+! begin
+!   Culture := System.Threading.Thread.CurrentThread.CurrentCulture;
+! 
+!   if LocaleOptions = TLocaleOptions.UserLocale then
+!     Result := _CompareText(S1,S2,Culture)
+!   else
+!     Result := _CompareText(S1,S2,Culture.InvariantCulture);
+! end;
+! 
+! class function SysUtils.SameText(const S1, S2: string): Boolean;
+! begin
+!   Result := (CompareText(S1,S2) = 0);
+! end;
+! 
+! class function SysUtils.SameText(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean;
+! begin
+!   Result := (CompareText(S1,S2,LocaleOptions) = 0);
+  end;
+  
+***************
+*** 342,370 ****
+  end;
+  
+! class function SysUtils.AnsiQuotedStr(S: string; AQuote: Char): string;
+  begin
+!   if S = nil then
+!     Result := AQuote + AQuote
+!   else
+!     Result := AQuote + S.Replace(AQuote, AQuote + AQuote) + AQuote;
+  end;
+  
+! class function SysUtils.AnsiExtractQuotedStr(var Src: string; AQuote: Char): string;
+  begin
+!   if Src = nil then
+!     Result := ''
+!   else
+!   begin
+!     Src := Src.Replace(AQuote + AQuote, AQuote);
+!     if Src.StartsWith(AQuote) and Src.EndsWith(AQuote) then
+!       Src := Src.Substring(1,Src.Length-2);
+!     Result := Src;
+!   end;
+  end;
+  
+! class function SysUtils.AnsiDequotedStr(S: string; AQuote: Char): string;
+  begin
+    Result := S;
+!   AnsiExtractQuotedStr(Result, AQuote);
+  end;
+  
+--- 602,675 ----
+  end;
+  
+! class function SysUtils.AnsiPos(const SubS, S: string): Integer;
+  begin
+!   Result := Pos(SubS,S);
+  end;
+  
+! class function SysUtils.QuotedStr(const S: string): string;
+  begin
+!   Result := QuotedStr(S,'"');
+  end;
+  
+! class function SysUtils.QuotedStr(const S: string; QuoteChar: Char): string;
+! begin
+!   Result := QuoteChar + S + QuoteChar;
+! end;
+! 
+! class function SysUtils.AnsiQuotedStr(const S: string; Quote: Char): string;
+! begin
+!   Result := QuotedStr(S,Quote);
+! end;
+! 
+! class function SysUtils.DequotedStr(const S: string): string;
+! begin
+!   Result := DequotedStr(S,'"');
+! end;
+! 
+! class function SysUtils.DequotedStr(const S: string; QuoteChar: Char): string;
+! var
+!   I: Integer;
+  begin
+    Result := S;
+! 
+!   for I := 1 to Length(Result) do
+!     begin
+!       if Result[I] = QuoteChar then
+!         begin
+!           Delete(Result,I,1);
+!           Break;
+!         end;
+!     end;
+! 
+!   for I := Length(Result) downto 1 do
+!     begin
+!       if Result[I] = QuoteChar then
+!         begin
+!           Delete(Result,I,1);
+!           Break;
+!         end;
+!     end;
+! end;
+! 
+! class function SysUtils.DequotedStr(const S: string; QuoteChar: Char; var p: integer): string;
+! begin
+!   NotImplemented;
+! end;
+! 
+! class function SysUtils.AnsiDequotedStr(const S: string; Quote: Char): string;
+! begin
+!   Result := DequotedStr(S,Quote);
+! end;
+! 
+! class function SysUtils.AdjustLineBreaks(const S: string; Style: TTextLineBreakStyle): string;
+! begin
+!   NotImplemented;
+! end;
+! 
+! class function SysUtils.IsValidIdent(const Ident: string; AllowDots: Boolean): Boolean;
+! begin
+!   Result := False;
+! 
+!   NotImplemented;
+  end;
+  
+***************
+*** 753,761 ****
+  end;
+  
+- class function SysUtils.AnsiPos(Substr, S: string): Integer;
+- begin
+-   Result := Pos(SubStr, S);
+- end;
+- 
+  class function SysUtils.AnsiStrPos(Str, SubStr: string): string;
+  var i:integer;
+--- 1058,1061 ----
+***************
+*** 828,831 ****
+--- 1128,1191 ----
+  // DELPHI COMPATIBLE GLOBAL METHODS
+  
++ function UpperCase(const S: string): string;
++ begin
++   Result := ShineOn.RTL.SysUtils.UpperCase(S);
++ end;
++ 
++ function UpperCase(const S: string; LocaleOptions: TLocaleOptions): string;
++ begin
++   Result := ShineOn.RTL.SysUtils.UpperCase(S,LocaleOptions);
++ end;
++ 
++ function LowerCase(const S: string): string;
++ begin
++   Result := ShineOn.RTL.SysUtils.LowerCase(S);
++ end;
++ 
++ function LowerCase(const S: string; LocaleOptions: TLocaleOptions): string;
++ begin
++   Result := ShineOn.RTL.SysUtils.LowerCase(S,LocaleOptions);
++ end;
++ 
++ function CompareStr(const S1, S2: string): Integer;
++ begin
++   Result := ShineOn.RTL.SysUtils.CompareStr(S1,S2);
++ end;
++ 
++ function CompareStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer;
++ begin
++   Result := ShineOn.RTL.SysUtils.CompareStr(S1,S2,LocaleOptions);
++ end;
++ 
++ function SameStr(const S1, S2: string): Boolean;
++ begin
++   Result := ShineOn.RTL.SysUtils.SameStr(S1,S2);
++ end;
++ 
++ function SameStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean;
++ begin
++   Result := ShineOn.RTL.SysUtils.SameStr(S1,S2,LocaleOptions);
++ end;
++ 
++ function CompareText(const S1, S2: string): Integer;
++ begin
++   Result := ShineOn.RTL.SysUtils.CompareText(S1,S2);
++ end;
++ 
++ function CompareText(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer;
++ begin
++   Result := ShineOn.RTL.SysUtils.CompareText(S1,S2,LocaleOptions);
++ end;
++ 
++ function SameText(const S1, S2: string): Boolean;
++ begin
++   Result := ShineOn.RTL.SysUtils.SameText(S1,S2);
++ end;
++ 
++ function SameText(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean;
++ begin
++   Result := ShineOn.RTL.SysUtils.SameText(S1,S2,LocaleOptions);
++ end;
++ 
+  function AnsiUpperCase(S: string): string;
+  begin
+***************
+*** 942,961 ****
+    Result := ShineOn.RTL.SysUtils.TrimRight(S);
+  end;
+!   
+! function AnsiQuotedStr(S: string; AQuote: Char): string;
+  begin
+!   Result := ShineOn.RTL.SysUtils.AnsiQuotedStr(S, AQuote);
+  end;
+!   
+! function AnsiExtractQuotedStr(var Src: string; AQuote: Char): string;
+  begin
+!   Result := ShineOn.RTL.SysUtils.AnsiExtractQuotedStr(Src, AQuote);
+  end;
+!   
+! function AnsiDequotedStr(S: string; AQuote: Char): string;
+  begin
+!   Result := ShineOn.RTL.SysUtils.AnsiDequotedStr(S, AQuote);
+  end;
+!   
+  function IntToStr(Value: Integer): string; 
+  begin
+--- 1302,1356 ----
+    Result := ShineOn.RTL.SysUtils.TrimRight(S);
+  end;
+! 
+! function AnsiPos(const SubS, S: string): Integer;
+  begin
+!   Result := ShineOn.RTL.SysUtils.AnsiPos(SubS,S);
+  end;
+! 
+! function QuotedStr(const S: string): string;
+  begin
+!   Result := ShineOn.RTL.SysUtils.QuotedStr(S);
+  end;
+! 
+! function QuotedStr(const S: string; QuoteChar: Char): string;
+  begin
+!   Result := ShineOn.RTL.SysUtils.QuotedStr(S,QuoteChar);
+  end;
+! 
+! function AnsiQuotedStr(const S: string; Quote: Char): string;
+! begin
+!   Result := ShineOn.RTL.SysUtils.AnsiQuotedStr(S,Quote);
+! end;
+! 
+! function DequotedStr(const S: string): string;
+! begin
+!   Result := ShineOn.RTL.SysUtils.DequotedStr(S);
+! end;
+! 
+! function DequotedStr(const S: string; QuoteChar: Char): string;
+! begin
+!   Result := ShineOn.RTL.SysUtils.DequotedStr(S,QuoteChar);
+! end;
+! 
+! function DequotedStr(const S: string; QuoteChar: Char; var p: integer): string;
+! begin
+!   Result := ShineOn.RTL.SysUtils.DequotedStr(S,QuoteChar,P);
+! end;
+! 
+! function AnsiDequotedStr(const S: string; Quote: Char): string;
+! begin
+!   Result := ShineOn.RTL.SysUtils.AnsiDequotedStr(S,Quote);
+! end;
+! 
+! function AdjustLineBreaks(const S: string; Style: TTextLineBreakStyle): string;
+! begin
+!   Result := ShineOn.RTL.SysUtils.AdjustLineBreaks(S,Style);
+! end;
+! 
+! function IsValidIdent(const Ident: string; AllowDots: Boolean): Boolean;
+! begin
+!   Result := ShineOn.RTL.SysUtils.IsValidIdent(Ident,AllowDots);
+! end;
+! 
+  function IntToStr(Value: Integer): string; 
+  begin
+***************
+*** 1207,1216 ****
+    Result := ShineOn.RTL.SysUtils.AnsiUpperCaseFileName(S);
+  end;
+!   
+! function AnsiPos(Substr, S: string): Integer;
+! begin
+!   Result := ShineOn.RTL.SysUtils.AnsiPos(SubStr, S);
+! end;
+!   
+  function AnsiStrPos(Str, SubStr: string): string;
+  begin
+--- 1602,1606 ----
+    Result := ShineOn.RTL.SysUtils.AnsiUpperCaseFileName(S);
+  end;
+! 
+  function AnsiStrPos(Str, SubStr: string): string;
+  begin
+***************
+*** 1239,1242 ****
+--- 1629,1653 ----
+    
+  
++ // This class takes the place of the initialization section which isn't available
++ // in Chrome.It simply sets up all the global variables and then returns.
++ type
++   TInitializer = class
++     public
++       constructor Create;
++     end;
++     
++ var
++   InitClass: TInitializer := TInitializer.Create;
++   
++ constructor TInitializer.Create;
++ begin
++   //PathDelim  := System.IO.Path.DirectorySeparatorChar;
++   //DriveDelim := System.IO.Path.VolumeSeparatorChar;
++   //PathSep    := System.IO.Path.PathSeparator;
++ 
++   //SysUtils.GetFormatSettings;
++   
++   InitClass := nil;
++ end; 
+    
+  end.
+
+Index: System.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/System.pas,v
+retrieving revision 1.8
+retrieving revision 1.9
+diff -C2 -d -r1.8 -r1.9
+*** System.pas	4 Jun 2005 18:01:35 -0000	1.8
+--- System.pas	15 Jun 2005 23:47:29 -0000	1.9
+***************
+*** 11,15 ****
+  // History:
+  //
+! // 2005-06-04   :   Lloyd Kinsella    : Modifications to support newer TDateTime implementation
+  
+  namespace ShineOn.RTL;
+--- 11,16 ----
+  // History:
+  //
+! // 2005-06-04   :   Lloyd Kinsella    :   Modifications to support newer TDateTime implementation
+! // 2005-06-16   :   Lloyd Kinsella    :   Implemented NotImplemented as a method of the System class
+  
+  namespace ShineOn.RTL;
+***************
+*** 18,26 ****
+  
+  uses
+!   System.Globalization;  
+!   
+  type
+    System = public sealed class 
+    public
+      class function Pos(SubStr, Str:string):integer;
+      class function Concat(S1, S2:string):string;
+--- 19,31 ----
+  
+  uses
+!   System.Globalization;
+!     
+  type
++   EShineOnError = public class(Exception);
++   
+    System = public sealed class 
+    public
++     class procedure NotImplemented;
++     
+      class function Pos(SubStr, Str:string):integer;
+      class function Concat(S1, S2:string):string;
+***************
+*** 69,72 ****
+--- 74,79 ----
+    end;
+    
++ procedure NotImplemented;
++   
+  function Pos(SubStr, Str:string):integer;
+  function Concat(S1, S2:string):string;
+***************
+*** 110,113 ****
+--- 117,126 ----
+  implementation
+  
++ class procedure System.NotImplemented;
++ begin
++   {$IFNDEF SHINEON_DISABLE_NOTIMPLEMENTED_ERROR}
++   raise EShineOnError.Create('Not implemented.');
++   {$ENDIF} 
++ end;
+  
+  class function System.Pos(SubStr, Str:string):integer;
+***************
+*** 341,344 ****
+--- 354,362 ----
+  
+  // DELPHI COMPATIBLE GLOBAL METHODS
++ 
++ procedure NotImplemented;
++ begin
++   ShineOn.RTL.System.NotImplemented;
++ end;
+  
+  function Pos(SubStr, Str:string):integer;
+
+Index: Types.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Types.pas,v
+retrieving revision 1.8
+retrieving revision 1.9
+diff -C2 -d -r1.8 -r1.9
+*** Types.pas	4 Jun 2005 18:01:19 -0000	1.8
+--- Types.pas	15 Jun 2005 23:47:29 -0000	1.9
+***************
+*** 67,70 ****
+--- 67,73 ----
+    Largeint = Int64;
+    PDWORD = ^DWORD;
++   
++   LCID = Word;
++   LANGID = Word;
+  
+    PFileTime = ^TFileTime;
+
+
+
+From nobody at sheep.berlios.de  Thu Jun 16 17:01:58 2005
+From: nobody at sheep.berlios.de (lloydkinsella)
+Date: Thu, 16 Jun 2005 17:01:58 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.RTL Globals.pas,1.5,1.6 ShineOn.RTL.chrome,1.6,1.7
+Message-ID: <200506161501.j5GF1wI30360@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv21275/ShineOn.RTL
+
+Modified Files:
+	Globals.pas ShineOn.RTL.chrome 
+Log Message:
+
+
+Index: Globals.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Globals.pas,v
+retrieving revision 1.5
+retrieving revision 1.6
+diff -C2 -d -r1.5 -r1.6
+*** Globals.pas	15 Jun 2005 23:47:26 -0000	1.5
+--- Globals.pas	16 Jun 2005 15:01:55 -0000	1.6
+***************
+*** 119,122 ****
+--- 119,280 ----
+      class const loInvariantLocale = TLocaleOptions.InvariantLocale;
+      class const loUserLocale = TLocaleOptions.UserLocale;
++     
++     class const LANG_NEUTRAL: Word = TPrimaryLanguage.Neutral;
++     class const LANG_AFRIKAANS: Word = TPrimaryLanguage.Afrikaans;
++     class const LANG_ALBANIAN: Word = TPrimaryLanguage.Albanian;
++     class const LANG_ARABIC: Word = TPrimaryLanguage.Arabic;
++     class const LANG_BASQUE: Word = TPrimaryLanguage.Basque;
++     class const LANG_BELARUSIAN: Word = TPrimaryLanguage.Belarusian;
++     class const LANG_BULGARIAN: Word = TPrimaryLanguage.Bulgarian;
++     class const LANG_CATALAN: Word = TPrimaryLanguage.Catalan;
++     class const LANG_CHINESE: Word = TPrimaryLanguage.Chinese;
++     class const LANG_CROATIAN: Word = TPrimaryLanguage.Croatian;
++     class const LANG_CZECH: Word = TPrimaryLanguage.Czech;
++     class const LANG_DANISH: Word = TPrimaryLanguage.Danish;
++     class const LANG_DUTCH: Word = TPrimaryLanguage.Dutch;
++     class const LANG_ENGLISH: Word = TPrimaryLanguage.English;
++     class const LANG_ESTONIAN: Word = TPrimaryLanguage.Estonian;
++     class const LANG_FAEROESE: Word = TPrimaryLanguage.Faeroese;
++     class const LANG_FARSI: Word = TPrimaryLanguage.Farsi;
++     class const LANG_FINNISH: Word = TPrimaryLanguage.Finnish;
++     class const LANG_FRENCH: Word = TPrimaryLanguage.French;
++     class const LANG_GERMAN: Word = TPrimaryLanguage.German;
++     class const LANG_GREEK: Word = TPrimaryLanguage.Greek;
++     class const LANG_HEBREW: Word = TPrimaryLanguage.Hebrew;
++     class const LANG_HUNGARIAN: Word = TPrimaryLanguage.Hungarian;
++     class const LANG_ICELANDIC: Word = TPrimaryLanguage.Icelandic;
++     class const LANG_INDONESIAN: Word = TPrimaryLanguage.Indonesian;
++     class const LANG_ITALIAN: Word = TPrimaryLanguage.Italian;
++     class const LANG_JAPANESE: Word = TPrimaryLanguage.Japanese;
++     class const LANG_KOREAN: Word = TPrimaryLanguage.Korean;
++     class const LANG_LATVIAN: Word = TPrimaryLanguage.Latvian;
++     class const LANG_LITHUANIAN: Word = TPrimaryLanguage.Lithuanian;
++     class const LANG_NORWEGIAN: Word = TPrimaryLanguage.Norwegian;
++     class const LANG_POLISH: Word = TPrimaryLanguage.Polish;
++     class const LANG_PORTUGUESE: Word = TPrimaryLanguage.Portuguese;
++     class const LANG_ROMANIAN: Word = TPrimaryLanguage.Romanian;
++     class const LANG_RUSSIAN: Word = TPrimaryLanguage.Russian;
++     class const LANG_SERBIAN: Word = TPrimaryLanguage.Serbian;
++     class const LANG_SLOVAK: Word = TPrimaryLanguage.Slovak;
++     class const LANG_SLOVENIAN: Word = TPrimaryLanguage.Slovenian;
++     class const LANG_SPANISH: Word = TPrimaryLanguage.Spanish;
++     class const LANG_SWEDISH: Word = TPrimaryLanguage.Swedish;
++     class const LANG_THAI: Word = TPrimaryLanguage.Thai;
++     class const LANG_TURKISH: Word = TPrimaryLanguage.Turkish;
++     class const LANG_UKRAINIAN: Word = TPrimaryLanguage.Ukranian;
++     class const LANG_VIETNAMESE: Word = TPrimaryLanguage.Vietnamese;
++ 
++     class const SUBLANG_NEUTRAL: Word = TSubLanguage.Neutral;
++     class const SUBLANG_DEFAULT: Word = TSubLanguage.Default;
++     class const SUBLANG_SYS_DEFAULT: Word = TSubLanguage.SystemDefault;
++ 
++     class const SUBLANG_ARABIC_SAUDI_ARABIA: Word = TArabicSubLanguage.SaudiArabia;
++     class const SUBLANG_ARABIC_IRAQ: Word = TArabicSubLanguage.Iraq;
++     class const SUBLANG_ARABIC_EGYPT: Word = TArabicSubLanguage.Egypt;
++     class const SUBLANG_ARABIC_LIBYA: Word = TArabicSubLanguage.Libya;
++     class const SUBLANG_ARABIC_ALGERIA: Word = TArabicSubLanguage.Algeria;
++     class const SUBLANG_ARABIC_MOROCCO: Word = TArabicSubLanguage.Morocco;
++     class const SUBLANG_ARABIC_TUNISIA: Word = TArabicSubLanguage.Tunisia;
++     class const SUBLANG_ARABIC_OMAN: Word = TArabicSubLanguage.Oman;
++     class const SUBLANG_ARABIC_YEMEN: Word = TArabicSubLanguage.Yemen;
++     class const SUBLANG_ARABIC_SYRIA: Word = TArabicSubLanguage.Syria;
++     class const SUBLANG_ARABIC_JORDAN: Word = TArabicSubLanguage.Jordan;
++     class const SUBLANG_ARABIC_LEBANON: Word = TArabicSubLanguage.Lebanon;
++     class const SUBLANG_ARABIC_KUWAIT: Word = TArabicSubLanguage.Kuwait;
++     class const SUBLANG_ARABIC_UAE: Word = TArabicSubLanguage.UAE;
++     class const SUBLANG_ARABIC_BAHRAIN: Word = TArabicSubLanguage.Bahrain;
++     class const SUBLANG_ARABIC_QATAR: Word = TArabicSubLanguage.Qatar;
++ 
++     class const SUBLANG_CHINESE_TRADITIONAL: Word = TChineseSubLanguage.Traditional;
++     class const SUBLANG_CHINESE_SIMPLIFIED: Word = TChineseSubLanguage.Simplified;
++     class const SUBLANG_CHINESE_HONGKONG: Word = TChineseSubLanguage.HongKong;
++     class const SUBLANG_CHINESE_SINGAPORE: Word = TChineseSubLanguage.Singapore;
++   
++     class const SUBLANG_DUTCH: Word = TDutchSubLanguage.Dutch;
++     class const SUBLANG_DUTCH_BELGIAN: Word = TDutchSubLanguage.Belgian;
++  
++     class const SUBLANG_ENGLISH_US: Word = TEnglishSubLanguage.US;
++     class const SUBLANG_ENGLISH_UK: Word = TEnglishSubLanguage.UK;
++     class const SUBLANG_ENGLISH_AUS: Word = TEnglishSubLanguage.Australia;
++     class const SUBLANG_ENGLISH_CAN: Word = TEnglishSubLanguage.Canada;
++     class const SUBLANG_ENGLISH_NZ: Word = TEnglishSubLanguage.NewZealand;
++     class const SUBLANG_ENGLISH_EIRE: Word = TEnglishSubLanguage.Ireland;
++     class const SUBLANG_ENGLISH_SOUTH_AFRICA: Word = TEnglishSubLanguage.SouthAfrica;
++     class const SUBLANG_ENGLISH_JAMAICA: Word = TEnglishSubLanguage.Jamaica;
++     class const SUBLANG_ENGLISH_CARIBBEAN: Word = TEnglishSubLanguage.Caribbean;
++     class const SUBLANG_ENGLISH_BELIZE: Word = TEnglishSubLanguage.Belize;
++     class const SUBLANG_ENGLISH_TRINIDAD: Word = TEnglishSubLanguage.Trinidad;
++ 
++     class const SUBLANG_FRENCH: Word = TFrenchSubLanguage.French;
++     class const SUBLANG_FRENCH_BELGIAN: Word = TFrenchSubLanguage.Belgian;
++     class const SUBLANG_FRENCH_CANADIAN: Word = TFrenchSubLanguage.Canadian;
++     class const SUBLANG_FRENCH_SWISS: Word = TFrenchSubLanguage.Swiss;
++     class const SUBLANG_FRENCH_LUXEMBOURG: Word = TFrenchSubLanguage.Luxembourg;
++   
++     class const SUBLANG_GERMAN: Word = TGermanSubLanguage.German;
++     class const SUBLANG_GERMAN_SWISS: Word = TGermanSubLanguage.Swiss;
++     class const SUBLANG_GERMAN_AUSTRIAN: Word = TGermanSubLanguage.Austrian;
++     class const SUBLANG_GERMAN_LUXEMBOURG: Word = TGermanSubLanguage.Luxembourg;
++     class const SUBLANG_GERMAN_LIECHTENSTEIN: Word = TGermanSubLanguage.Liechtenstein;
++ 
++     class const SUBLANG_ITALIAN: Word = TItalianSubLanguage.Italian;
++     class const SUBLANG_ITALIAN_SWISS: Word = TItalianSubLanguage.Swiss;
++   
++     class const SUBLANG_KOREAN: Word = TKoreanSubLanguage.Korean;
++     class const SUBLANG_KOREAN_JOHAB: Word = TKoreanSubLanguage.Johab;
++   
++     class const SUBLANG_NORWEGIAN_BOKMAL: Word = TNorwegianSubLanguage.Bokmal;
++     class const SUBLANG_NORWEGIAN_NYNORSK: Word = TNorwegianSubLanguage.Nynorsk;
++   
++     class const SUBLANG_PORTUGUESE: Word = TPortugueseSubLanguage.Portuguese;
++     class const SUBLANG_PORTUGUESE_BRAZILIAN: Word = TPortugueseSubLanguage.Brazilian;
++   
++     class const SUBLANG_SERBIAN_LATIN: Word = TSerbianSubLanguage.Latin;
++     class const SUBLANG_SERBIAN_CYRILLIC: Word = TSerbianSubLanguage.Cyrillic;
++ 
++     class const SUBLANG_SPANISH: Word = TSpanishSubLanguage.Spanish;
++     class const SUBLANG_SPANISH_MEXICAN: Word = TSpanishSubLanguage.Mexican;
++     class const SUBLANG_SPANISH_MODERN: Word = TSpanishSubLanguage.Modern;
++     class const SUBLANG_SPANISH_GUATEMALA: Word = TSpanishSubLanguage.Guatemala;
++     class const SUBLANG_SPANISH_COSTA_RICA: Word = TSpanishSubLanguage.CostaRica;
++     class const SUBLANG_SPANISH_PANAMA: Word = TSpanishSubLanguage.Panama;
++     class const SUBLANG_SPANISH_DOMINICAN_REPUBLIC: Word = TSpanishSubLanguage.DominicanRepublic;
++     class const SUBLANG_SPANISH_VENEZUELA: Word = TSpanishSubLanguage.Venezuela;
++     class const SUBLANG_SPANISH_COLOMBIA: Word = TSpanishSubLanguage.Colombia;
++     class const SUBLANG_SPANISH_PERU: Word = TSpanishSubLanguage.Peru;
++     class const SUBLANG_SPANISH_ARGENTINA: Word = TSpanishSubLanguage.Argentina;
++     class const SUBLANG_SPANISH_ECUADOR: Word = TSpanishSubLanguage.Ecuador;
++     class const SUBLANG_SPANISH_CHILE: Word = TSpanishSubLanguage.Chile;
++     class const SUBLANG_SPANISH_URUGUAY: Word = TSpanishSubLanguage.Uruguay;
++     class const SUBLANG_SPANISH_PARAGUAY: Word = TSpanishSubLanguage.Paraguay;
++     class const SUBLANG_SPANISH_BOLIVIA: Word = TSpanishSubLanguage.Bolivia;
++     class const SUBLANG_SPANISH_EL_SALVADOR: Word = TSpanishSubLanguage.ElSalvador;
++     class const SUBLANG_SPANISH_HONDURAS: Word = TSpanishSubLanguage.Honduras;
++     class const SUBLANG_SPANISH_NICARAGUA: Word = TSpanishSubLanguage.Nicaragua;
++     class const SUBLANG_SPANISH_PUERTO_RICO: Word = TSpanishSubLanguage.PuertoRico;
++ 
++     class const SUBLANG_SWEDISH: Word = TSwedishSubLanguage.Sweden;
++     class const SUBLANG_SWEDISH_FINLAND: Word = TSwedishSubLanguage.Finland;
++ 
++     class const SORT_DEFAULT: Word = TLanguageSort.Default;
++ 
++     class const SORT_JAPANESE_XJIS: Word = TLanguageSort.JapaneseByXJIS;
++     class const SORT_JAPANESE_UNICODE: Word = TLanguageSort.JapaneseByUnicode;
++ 
++     class const SORT_CHINESE_BIG5: Word = TLanguageSort.ChineseByBig5;
++     class const SORT_CHINESE_PRCP: Word = TLanguageSort.ChineseByPRCP;
++     class const SORT_CHINESE_UNICODE: Word = TLanguageSort.ChineseByUnicode;
++     class const SORT_CHINESE_PRC: Word = TLanguageSort.ChineseByPRC;
++ 
++     class const SORT_KOREAN_KSC: Word = TLanguageSort.KoreanByKSC;
++     class const SORT_KOREAN_UNICODE: Word = TLanguageSort.KoreanByUnicode;
++ 
++     class const SORT_GERMAN_PHONE_BOOK: Word = TLanguageSort.GermanByPhoneBook;
++ 
++     class const LANG_SYSTEM_DEFAULT: Word = (SUBLANG_SYS_DEFAULT shl 10) or LANG_NEUTRAL;
++     class const LANG_USER_DEFAULT: Word = (SUBLANG_DEFAULT shl 10) or LANG_NEUTRAL;
++ 
++     class const LOCALE_SYSTEM_DEFAULT: Word = (SORT_DEFAULT shl 16) or LANG_SYSTEM_DEFAULT;
++     class const LOCALE_USER_DEFAULT: Word = (SORT_DEFAULT shl 16) or LANG_USER_DEFAULT;
+    end;
+  
+
+Index: ShineOn.RTL.chrome
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/ShineOn.RTL.chrome,v
+retrieving revision 1.6
+retrieving revision 1.7
+diff -C2 -d -r1.6 -r1.7
+*** ShineOn.RTL.chrome	26 May 2005 14:30:08 -0000	1.6
+--- ShineOn.RTL.chrome	16 Jun 2005 15:01:55 -0000	1.7
+***************
+*** 72,75 ****
+--- 72,79 ----
+        <BuildAction>Compile</BuildAction>
+      </File>
++     <File Filename="Globals.pas">
++       <ExcludeFromBuild>False</ExcludeFromBuild>
++       <BuildAction>Compile</BuildAction>
++     </File>
+      <File Filename="IniFiles.pas">
+        <ExcludeFromBuild>False</ExcludeFromBuild>
+***************
+*** 88,92 ****
+        <BuildAction>Compile</BuildAction>
+      </File>
+!     <File Filename="Globals.pas">
+        <ExcludeFromBuild>False</ExcludeFromBuild>
+        <BuildAction>Compile</BuildAction>
+--- 92,96 ----
+        <BuildAction>Compile</BuildAction>
+      </File>
+!     <File Filename="Langs.pas">
+        <ExcludeFromBuild>False</ExcludeFromBuild>
+        <BuildAction>Compile</BuildAction>
+
+
+
+From nobody at sheep.berlios.de  Thu Jun 16 17:05:33 2005
+From: nobody at sheep.berlios.de (lloydkinsella)
+Date: Thu, 16 Jun 2005 17:05:33 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.RTL Langs.pas,NONE,1.1
+Message-ID: <200506161505.j5GF5XI31572@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv21734/ShineOn.RTL
+
+Added Files:
+	Langs.pas 
+Log Message:
+Language types and constants
+
+--- NEW FILE: Langs.pas ---
+namespace ShineOn.RTL;
+
+interface
+  
+type
+  TPrimaryLanguage = public enum (
+    Neutral    = $00,
+    Afrikaans  = $36,
+    Albanian   = $1C,
+    Arabic     = $01,
+    Basque     = $2D,
+    Belarusian = $23,
+    Bulgarian  = $02,
+    Catalan    = $03,
+    Chinese    = $04,
+    Croatian   = $1A,
+    Czech      = $05,
+    Danish     = $06,
+    Dutch      = $13,
+    English    = $09,
+    Estonian   = $25,
+    Faeroese   = $38,
+    Farsi      = $29,
+    Finnish    = $0B,
+    French     = $0C,
+    German     = $07,
+    Greek      = $08,
+    Hebrew     = $0D,
+    Hungarian  = $0E,
+    Icelandic  = $0F,
+    Indonesian = $21,
+    Italian    = $10,
+    Japanese   = $11,
+    Korean     = $12,
+    Latvian    = $26,
+    Lithuanian = $27,
+    Norwegian  = $14,
+    Polish     = $15,
+    Portuguese = $16,
+    Romanian   = $18,
+    Russian    = $19,
+    Serbian    = $1A,
+    Slovak     = $1B,
+    Slovenian  = $24,
+    Spanish    = $0A,
+    Swedish    = $1D,
+    Thai       = $1E,
+    Turkish    = $1F,
+    Ukranian   = $22,
+    Vietnamese = $2A  
+  );
+  
+  TSubLanguage = public enum (
+    Neutral = $00,
+    Default = $01,
+    SystemDefault = $02
+  );
+  
+  TArabicSubLanguage = public enum ( 
+    SaudiArabia = $01,
+    Iraq        = $02,
+    Egypt       = $03,
+    Libya       = $04,
+    Algeria     = $05,
+    Morocco     = $06,
+    Tunisia     = $07,
+    Oman        = $08,
+    Yemen       = $09,
+    Syria       = $0A,
+    Jordan      = $0B,
+    Lebanon     = $0C,
+    Kuwait      = $0D,
+    UAE         = $0E,
+    Bahrain     = $0F,
+    Qatar       = $10
+  );
+  
+  TChineseSubLanguage = public enum (   
+    Traditional = $01,
+    Simplified  = $02,
+    HongKong    = $03,
+    Singapore   = $04
+  );
+  
+  TDutchSubLanguage = public enum (  
+    Dutch   = $01,
+    Belgian = $02
+  );
+    
+  TEnglishSubLanguage = public enum (
+    US          = $01,
+    UK          = $02,
+    Australia   = $03,
+    Canada      = $04,
+    NewZealand  = $05,
+    Ireland     = $06,
+    SouthAfrica = $07,
+    Jamaica     = $08,
+    Caribbean   = $09,
+    Belize      = $0A,
+    Trinidad    = $0B
+  );
+  
+  TFrenchSubLanguage = public enum (  
+    French     = $01,
+    Belgian    = $02,
+    Canadian   = $03,
+    Swiss      = $04,
+    Luxembourg = $05
+  );
+  
+  TGermanSubLanguage = public enum (
+    German        = $01,
+    Swiss         = $02,
+    Austrian      = $03,
+    Luxembourg    = $04,
+    Liechtenstein = $05
+  );
+
+  TItalianSubLanguage = public enum (
+    Italian = $01,
+    Swiss   = $02
+  );
+  
+  TKoreanSubLanguage = public enum (
+    Korean = $01,
+    Johab  = $02
+  );
+  
+  TNorwegianSubLanguage = public enum (
+    Bokmal  = $01,
+    Nynorsk = $02
+  );
+  
+  TPortugueseSubLanguage = public enum (
+    Portuguese = $02,
+    Brazilian  = $01
+  );
+  
+  TSerbianSubLanguage = public enum (
+    Latin    = $02,
+    Cyrillic = $03
+  );
+  
+  TSpanishSubLanguage = public enum (
+    Spanish           = $01, 
+    Mexican           = $02,
+    Modern            = $03,
+    Guatemala         = $04,
+    CostaRica         = $05,
+    Panama            = $06,
+    DominicanRepublic = $07,
+    Venezuela         = $08,
+    Colombia          = $09,
+    Peru              = $0A,
+    Argentina         = $0B,
+    Ecuador           = $0C,
+    Chile             = $0D,
+    Uruguay           = $0E,
+    Paraguay          = $0F,
+    Bolivia           = $10,
+    ElSalvador        = $11,
+    Honduras          = $12,
+    Nicaragua         = $13,
+    PuertoRico        = $14
+  );
+  
+  TSwedishSubLanguage = public enum (
+    Sweden = $01,
+    Finland = $02
+  );
+  
+  TLanguageSort = public enum (
+    Default = $0,
+    
+    JapaneseByXJIS = $0,
+    JapaneseByUnicode = $1,
+    
+    ChineseByBig5 = $0,
+    ChineseByPRCP = $0,
+    ChineseByUnicode = $1,
+    ChineseByPRC = $2,
+
+    KoreanByKSC = $0,
+    KoreanByUnicode = $1,
+    
+    GermanByPhoneBook = $1
+  );
+ 
+ 
+//
+//  Language IDs.
+//
+//  The following two combinations of primary language ID and
+//  sublanguage ID have special semantics:
+//
+//    Primary Language ID   Sublanguage ID        Result
+//    -------------------   ---------------       ------------------------
+//    LANG_NEUTRAL          SUBLANG_NEUTRAL       Language neutral
+//    LANG_NEUTRAL          SUBLANG_DEFAULT       User default language
+//    LANG_NEUTRAL          SUBLANG_SYS_DEFAULT   System default language
+//
+const
+  // Primary language ID's
+  LANG_NEUTRAL    = Globals.LANG_NEUTRAL;
+
+  LANG_AFRIKAANS  = Globals.LANG_AFRIKAANS;
+  LANG_ALBANIAN   = Globals.LANG_ALBANIAN;
+  LANG_ARABIC     = Globals.LANG_ARABIC;
+  LANG_BASQUE     = Globals.LANG_BASQUE;
+  LANG_BELARUSIAN = Globals.LANG_BELARUSIAN;
+  LANG_BULGARIAN  = Globals.LANG_BULGARIAN;
+  LANG_CATALAN    = Globals.LANG_CATALAN;
+  LANG_CHINESE    = Globals.LANG_CHINESE;
+  LANG_CROATIAN   = Globals.LANG_CROATIAN;
+  LANG_CZECH      = Globals.LANG_CZECH;
+  LANG_DANISH     = Globals.LANG_DANISH;
+  LANG_DUTCH      = Globals.LANG_DUTCH;
+  LANG_ENGLISH    = Globals.LANG_ENGLISH;
+  LANG_ESTONIAN   = Globals.LANG_ESTONIAN;
+  LANG_FAEROESE   = Globals.LANG_FAEROESE;
+  LANG_FARSI      = Globals.LANG_FARSI;
+  LANG_FINNISH    = Globals.LANG_FINNISH;
+  LANG_FRENCH     = Globals.LANG_FRENCH;
+  LANG_GERMAN     = Globals.LANG_GERMAN;
+  LANG_GREEK      = Globals.LANG_GREEK;
+  LANG_HEBREW     = Globals.LANG_HEBREW;
+  LANG_HUNGARIAN  = Globals.LANG_HUNGARIAN;
+  LANG_ICELANDIC  = Globals.LANG_ICELANDIC;
+  LANG_INDONESIAN = Globals.LANG_INDONESIAN;
+  LANG_ITALIAN    = Globals.LANG_ITALIAN;
+  LANG_JAPANESE   = Globals.LANG_JAPANESE;
+  LANG_KOREAN     = Globals.LANG_KOREAN;
+  LANG_LATVIAN    = Globals.LANG_LATVIAN;
+  LANG_LITHUANIAN = Globals.LANG_LITHUANIAN;
+  LANG_NORWEGIAN  = Globals.LANG_NORWEGIAN;
+  LANG_POLISH     = Globals.LANG_POLISH;
+  LANG_PORTUGUESE = Globals.LANG_PORTUGUESE;
+  LANG_ROMANIAN   = Globals.LANG_ROMANIAN;
+  LANG_RUSSIAN    = Globals.LANG_RUSSIAN;
+  LANG_SERBIAN    = Globals.LANG_SERBIAN;
+  LANG_SLOVAK     = Globals.LANG_SLOVAK;
+  LANG_SLOVENIAN  = Globals.LANG_SLOVENIAN;
+  LANG_SPANISH    = Globals.LANG_SPANISH;
+  LANG_SWEDISH    = Globals.LANG_SWEDISH;
+  LANG_THAI       = Globals.LANG_THAI;
+  LANG_TURKISH    = Globals.LANG_TURKISH;
+  LANG_UKRAINIAN  = Globals.LANG_UKRAINIAN;
+  LANG_VIETNAMESE = Globals.LANG_VIETNAMESE;
+
+  // Sublanguage ID's
+  SUBLANG_NEUTRAL                     = Globals.SUBLANG_NEUTRAL;
+  SUBLANG_DEFAULT                     = Globals.SUBLANG_DEFAULT;
+  SUBLANG_SYS_DEFAULT                 = Globals.SUBLANG_SYS_DEFAULT;
+
+  SUBLANG_ARABIC_SAUDI_ARABIA         = Globals.SUBLANG_ARABIC_SAUDI_ARABIA;
+  SUBLANG_ARABIC_IRAQ                 = Globals.SUBLANG_ARABIC_IRAQ;
+  SUBLANG_ARABIC_EGYPT                = Globals.SUBLANG_ARABIC_EGYPT;
+  SUBLANG_ARABIC_LIBYA                = Globals.SUBLANG_ARABIC_LIBYA;
+  SUBLANG_ARABIC_ALGERIA              = Globals.SUBLANG_ARABIC_ALGERIA;
+  SUBLANG_ARABIC_MOROCCO              = Globals.SUBLANG_ARABIC_MOROCCO;
+  SUBLANG_ARABIC_TUNISIA              = Globals.SUBLANG_ARABIC_TUNISIA;
+  SUBLANG_ARABIC_OMAN                 = Globals.SUBLANG_ARABIC_OMAN;
+  SUBLANG_ARABIC_YEMEN                = Globals.SUBLANG_ARABIC_YEMEN;
+  SUBLANG_ARABIC_SYRIA                = Globals.SUBLANG_ARABIC_SYRIA;
+  SUBLANG_ARABIC_JORDAN               = Globals.SUBLANG_ARABIC_JORDAN;
+  SUBLANG_ARABIC_LEBANON              = Globals.SUBLANG_ARABIC_LEBANON;
+  SUBLANG_ARABIC_KUWAIT               = Globals.SUBLANG_ARABIC_KUWAIT;
+  SUBLANG_ARABIC_UAE                  = Globals.SUBLANG_ARABIC_UAE;
+  SUBLANG_ARABIC_BAHRAIN              = Globals.SUBLANG_ARABIC_BAHRAIN;
+  SUBLANG_ARABIC_QATAR                = Globals.SUBLANG_ARABIC_QATAR; 
+  SUBLANG_CHINESE_TRADITIONAL         = Globals.SUBLANG_CHINESE_TRADITIONAL;
+  SUBLANG_CHINESE_SIMPLIFIED          = Globals.SUBLANG_CHINESE_SIMPLIFIED;
+  SUBLANG_CHINESE_HONGKONG            = Globals.SUBLANG_CHINESE_HONGKONG;
+  SUBLANG_CHINESE_SINGAPORE           = Globals.SUBLANG_CHINESE_SINGAPORE;
+  SUBLANG_DUTCH                       = Globals.SUBLANG_DUTCH;
+  SUBLANG_DUTCH_BELGIAN               = Globals.SUBLANG_DUTCH_BELGIAN;
+  SUBLANG_ENGLISH_US                  = Globals.SUBLANG_ENGLISH_US;
+  SUBLANG_ENGLISH_UK                  = Globals.SUBLANG_ENGLISH_UK;
+  SUBLANG_ENGLISH_AUS                 = Globals.SUBLANG_ENGLISH_AUS;
+  SUBLANG_ENGLISH_CAN                 = Globals.SUBLANG_ENGLISH_CAN;
+  SUBLANG_ENGLISH_NZ                  = Globals.SUBLANG_ENGLISH_NZ;
+  SUBLANG_ENGLISH_EIRE                = Globals.SUBLANG_ENGLISH_EIRE;
+  SUBLANG_ENGLISH_SOUTH_AFRICA        = Globals.SUBLANG_ENGLISH_SOUTH_AFRICA;
+  SUBLANG_ENGLISH_JAMAICA             = Globals.SUBLANG_ENGLISH_JAMAICA;
+  SUBLANG_ENGLISH_CARIBBEAN           = Globals.SUBLANG_ENGLISH_CARIBBEAN;
+  SUBLANG_ENGLISH_BELIZE              = Globals.SUBLANG_ENGLISH_BELIZE;
+  SUBLANG_ENGLISH_TRINIDAD            = Globals.SUBLANG_ENGLISH_TRINIDAD;
+  SUBLANG_FRENCH                      = Globals.SUBLANG_FRENCH;
+  SUBLANG_FRENCH_BELGIAN              = Globals.SUBLANG_FRENCH_BELGIAN;
+  SUBLANG_FRENCH_CANADIAN             = Globals.SUBLANG_FRENCH_CANADIAN;
+  SUBLANG_FRENCH_SWISS                = Globals.SUBLANG_FRENCH_SWISS;
+  SUBLANG_FRENCH_LUXEMBOURG           = Globals.SUBLANG_FRENCH_LUXEMBOURG;
+  SUBLANG_GERMAN                      = Globals.SUBLANG_GERMAN;
+  SUBLANG_GERMAN_SWISS                = Globals.SUBLANG_GERMAN_SWISS;
+  SUBLANG_GERMAN_AUSTRIAN             = Globals.SUBLANG_GERMAN_AUSTRIAN;
+  SUBLANG_GERMAN_LUXEMBOURG           = Globals.SUBLANG_GERMAN_LUXEMBOURG;
+  SUBLANG_GERMAN_LIECHTENSTEIN        = Globals.SUBLANG_GERMAN_LIECHTENSTEIN;
+  SUBLANG_ITALIAN                     = Globals.SUBLANG_ITALIAN;
+  SUBLANG_ITALIAN_SWISS               = Globals.SUBLANG_ITALIAN_SWISS;
+  SUBLANG_KOREAN                      = Globals.SUBLANG_KOREAN;
+  SUBLANG_KOREAN_JOHAB                = Globals.SUBLANG_KOREAN_JOHAB;
+  SUBLANG_NORWEGIAN_BOKMAL            = Globals.SUBLANG_NORWEGIAN_BOKMAL;
+  SUBLANG_NORWEGIAN_NYNORSK           = Globals.SUBLANG_NORWEGIAN_NYNORSK;
+  SUBLANG_PORTUGUESE                  = Globals.SUBLANG_PORTUGUESE;
+  SUBLANG_PORTUGUESE_BRAZILIAN        = Globals.SUBLANG_PORTUGUESE_BRAZILIAN;
+  SUBLANG_SERBIAN_LATIN               = Globals.SUBLANG_SERBIAN_LATIN;
+  SUBLANG_SERBIAN_CYRILLIC            = Globals.SUBLANG_SERBIAN_CYRILLIC;
+  SUBLANG_SPANISH                     = Globals.SUBLANG_SPANISH;
+  SUBLANG_SPANISH_MEXICAN             = Globals.SUBLANG_SPANISH_MEXICAN;
+  SUBLANG_SPANISH_MODERN              = Globals.SUBLANG_SPANISH_MODERN;
+  SUBLANG_SPANISH_GUATEMALA           = Globals.SUBLANG_SPANISH_GUATEMALA;
+  SUBLANG_SPANISH_COSTA_RICA          = Globals.SUBLANG_SPANISH_COSTA_RICA;
+  SUBLANG_SPANISH_PANAMA              = Globals.SUBLANG_SPANISH_PANAMA;
+  SUBLANG_SPANISH_DOMINICAN_REPUBLIC  = Globals.SUBLANG_SPANISH_DOMINICAN_REPUBLIC;
+  SUBLANG_SPANISH_VENEZUELA           = Globals.SUBLANG_SPANISH_VENEZUELA;
+  SUBLANG_SPANISH_COLOMBIA            = Globals.SUBLANG_SPANISH_COLOMBIA;
+  SUBLANG_SPANISH_PERU                = Globals.SUBLANG_SPANISH_PERU;
+  SUBLANG_SPANISH_ARGENTINA           = Globals.SUBLANG_SPANISH_ARGENTINA;
+  SUBLANG_SPANISH_ECUADOR             = Globals.SUBLANG_SPANISH_ECUADOR;
+  SUBLANG_SPANISH_CHILE               = Globals.SUBLANG_SPANISH_CHILE;
+  SUBLANG_SPANISH_URUGUAY             = Globals.SUBLANG_SPANISH_URUGUAY;
+  SUBLANG_SPANISH_PARAGUAY            = Globals.SUBLANG_SPANISH_PARAGUAY;
+  SUBLANG_SPANISH_BOLIVIA             = Globals.SUBLANG_SPANISH_BOLIVIA;
+  SUBLANG_SPANISH_EL_SALVADOR         = Globals.SUBLANG_SPANISH_EL_SALVADOR;
+  SUBLANG_SPANISH_HONDURAS            = Globals.SUBLANG_SPANISH_HONDURAS;
+  SUBLANG_SPANISH_NICARAGUA           = Globals.SUBLANG_SPANISH_NICARAGUA;
+  SUBLANG_SPANISH_PUERTO_RICO         = Globals.SUBLANG_SPANISH_PUERTO_RICO;
+  SUBLANG_SWEDISH                     = Globals.SUBLANG_SWEDISH;
+  SUBLANG_SWEDISH_FINLAND             = Globals.SUBLANG_SWEDISH_FINLAND;
+
+  // Sorting ID's
+  SORT_DEFAULT           = Globals.SORT_DEFAULT;
+
+  SORT_JAPANESE_XJIS     = Globals.SORT_JAPANESE_XJIS;
+  SORT_JAPANESE_UNICODE  = Globals.SORT_JAPANESE_UNICODE;
+
+  SORT_CHINESE_BIG5      = Globals.SORT_CHINESE_BIG5;
+  SORT_CHINESE_PRCP      = Globals.SORT_CHINESE_PRCP;
+  SORT_CHINESE_UNICODE   = Globals.SORT_CHINESE_UNICODE;
+  SORT_CHINESE_PRC       = Globals.SORT_CHINESE_PRC;
+
+  SORT_KOREAN_KSC        = Globals.SORT_KOREAN_KSC;
+  SORT_KOREAN_UNICODE    = Globals.SORT_KOREAN_UNICODE;
+
+  SORT_GERMAN_PHONE_BOOK = Globals.SORT_GERMAN_PHONE_BOOK;
+
+  // Default System and User ID's for language and locale
+  LANG_SYSTEM_DEFAULT   = Globals.LANG_SYSTEM_DEFAULT;
+  LANG_USER_DEFAULT     = Globals.LANG_USER_DEFAULT;
+
+  LOCALE_SYSTEM_DEFAULT = Globals.LOCALE_SYSTEM_DEFAULT;
+  LOCALE_USER_DEFAULT   = Globals.LOCALE_USER_DEFAULT;
+
+implementation
+
+end.
+
+
+
+From nobody at sheep.berlios.de  Thu Jun 16 17:07:40 2005
+From: nobody at sheep.berlios.de (lloydkinsella)
+Date: Thu, 16 Jun 2005 17:07:40 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.RTL Langs.pas,1.1,1.2
+Message-ID: <200506161507.j5GF7eI31610@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv22066/ShineOn.RTL
+
+Modified Files:
+	Langs.pas 
+Log Message:
+
+
+Index: Langs.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Langs.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** Langs.pas	16 Jun 2005 15:05:31 -0000	1.1
+--- Langs.pas	16 Jun 2005 15:07:38 -0000	1.2
+***************
+*** 1,2 ****
+--- 1,12 ----
++ // The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License"); 
++ // you may not use this file except in compliance with the License. You may obtain a copy of the 
++ // License at http://www.mozilla.org/MPL/ 
++ // 
++ // Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF 
++ // ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
++ // limitations under the License.
++ 
++ // $Id$
++ 
+  namespace ShineOn.RTL;
+  
+
+
+
+From nobody at sheep.berlios.de  Mon Jun 27 13:04:54 2005
+From: nobody at sheep.berlios.de (peter3)
+Date: Mon, 27 Jun 2005 13:04:54 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.RTL IniFiles.pas,1.4,1.5 ShineOn.RTL.chrome,1.7,1.8 SysUtils.pas,1.11,1.12 Types.pas,1.9,1.10
+Message-ID: <200506271104.j5RB4sI20394@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv6397/ShineOn.RTL
+
+Modified Files:
+	IniFiles.pas ShineOn.RTL.chrome SysUtils.pas Types.pas 
+Log Message:
+- strings in .Net are not 1-based
+
+Index: IniFiles.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/IniFiles.pas,v
+retrieving revision 1.4
+retrieving revision 1.5
+diff -C2 -d -r1.4 -r1.5
+*** IniFiles.pas	4 Jun 2005 18:01:02 -0000	1.4
+--- IniFiles.pas	27 Jun 2005 11:04:50 -0000	1.5
+***************
+*** 104,109 ****
+  begin
+    S := ReadString(Section, Name, '');
+!   if S.StartsWith('$') then
+!     S := '0x' + S.SubString(1);
+    Result := StrToIntDef(S, Default);
+  end;
+--- 104,110 ----
+  begin
+    S := ReadString(Section, Name, '');
+!   // StrToInt already handles $ hex specifier
+! //  if S.StartsWith('$') then
+! //    S := '0x' + S.SubString(1);
+    Result := StrToIntDef(S, Default);
+  end;
+
+Index: ShineOn.RTL.chrome
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/ShineOn.RTL.chrome,v
+retrieving revision 1.7
+retrieving revision 1.8
+diff -C2 -d -r1.7 -r1.8
+*** ShineOn.RTL.chrome	16 Jun 2005 15:01:55 -0000	1.7
+--- ShineOn.RTL.chrome	27 Jun 2005 11:04:50 -0000	1.8
+***************
+*** 19,23 ****
+      <Reference Assembly="$(Framework)\System.dll" Display="System" CopyLocal="False" />
+      <Reference Assembly="$(Framework)\System.Drawing.dll" Display="System.Drawing" CopyLocal="False" />
+!     <Reference Assembly="..\..\..\..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll" Display="System.Windows.Forms.dll" CopyLocal="False" />
+    </References>
+    <Configurations>
+--- 19,23 ----
+      <Reference Assembly="$(Framework)\System.dll" Display="System" CopyLocal="False" />
+      <Reference Assembly="$(Framework)\System.Drawing.dll" Display="System.Drawing" CopyLocal="False" />
+!     <Reference Assembly="$(Framework)\\System.Windows.Forms.dll" Display="System.Windows.Forms.dll" CopyLocal="False" />
+    </References>
+    <Configurations>
+
+Index: SysUtils.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/SysUtils.pas,v
+retrieving revision 1.11
+retrieving revision 1.12
+diff -C2 -d -r1.11 -r1.12
+*** SysUtils.pas	15 Jun 2005 23:47:29 -0000	1.11
+--- SysUtils.pas	27 Jun 2005 11:04:50 -0000	1.12
+***************
+*** 423,427 ****
+    LB := Length(S2);
+  
+!   for I := 1 to LA do
+      begin
+        if I > LB then
+--- 423,427 ----
+    LB := Length(S2);
+  
+!   for I := 0 to LA - 1 do
+      begin
+        if I > LB then
+***************
+*** 633,637 ****
+    Result := S;
+  
+!   for I := 1 to Length(Result) do
+      begin
+        if Result[I] = QuoteChar then
+--- 633,637 ----
+    Result := S;
+  
+!   for I := 0 to Length(Result) - 1 do
+      begin
+        if Result[I] = QuoteChar then
+***************
+*** 642,646 ****
+      end;
+  
+!   for I := Length(Result) downto 1 do
+      begin
+        if Result[I] = QuoteChar then
+--- 642,646 ----
+      end;
+  
+!   for I := Length(Result) - 1 downto 0 do
+      begin
+        if Result[I] = QuoteChar then
+
+Index: Types.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Types.pas,v
+retrieving revision 1.9
+retrieving revision 1.10
+diff -C2 -d -r1.9 -r1.10
+*** Types.pas	15 Jun 2005 23:47:29 -0000	1.9
+--- Types.pas	27 Jun 2005 11:04:50 -0000	1.10
+***************
+*** 181,187 ****
+  
+  { Text alignment types }
+- 
+    TAlignment = public (LeftJustify, RightJustify, Center);
+! //!!!  TLeftRight = taLeftJustify..taRightJustify; // not supported by Chrome
+    TBiDiMode = public (LeftToRight, RightToLeft, RightToLeftNoAlign, RightToLeftReadingOnly);
+    TShiftState = public set of (Shift, Alt, Ctrl, Left, Right, Middle, Double);
+--- 181,186 ----
+  
+  { Text alignment types }
+    TAlignment = public (LeftJustify, RightJustify, Center);
+!   TLeftRight = public (taLeftJustify,taRightJustify); //!!! Not compatible with global taLeftJustify/taRightJustify
+    TBiDiMode = public (LeftToRight, RightToLeft, RightToLeftNoAlign, RightToLeftReadingOnly);
+    TShiftState = public set of (Shift, Alt, Ctrl, Left, Right, Middle, Double);
+***************
+*** 191,198 ****
+  { Types used by standard events }
+  type
+!   
+! //!!!  THelpContext = -MaxLongint..MaxLongint; // not supported by Chrome
+! 
+! //!!!  TShortCut = Low(Word)..High(Word); // not supported by Chrome
+  
+  { Standard events }
+--- 190,195 ----
+  { Types used by standard events }
+  type
+! //  THelpContext = -MaxLongint..MaxLongint; // not supported by Chrome
+! //  TShortCut = Low(Word)..High(Word); // not supported by Chrome
+  
+  { Standard events }
+
+
+
+From nobody at sheep.berlios.de  Mon Jun 27 19:21:59 2005
+From: nobody at sheep.berlios.de (loonquawl)
+Date: Mon, 27 Jun 2005 19:21:59 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.9,1.10
+Message-ID: <200506271721.j5RHLxI03448@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv17488/ShineOn.RTL
+
+Modified Files:
+	System.pas 
+Log Message:
+Fixed the Delete implementation, it copied a part of the string instead of deleting a part.
+
+Index: System.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/System.pas,v
+retrieving revision 1.9
+retrieving revision 1.10
+diff -C2 -d -r1.9 -r1.10
+*** System.pas	15 Jun 2005 23:47:29 -0000	1.9
+--- System.pas	27 Jun 2005 17:21:55 -0000	1.10
+***************
+*** 13,16 ****
+--- 13,17 ----
+  // 2005-06-04   :   Lloyd Kinsella    :   Modifications to support newer TDateTime implementation
+  // 2005-06-16   :   Lloyd Kinsella    :   Implemented NotImplemented as a method of the System class
++ // 2005-06-27   :   Jeroen Vandezande :   Fixed the Delete implementation, it copied a part of the string instead of deleting a part.
+  
+  namespace ShineOn.RTL;
+***************
+*** 137,141 ****
+  class procedure System.Delete(var S: string; Index, Count:Integer);
+  begin
+!   S := S.SubString(Index, Count);
+  end;
+  
+--- 138,142 ----
+  class procedure System.Delete(var S: string; Index, Count:Integer);
+  begin
+!   S := S.Remove(Index,Count)
+  end;
+  
+
+
+
+From nobody at sheep.berlios.de  Tue Jun 28 03:32:05 2005
+From: nobody at sheep.berlios.de (loonquawl)
+Date: Tue, 28 Jun 2005 03:32:05 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.10,1.11
+Message-ID: <200506280132.j5S1W5I17516@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv18628/ShineOn.RTL
+
+Modified Files:
+	System.pas 
+Log Message:
+Implemented the LoCase and UpCase functions.
+
+Index: System.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/System.pas,v
+retrieving revision 1.10
+retrieving revision 1.11
+diff -C2 -d -r1.10 -r1.11
+*** System.pas	27 Jun 2005 17:21:55 -0000	1.10
+--- System.pas	28 Jun 2005 01:31:59 -0000	1.11
+***************
+*** 14,17 ****
+--- 14,18 ----
+  // 2005-06-16   :   Lloyd Kinsella    :   Implemented NotImplemented as a method of the System class
+  // 2005-06-27   :   Jeroen Vandezande :   Fixed the Delete implementation, it copied a part of the string instead of deleting a part.
++ // 2005-06-27   :   Jeroen Vandezande :   Implemented the LoCase and UpCase functions.
+  
+  namespace ShineOn.RTL;
+***************
+*** 34,37 ****
+--- 35,40 ----
+      class procedure Insert(Source: string; var S: string; Index: Integer);
+      class function Copy(Source:string; StartIndex, Length: Integer):string;
++     class function UpCase(Letter: Char): Char;
++     class function LoCase(Letter: Char): Char;
+  
+      class procedure Str(X:Double; Width:integer;Decimals:integer;var S:string);
+***************
+*** 82,85 ****
+--- 85,90 ----
+  procedure Insert(Source: string; var S: string; Index: Integer);
+  function Copy(Source:string; StartIndex, Length: Integer):string;
++ function UpCase(Letter: Char): Char;
++ function LoCase(Letter: Char): Char;
+  procedure Str(X:Double; Width:integer;Decimals:integer;var S:string);
+  procedure Val(S:string; var V:Double; var Code: Integer);
+***************
+*** 154,157 ****
+--- 159,172 ----
+  end;
+  
++ class function System.UpCase ( Letter : Char ) : Char; 
++ begin
++   Result := Letter.ToString.ToUpper[0];
++ end;
++ 
++ class function System.LoCase ( Letter : Char ) : Char; 
++ begin
++   Result := Letter.ToString.ToLower[0];
++ end;
++ 
+  class procedure System.Str(X:Double; Width:integer;Decimals:integer;var S:string);
+  begin
+***************
+*** 384,387 ****
+--- 399,412 ----
+  begin
+    Result := ShineOn.RTL.System.Copy(Source, StartIndex, Length);
++ end;
++ 
++ function UpCase(Letter: Char): Char;
++ begin
++   result := ShineOn.RTL.System.UpCase(Letter);
++ end;
++ 
++ function LoCase(Letter: Char): Char;
++ begin
++   result := ShineOn.RTL.System.LoCase(Letter);
+  end;
+    
+
+
+
+From nobody at sheep.berlios.de  Tue Jun 28 04:41:29 2005
+From: nobody at sheep.berlios.de (loonquawl)
+Date: Tue, 28 Jun 2005 04:41:29 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.11,1.12
+Message-ID: <200506280241.j5S2fTI18851@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv28265/ShineOn.RTL
+
+Modified Files:
+	System.pas 
+Log Message:
+mplemented the StringOfChar function.
+
+Index: System.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/System.pas,v
+retrieving revision 1.11
+retrieving revision 1.12
+diff -C2 -d -r1.11 -r1.12
+*** System.pas	28 Jun 2005 01:31:59 -0000	1.11
+--- System.pas	28 Jun 2005 02:41:26 -0000	1.12
+***************
+*** 15,18 ****
+--- 15,19 ----
+  // 2005-06-27   :   Jeroen Vandezande :   Fixed the Delete implementation, it copied a part of the string instead of deleting a part.
+  // 2005-06-27   :   Jeroen Vandezande :   Implemented the LoCase and UpCase functions.
++ // 2005-06-28   :   Jeroen Vandezande :   Implemented the StringOfChar function.
+  
+  namespace ShineOn.RTL;
+***************
+*** 37,40 ****
+--- 38,42 ----
+      class function UpCase(Letter: Char): Char;
+      class function LoCase(Letter: Char): Char;
++     class function StringOfChar(RepeatCharacter: Char; RepeatCount: Integer): string;
+  
+      class procedure Str(X:Double; Width:integer;Decimals:integer;var S:string);
+***************
+*** 87,90 ****
+--- 89,93 ----
+  function UpCase(Letter: Char): Char;
+  function LoCase(Letter: Char): Char;
++ function StringOfChar(RepeatCharacter: Char; RepeatCount: Integer ): string; 
+  procedure Str(X:Double; Width:integer;Decimals:integer;var S:string);
+  procedure Val(S:string; var V:Double; var Code: Integer);
+***************
+*** 169,172 ****
+--- 172,187 ----
+  end;
+  
++ class function System.StringOfChar ( RepeatCharacter : Char; RepeatCount : Integer ) : string; 
++ var
++   TempArray: Array of Char;
++ begin
++   TempArray := New Char[RepeatCount];
++   for i:Integer := 0 to RepeatCount -1 do
++   begin
++     Temparray[i] := RepeatCharacter;
++   end;
++   result := new String(TempArray);
++ end;
++ 
+  class procedure System.Str(X:Double; Width:integer;Decimals:integer;var S:string);
+  begin
+***************
+*** 410,413 ****
+--- 425,433 ----
+    result := ShineOn.RTL.System.LoCase(Letter);
+  end;
++ 
++ function StringOfChar(RepeatCharacter: Char; RepeatCount: Integer ): string; 
++ begin
++   result := ShineOn.RTL.System.StringOfChar(RepeatCharacter, RepeatCount);
++ end;
+    
+  procedure Str(X:Double; Width:integer;Decimals:integer;var S:string);
+***************
+*** 567,570 ****
+  end;
+    
+- 
+  end.
+--- 587,589 ----
+
+
+
+From nobody at sheep.berlios.de  Tue Jun 28 13:26:07 2005
+From: nobody at sheep.berlios.de (peter3)
+Date: Tue, 28 Jun 2005 13:26:07 +0200
+Subject: [Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.1,1.2
+Message-ID: <200506281126.j5SBQ7I06744@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/NUnit
+In directory sheep:/tmp/cvs-serv14809/NUnit
+
+Modified Files:
+	TestSystem.pas 
+Log Message:
+- Delete should work as in Delphi (without errors when Index and/or Count is beyond limits)
+- A few tests for Delete
+
+Index: TestSystem.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/TestSystem.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** TestSystem.pas	31 May 2005 08:38:50 -0000	1.1
+--- TestSystem.pas	28 Jun 2005 11:26:05 -0000	1.2
+***************
+*** 26,30 ****
+      method Concat;
+      [Test]
+!     method Delete;
+      [Test]
+      method Insert;
+--- 26,44 ----
+      method Concat;
+      [Test]
+!     method Delete1;
+!     [Test]
+!     method Delete2;
+!     [Test]
+!     method Delete3;
+!     [Test]
+!     method Delete4;
+!     [Test]
+!     method Delete5;
+!     [Test]
+!     method Delete6;
+!     [Test]
+!     method Delete7;
+!     [Test]
+!     method Delete8;
+      [Test]
+      method Insert;
+***************
+*** 115,121 ****
+  end;
+  
+! method SystemTests.Delete; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 129,189 ----
+  end;
+  
+! method SystemTests.Delete1; 
+  begin
+!   var S:string := 'TestString'; 
+!   ShineOn.RTL.System.Delete(S, 0, 0); // if Count <= 0 then nothing should happen
+!   NUnit.Framework.Assert.AreEqual(S, 'TestString');
+! end;
+! 
+! method SystemTests.Delete2; 
+! begin
+!   var S:string := 'TestString'; 
+!   ShineOn.RTL.System.Delete(S, S.Length, 0); // if Count <= 0 then nothing should happen
+!   NUnit.Framework.Assert.AreEqual(S, 'TestString');
+! end;
+! 
+! method SystemTests.Delete3; 
+! begin
+!   var S:string := 'TestString'; 
+!   ShineOn.RTL.System.Delete(S, 0, 1); 
+!   NUnit.Framework.Assert.AreEqual(S, 'estString');
+! end;
+! 
+! 
+! method SystemTests.Delete4; 
+! begin
+!   var S:string := 'TestString'; 
+!   ShineOn.RTL.System.Delete(S, S.Length - 1, 1);
+!   NUnit.Framework.Assert.AreEqual(S, 'TestStrin');
+! end;
+! 
+! 
+! method SystemTests.Delete5; 
+! begin
+!   var S:string := 'TestString'; 
+!   ShineOn.RTL.System.Delete(S, S.Length, 1); // if Index + Count >= S.Length then nothing should happen
+!   NUnit.Framework.Assert.AreEqual(S, 'TestString');
+! end;
+! 
+! 
+! method SystemTests.Delete6; 
+! begin
+!   var S:string := 'TestString'; 
+!   ShineOn.RTL.System.Delete(S, -1, -1); // if Index or Count are < 0 then nothing should happen
+!   NUnit.Framework.Assert.AreEqual(S, 'TestString');
+! end;
+! 
+! method SystemTests.Delete7; 
+! begin
+!   var S:string := 'TestString'; 
+!   ShineOn.RTL.System.Delete(S, 4, 3); 
+!   NUnit.Framework.Assert.AreEqual(S, 'Testing');
+! end;
+! 
+! method SystemTests.Delete8; 
+! begin
+!   var S:string := 'TestString'; 
+!   ShineOn.RTL.System.Delete(S, 4, 10000); 
+!   NUnit.Framework.Assert.AreEqual(S, 'Test');
+  end;
+  
+
+
+
+From nobody at sheep.berlios.de  Tue Jun 28 13:26:08 2005
+From: nobody at sheep.berlios.de (peter3)
+Date: Tue, 28 Jun 2005 13:26:08 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.12,1.13
+Message-ID: <200506281126.j5SBQ8I06748@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv14809/ShineOn.RTL
+
+Modified Files:
+	System.pas 
+Log Message:
+- Delete should work as in Delphi (without errors when Index and/or Count is beyond limits)
+- A few tests for Delete
+
+Index: System.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/System.pas,v
+retrieving revision 1.12
+retrieving revision 1.13
+diff -C2 -d -r1.12 -r1.13
+*** System.pas	28 Jun 2005 02:41:26 -0000	1.12
+--- System.pas	28 Jun 2005 11:26:05 -0000	1.13
+***************
+*** 146,150 ****
+  class procedure System.Delete(var S: string; Index, Count:Integer);
+  begin
+!   S := S.Remove(Index,Count)
+  end;
+  
+--- 146,156 ----
+  class procedure System.Delete(var S: string; Index, Count:Integer);
+  begin
+!   if (Index >= 0) and (Index <= S.Length - 1) and (Count > 0) then
+!   begin
+!     if Index + Count > S.Length then
+!       Count := S.Length - Index;
+!     if Count > 0 then
+!       S := S.Remove(Index, Count);
+!   end;
+  end;
+  
+
+
+
+From nobody at sheep.berlios.de  Tue Jun 28 15:29:39 2005
+From: nobody at sheep.berlios.de (peter3)
+Date: Tue, 28 Jun 2005 15:29:39 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.RTL.Win32 Registry.pas,1.3,1.4 ShineOn.RTL.Win32.chrome,1.4,1.5
+Message-ID: <200506281329.j5SDTdI12147@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.RTL.Win32
+In directory sheep:/tmp/cvs-serv3975/ShineOn.RTL.Win32
+
+Modified Files:
+	Registry.pas ShineOn.RTL.Win32.chrome 
+Log Message:
+- All: record members must have visibility declared
+- SysUtils+System:global procedures must have visibility declared
+- Types: experimental AnsiString class added (for 1-based index access)
+- Contnrs: removed warnings about hiding base class methods (added reintroduce)
+- Classes: cannot call Create from class method without class specifier
+
+Index: Registry.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL.Win32/Registry.pas,v
+retrieving revision 1.3
+retrieving revision 1.4
+diff -C2 -d -r1.3 -r1.4
+*** Registry.pas	13 Jun 2005 20:22:04 -0000	1.3
+--- Registry.pas	28 Jun 2005 13:29:37 -0000	1.4
+***************
+*** 60,63 ****
+--- 60,64 ----
+    ERegistryException = public class(Exception);
+    TRegKeyInfo = public record
++   public 
+      NumSubKeys: Integer;
+      MaxSubKeyLen: Integer;
+***************
+*** 71,74 ****
+--- 72,76 ----
+  
+    TRegDataInfo = public record
++   public
+      RegData: TRegDataType;
+      DataSize: Integer;
+
+Index: ShineOn.RTL.Win32.chrome
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL.Win32/ShineOn.RTL.Win32.chrome,v
+retrieving revision 1.4
+retrieving revision 1.5
+diff -C2 -d -r1.4 -r1.5
+*** ShineOn.RTL.Win32.chrome	7 May 2005 09:56:47 -0000	1.4
+--- ShineOn.RTL.Win32.chrome	28 Jun 2005 13:29:37 -0000	1.5
+***************
+*** 10,21 ****
+      <AllowLegacyWith>True</AllowLegacyWith>
+      <AllowLegacyOutParams>True</AllowLegacyOutParams>
+!     <AllowUnsafeCode>True</AllowUnsafeCode>
+      <ApplicationIcon>
+      </ApplicationIcon>
+    </ProjectOptions>
+    <References>
+!     <Reference Assembly="$(Framework)\mscorlib.dll" Display="mscorlib" CopyLocal="False" IgnoreStrongName="False" IgnoreVersion="False" />
+!     <Reference Assembly="$(Framework)\System.dll" Display="System" CopyLocal="False" IgnoreStrongName="False" IgnoreVersion="False" />
+!     <Reference Assembly="..\bin\shineon.rtl.dll" Display="ShineOn.RTL" ProjectReference="{EADE7853-FDBE-4770-B0B2-5FF5FDD2DBF7}|..\ShineOn.RTL\ShineOn.RTL.chrome" CopyLocal="False" IgnoreStrongName="False" IgnoreVersion="False" />
+    </References>
+    <Configurations>
+--- 10,22 ----
+      <AllowLegacyWith>True</AllowLegacyWith>
+      <AllowLegacyOutParams>True</AllowLegacyOutParams>
+!     <AllowUnsafeCode>False</AllowUnsafeCode>
+!     <AllowLegacyCreate>True</AllowLegacyCreate>
+      <ApplicationIcon>
+      </ApplicationIcon>
+    </ProjectOptions>
+    <References>
+!     <Reference Assembly="$(Framework)\mscorlib.dll" Display="mscorlib" CopyLocal="False" />
+!     <Reference Assembly="..\bin\shineon.rtl.dll" Display="ShineOn.RTL" ProjectReference="{EADE7853-FDBE-4770-B0B2-5FF5FDD2DBF7}" CopyLocal="False" />
+!     <Reference Assembly="$(Framework)\System.dll" Display="System" CopyLocal="False" />
+    </References>
+    <Configurations>
+
+
+
+From nobody at sheep.berlios.de  Tue Jun 28 15:29:40 2005
+From: nobody at sheep.berlios.de (peter3)
+Date: Tue, 28 Jun 2005 15:29:40 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.10,1.11 Contnrs.pas,1.4,1.5 ShineOn.RTL.chrome,1.8,1.9 SysUtils.pas,1.12,1.13 System.pas,1.13,1.14 Types.pas,1.10,1.11
+Message-ID: <200506281329.j5SDTeI12153@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv3975/ShineOn.RTL
+
+Modified Files:
+	Classes.pas Contnrs.pas ShineOn.RTL.chrome SysUtils.pas 
+	System.pas Types.pas 
+Log Message:
+- All: record members must have visibility declared
+- SysUtils+System:global procedures must have visibility declared
+- Types: experimental AnsiString class added (for 1-based index access)
+- Contnrs: removed warnings about hiding base class methods (added reintroduce)
+- Classes: cannot call Create from class method without class specifier
+
+Index: Classes.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Classes.pas,v
+retrieving revision 1.10
+retrieving revision 1.11
+diff -C2 -d -r1.10 -r1.11
+*** Classes.pas	13 Jun 2005 20:22:04 -0000	1.10
+--- Classes.pas	28 Jun 2005 13:29:37 -0000	1.11
+***************
+*** 2347,2351 ****
+  class function TResourceStream.CreateFromID(Instance: THandle; ResID: Integer; ResType: String):TResourceStream;
+  begin
+!   Result := Create(Instance, ResId.ToString, ResType);
+  end;
+  
+--- 2347,2351 ----
+  class function TResourceStream.CreateFromID(Instance: THandle; ResID: Integer; ResType: String):TResourceStream;
+  begin
+!   Result := new TResourceStream(Instance, ResId.ToString, ResType);
+  end;
+  
+
+Index: Contnrs.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Contnrs.pas,v
+retrieving revision 1.4
+retrieving revision 1.5
+diff -C2 -d -r1.4 -r1.5
+*** Contnrs.pas	26 May 2005 23:44:35 -0000	1.4
+--- Contnrs.pas	28 Jun 2005 13:29:37 -0000	1.5
+***************
+*** 31,38 ****
+      function FindInstanceOf(AClass: TClass; AExact: Boolean := True; AStartAt: Integer := 0): Integer;
+      procedure Insert(Index: Integer; AObject: TObject);
+!     function First: TObject;
+!     function Last: TObject;
+      property OwnsObjects: Boolean read FOwnsObjects write FOwnsObjects;
+!     property Items[Index: Integer]: TObject read GetItem write SetItem; default;
+    end;
+  
+--- 31,38 ----
+      function FindInstanceOf(AClass: TClass; AExact: Boolean := True; AStartAt: Integer := 0): Integer;
+      procedure Insert(Index: Integer; AObject: TObject);
+!     function First: TObject;reintroduce;
+!     function Last: TObject;reintroduce;
+      property OwnsObjects: Boolean read FOwnsObjects write FOwnsObjects;
+!     property Items[Index: Integer]: TObject read GetItem write SetItem; default;reintroduce;
+    end;
+  
+***************
+*** 52,59 ****
+      function Remove(AComponent: TComponent): Integer;
+      function IndexOf(AComponent: TComponent): Integer;
+!     function First: TComponent;
+!     function Last: TComponent;
+      procedure Insert(Index: Integer; AComponent: TComponent);
+!     property Items[Index: Integer]: TComponent read GetItems write SetItems; default;
+    end;
+  
+--- 52,59 ----
+      function Remove(AComponent: TComponent): Integer;
+      function IndexOf(AComponent: TComponent): Integer;
+!     function First: TComponent;reintroduce;
+!     function Last: TComponent;reintroduce;
+      procedure Insert(Index: Integer; AComponent: TComponent);
+!     property Items[Index: Integer]: TComponent read GetItems write SetItems; default;reintroduce;
+    end;
+  
+***************
+*** 69,76 ****
+      function Remove(AClass: TClass): Integer;
+      function IndexOf(AClass: TClass): Integer;
+!     function First: TClass;
+!     function Last: TClass;
+      procedure Insert(Index: Integer; AClass: TClass);
+!     property Items[Index: Integer]: TClass read GetItems write SetItems; default;
+    end;
+  
+--- 69,76 ----
+      function Remove(AClass: TClass): Integer;
+      function IndexOf(AClass: TClass): Integer;
+!     function First: TClass;reintroduce;
+!     function Last: TClass;reintroduce;
+      procedure Insert(Index: Integer; AClass: TClass);
+!     property Items[Index: Integer]: TClass read GetItems write SetItems; default;reintroduce;
+    end;
+  
+***************
+*** 106,111 ****
+    public
+      function Push(AObject: TObject): TObject;
+!     function Pop: TObject;
+!     function Peek: TObject;
+    end;
+  
+--- 106,111 ----
+    public
+      function Push(AObject: TObject): TObject;
+!     function Pop: TObject;reintroduce;
+!     function Peek: TObject;reintroduce;
+    end;
+  
+***************
+*** 122,127 ****
+    public
+      function Push(AObject: TObject): TObject;
+!     function Pop: TObject;
+!     function Peek: TObject;
+    end;
+  
+--- 122,127 ----
+    public
+      function Push(AObject: TObject): TObject;
+!     function Pop: TObject;reintroduce;
+!     function Peek: TObject;reintroduce;
+    end;
+  
+
+Index: ShineOn.RTL.chrome
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/ShineOn.RTL.chrome,v
+retrieving revision 1.8
+retrieving revision 1.9
+diff -C2 -d -r1.8 -r1.9
+*** ShineOn.RTL.chrome	27 Jun 2005 11:04:50 -0000	1.8
+--- ShineOn.RTL.chrome	28 Jun 2005 13:29:37 -0000	1.9
+***************
+*** 19,23 ****
+      <Reference Assembly="$(Framework)\System.dll" Display="System" CopyLocal="False" />
+      <Reference Assembly="$(Framework)\System.Drawing.dll" Display="System.Drawing" CopyLocal="False" />
+!     <Reference Assembly="$(Framework)\\System.Windows.Forms.dll" Display="System.Windows.Forms.dll" CopyLocal="False" />
+    </References>
+    <Configurations>
+--- 19,23 ----
+      <Reference Assembly="$(Framework)\System.dll" Display="System" CopyLocal="False" />
+      <Reference Assembly="$(Framework)\System.Drawing.dll" Display="System.Drawing" CopyLocal="False" />
+!     <Reference Assembly="$(Framework)\System.Windows.Forms.dll" Display="System.Windows.Forms.dll" CopyLocal="False" />
+    </References>
+    <Configurations>
+***************
+*** 80,96 ****
+        <BuildAction>Compile</BuildAction>
+      </File>
+!     <File Filename="System.pas">
+        <ExcludeFromBuild>False</ExcludeFromBuild>
+        <BuildAction>Compile</BuildAction>
+      </File>
+!     <File Filename="SysUtils.pas">
+        <ExcludeFromBuild>False</ExcludeFromBuild>
+        <BuildAction>Compile</BuildAction>
+      </File>
+!     <File Filename="Types.pas">
+        <ExcludeFromBuild>False</ExcludeFromBuild>
+        <BuildAction>Compile</BuildAction>
+      </File>
+!     <File Filename="Langs.pas">
+        <ExcludeFromBuild>False</ExcludeFromBuild>
+        <BuildAction>Compile</BuildAction>
+--- 80,96 ----
+        <BuildAction>Compile</BuildAction>
+      </File>
+!     <File Filename="Langs.pas">
+        <ExcludeFromBuild>False</ExcludeFromBuild>
+        <BuildAction>Compile</BuildAction>
+      </File>
+!     <File Filename="System.pas">
+        <ExcludeFromBuild>False</ExcludeFromBuild>
+        <BuildAction>Compile</BuildAction>
+      </File>
+!     <File Filename="SysUtils.pas">
+        <ExcludeFromBuild>False</ExcludeFromBuild>
+        <BuildAction>Compile</BuildAction>
+      </File>
+!     <File Filename="Types.pas">
+        <ExcludeFromBuild>False</ExcludeFromBuild>
+        <BuildAction>Compile</BuildAction>
+
+Index: SysUtils.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/SysUtils.pas,v
+retrieving revision 1.12
+retrieving revision 1.13
+diff -C2 -d -r1.12 -r1.13
+*** SysUtils.pas	27 Jun 2005 11:04:50 -0000	1.12
+--- SysUtils.pas	28 Jun 2005 13:29:37 -0000	1.13
+***************
+*** 34,37 ****
+--- 34,38 ----
+  
+    TSysLocale = public record
++   public 
+      DefaultLCID: LCID;
+      PriLangID: LANGID;
+***************
+*** 42,45 ****
+--- 43,47 ----
+    
+    TFormatSettings = public record
++   public 
+      CurrencyFormat: Byte;
+      NegCurrFormat: Byte;
+***************
+*** 216,336 ****
+    end;
+    
+! function UpperCase(const S: string): string;
+! function UpperCase(const S: string; LocaleOptions: TLocaleOptions): string;
+  
+! function LowerCase(const S: string): string;
+! function LowerCase(const S: string; LocaleOptions: TLocaleOptions): string;
+  
+! function CompareStr(const S1, S2: string): Integer;
+! function CompareStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer;
+  
+! function SameStr(const S1, S2: string): Boolean;
+! function SameStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean;
+  
+! function CompareText(const S1, S2: string): Integer;
+! function CompareText(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer;
+  
+! function SameText(const S1, S2: string): Boolean;
+! function SameText(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean;
+     
+! function AnsiUpperCase(S: string): string;
+! function AnsiLowerCase(S: string): string;
+! function AnsiCompareStr(S1, S2: string): Integer;
+! function AnsiSameStr(S1, S2: string): Boolean;
+! function AnsiCompareText(S1, S2: string): Integer;
+! function AnsiSameText(S1, S2: string): Boolean;
+! function AnsiStrComp(S1, S2: string): Integer;
+! function AnsiStrIComp(S1, S2: string): Integer;
+! function AnsiStrLComp(S1, S2: string; MaxLen: Cardinal): Integer;
+! function AnsiStrLIComp(S1, S2: string; MaxLen: Cardinal): Integer;
+! function AnsiStrLower(Str: string): string;
+! function AnsiStrUpper(Str: string): string;
+! function AnsiLastChar(S: string): string;
+! function AnsiStrLastChar(P: string): string;
+  
+! function WideUpperCase(S: WideString): WideString;
+! function WideLowerCase(S: WideString): WideString;
+! function WideCompareStr(S1, S2: WideString): Integer;
+! function WideSameStr(S1, S2: WideString): Boolean;
+! function WideCompareText(S1, S2: WideString): Integer;
+! function WideSameText(S1, S2: WideString): Boolean;
+  
+! function Trim(S: string): string; 
+! function TrimLeft(S: string): string; 
+! function TrimRight(S: string): string; 
+  
+! function AnsiPos(const SubS, S: string): Integer;
+  
+! function QuotedStr(const S: string): string;
+! function QuotedStr(const S: string; QuoteChar: Char): string;
+  
+! function AnsiQuotedStr(const S: string; Quote: Char): string;
+  
+! function DequotedStr(const S: string): string;
+! function DequotedStr(const S: string; QuoteChar: Char): string;
+! function DequotedStr(const S: string; QuoteChar: Char; var p: integer): string;
+  
+! function AnsiDequotedStr(const S: string; Quote: Char): string;
+  
+! function AdjustLineBreaks(const S: string; Style: TTextLineBreakStyle): string;
+! function IsValidIdent(const Ident: string; AllowDots: Boolean): Boolean;
+  
+! function IntToStr(Value: Integer): string; 
+! function IntToHex(Value: Integer; Digits: Integer): string; 
+! function StrToInt(S: string): Integer;
+! function StrToIntDef(S: string; Default: Integer): Integer;
+! function TryStrToInt(S: string; out Value: Integer): Boolean;
+! function StrToInt64(S: string): Int64;
+! function StrToInt64Def(S: string; Default: Int64): Int64;
+! function TryStrToInt64(S: string; out Value: Int64): Boolean;
+! function StrToBool(S:String):boolean;
+! function BoolToStr(B: Boolean; UseBoolStrs: Boolean): string;
+! function StrToDate(S:String):TDateTime;
+! function StrToDateDef(S:String; Default:TDateTime):TDateTime;
+! function StrToDateTime(S:String):TDateTime;
+! function StrToDateTimeDef(S:String; Default:TDateTime):TDateTime;
+! function StrToTime(S:String):TDateTime;
+! function StrToTimeDef(S:String; Default:TDateTime):TDateTime;
+! function DateToStr(ADate:TDateTime):string;
+! function DateTimeToStr(ADateTime:TDateTime):string;
+! function TimeToStr(ATime:TDateTime):string;
+! procedure FreeAndNil(var obj);
+! function FileExists(FileName: string): Boolean;
+! function DirectoryExists(Directory: string): Boolean;
+! function ForceDirectories(Dir: string): Boolean;
+! function DeleteFile(FileName: string): Boolean;
+! function RenameFile(OldName, NewName: string): Boolean;
+! function ChangeFileExt(FileName, Extension: string): string;
+! function ExtractFilePath(FileName: string): string;
+! function ExtractFileDir(FileName: string): string;
+! function ExtractFileDrive(FileName: string): string;
+! function ExtractFileName(FileName: string): string;
+! function ExtractFileExt(FileName: string): string;
+! function ExpandFileName(FileName: string): string;
+! function ExpandUNCFileName(FileName: string): string;
+! function ExtractRelativePath(BaseName, DestName: string): string;
+! function ExtractShortPathName(FileName: string): string;
+! function GetCurrentDir: string;
+! function SetCurrentDir(Dir: string): Boolean;
+! function CreateDir(Dir: string): Boolean;
+! function RemoveDir(Dir: string): Boolean;
+! function IsPathDelimiter(S: string; Index: Integer): Boolean;
+! function IsDelimiter(Delimiters, S: string; Index: Integer): Boolean;
+! function IncludeTrailingPathDelimiter(S: string): string;
+  [Obsolete('This method has been replaced by IncludeTrailingPathDelimiter')]
+! function IncludeTrailingBackslash(S: string): string; 
+! function ExcludeTrailingPathDelimiter(S: string): string;
+  [Obsolete('This method has been replaced by ExcludeTrailingPathDelimiter')]
+! function ExcludeTrailingBackslash(S: string): string;
+! function LastDelimiter(Delimiters, S: string): Integer;
+! function AnsiCompareFileName(S1, S2: string): Integer;
+! function SameFileName(S1, S2: string): Boolean;
+! function AnsiLowerCaseFileName(S: string): string;
+! function AnsiUpperCaseFileName(S: string): string;
+! function AnsiStrPos(Str, SubStr: string): string;
+! function AnsiStrRScan(Str: string; Chr: Char): string;
+! function AnsiStrScan(Str: string; Chr: Char): string;
+! function StringReplace(S, OldPattern, NewPattern: string; Flags: TReplaceFlags): string;
+! function GetEnvironmentVariable(Name: string): string;   
+  
+  implementation
+--- 218,338 ----
+    end;
+    
+! function UpperCase(const S: string): string;public;
+! function UpperCase(const S: string; LocaleOptions: TLocaleOptions): string;public;
+  
+! function LowerCase(const S: string): string;public;
+! function LowerCase(const S: string; LocaleOptions: TLocaleOptions): string;public;
+  
+! function CompareStr(const S1, S2: string): Integer;public;
+! function CompareStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer;public;
+  
+! function SameStr(const S1, S2: string): Boolean;public;
+! function SameStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean;public;
+  
+! function CompareText(const S1, S2: string): Integer;public;
+! function CompareText(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer;public;
+  
+! function SameText(const S1, S2: string): Boolean;public;
+! function SameText(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean;public;
+     
+! function AnsiUpperCase(S: string): string;public;
+! function AnsiLowerCase(S: string): string;public;
+! function AnsiCompareStr(S1, S2: string): Integer;public;
+! function AnsiSameStr(S1, S2: string): Boolean;public;
+! function AnsiCompareText(S1, S2: string): Integer;public;
+! function AnsiSameText(S1, S2: string): Boolean;public;
+! function AnsiStrComp(S1, S2: string): Integer;public;
+! function AnsiStrIComp(S1, S2: string): Integer;public;
+! function AnsiStrLComp(S1, S2: string; MaxLen: Cardinal): Integer;public;
+! function AnsiStrLIComp(S1, S2: string; MaxLen: Cardinal): Integer;public;
+! function AnsiStrLower(Str: string): string;public;
+! function AnsiStrUpper(Str: string): string;public;
+! function AnsiLastChar(S: string): string;public;
+! function AnsiStrLastChar(P: string): string;public;
+  
+! function WideUpperCase(S: WideString): WideString;public;
+! function WideLowerCase(S: WideString): WideString;public;
+! function WideCompareStr(S1, S2: WideString): Integer;public;
+! function WideSameStr(S1, S2: WideString): Boolean;public;
+! function WideCompareText(S1, S2: WideString): Integer;public;
+! function WideSameText(S1, S2: WideString): Boolean;public;
+  
+! function Trim(S: string): string; public;
+! function TrimLeft(S: string): string; public;
+! function TrimRight(S: string): string; public;
+  
+! function AnsiPos(const SubS, S: string): Integer;public;
+  
+! function QuotedStr(const S: string): string;public;
+! function QuotedStr(const S: string; QuoteChar: Char): string;public;
+  
+! function AnsiQuotedStr(const S: string; Quote: Char): string;public;
+  
+! function DequotedStr(const S: string): string;public;
+! function DequotedStr(const S: string; QuoteChar: Char): string;public;
+! function DequotedStr(const S: string; QuoteChar: Char; var p: integer): string;public;
+  
+! function AnsiDequotedStr(const S: string; Quote: Char): string;public;
+  
+! function AdjustLineBreaks(const S: string; Style: TTextLineBreakStyle): string;public;
+! function IsValidIdent(const Ident: string; AllowDots: Boolean): Boolean;public;
+  
+! function IntToStr(Value: Integer): string; public;
+! function IntToHex(Value: Integer; Digits: Integer): string; public;
+! function StrToInt(S: string): Integer;public;
+! function StrToIntDef(S: string; Default: Integer): Integer;public;
+! function TryStrToInt(S: string; out Value: Integer): Boolean;public;
+! function StrToInt64(S: string): Int64;public;
+! function StrToInt64Def(S: string; Default: Int64): Int64;public;
+! function TryStrToInt64(S: string; out Value: Int64): Boolean;public;
+! function StrToBool(S:String):boolean;public;
+! function BoolToStr(B: Boolean; UseBoolStrs: Boolean): string;public;
+! function StrToDate(S:String):TDateTime;public;
+! function StrToDateDef(S:String; Default:TDateTime):TDateTime;public;
+! function StrToDateTime(S:String):TDateTime;public;
+! function StrToDateTimeDef(S:String; Default:TDateTime):TDateTime;public;
+! function StrToTime(S:String):TDateTime;public;
+! function StrToTimeDef(S:String; Default:TDateTime):TDateTime;public;
+! function DateToStr(ADate:TDateTime):string;public;
+! function DateTimeToStr(ADateTime:TDateTime):string;public;
+! function TimeToStr(ATime:TDateTime):string;public;
+! procedure FreeAndNil(var obj);public;
+! function FileExists(FileName: string): Boolean;public;
+! function DirectoryExists(Directory: string): Boolean;public;
+! function ForceDirectories(Dir: string): Boolean;public;
+! function DeleteFile(FileName: string): Boolean;public;
+! function RenameFile(OldName, NewName: string): Boolean;public;
+! function ChangeFileExt(FileName, Extension: string): string;public;
+! function ExtractFilePath(FileName: string): string;public;
+! function ExtractFileDir(FileName: string): string;public;
+! function ExtractFileDrive(FileName: string): string;public;
+! function ExtractFileName(FileName: string): string;public;
+! function ExtractFileExt(FileName: string): string;public;
+! function ExpandFileName(FileName: string): string;public;
+! function ExpandUNCFileName(FileName: string): string;public;
+! function ExtractRelativePath(BaseName, DestName: string): string;public;
+! function ExtractShortPathName(FileName: string): string;public;
+! function GetCurrentDir: string;public;
+! function SetCurrentDir(Dir: string): Boolean;public;
+! function CreateDir(Dir: string): Boolean;public;
+! function RemoveDir(Dir: string): Boolean;public;
+! function IsPathDelimiter(S: string; Index: Integer): Boolean;public;
+! function IsDelimiter(Delimiters, S: string; Index: Integer): Boolean;public;
+! function IncludeTrailingPathDelimiter(S: string): string;public;
+  [Obsolete('This method has been replaced by IncludeTrailingPathDelimiter')]
+! function IncludeTrailingBackslash(S: string): string; public;
+! function ExcludeTrailingPathDelimiter(S: string): string;public;
+  [Obsolete('This method has been replaced by ExcludeTrailingPathDelimiter')]
+! function ExcludeTrailingBackslash(S: string): string;public;
+! function LastDelimiter(Delimiters, S: string): Integer;public;
+! function AnsiCompareFileName(S1, S2: string): Integer;public;
+! function SameFileName(S1, S2: string): Boolean;public;
+! function AnsiLowerCaseFileName(S: string): string;public;
+! function AnsiUpperCaseFileName(S: string): string;public;
+! function AnsiStrPos(Str, SubStr: string): string;public;
+! function AnsiStrRScan(Str: string; Chr: Char): string;public;
+! function AnsiStrScan(Str: string; Chr: Char): string;public;
+! function StringReplace(S, OldPattern, NewPattern: string; Flags: TReplaceFlags): string;public;
+! function GetEnvironmentVariable(Name: string): string;   public;
+  
+  implementation
+
+Index: System.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/System.pas,v
+retrieving revision 1.13
+retrieving revision 1.14
+diff -C2 -d -r1.13 -r1.14
+*** System.pas	28 Jun 2005 11:26:05 -0000	1.13
+--- System.pas	28 Jun 2005 13:29:37 -0000	1.14
+***************
+*** 80,125 ****
+    end;
+    
+- procedure NotImplemented;
+-   
+- function Pos(SubStr, Str:string):integer;
+- function Concat(S1, S2:string):string;
+- procedure Delete(var S: string; Index, Count:Integer);
+- procedure Insert(Source: string; var S: string; Index: Integer);
+- function Copy(Source:string; StartIndex, Length: Integer):string;
+- function UpCase(Letter: Char): Char;
+- function LoCase(Letter: Char): Char;
+- function StringOfChar(RepeatCharacter: Char; RepeatCount: Integer ): string; 
+- procedure Str(X:Double; Width:integer;Decimals:integer;var S:string);
+- procedure Val(S:string; var V:Double; var Code: Integer);
+- function Ord(Value:Char):integer;
+- function Ord(Value:Boolean):integer;
+- procedure Inc(var Value:integer);
+- procedure Inc(var Value:integer; Amount:integer);
+- procedure Dec(var Value:integer);
+- procedure Dec(var Value:integer; Amount:integer);
+- function Pred(Value:Integer):Integer;
+- function Succ(Value:Integer):Integer;
+- function Round(Value:Double):Integer;
+- function Round(Value:TDateTime):Integer;
+- function Trunc(Value:Double):Integer;
+- function Trunc(Value:TDateTime):Integer;
+- function Int(X: Double): Double;
+- function Int(X: TDateTime): Double;
+- function Frac(Value:Double):Double;
+- function Frac(Value:TDateTime):Double;
+- function Odd(Value:Integer):boolean;
+- function Sqrt(Number:Extended):Extended; 
+- function Sqr(Number:Extended):Extended; 
+- function Sqr(Number:Integer):Integer; 
+  
+! function Abs(X:Integer):Integer;
+! function Abs(X:Double):Double;
+! function Abs(X:TDateTime):TDateTime;
+! function Exp(X: Double): Double;
+! procedure SetLength(var S; Length: integer);
+! procedure Write(S:string);
+! procedure WriteLn(S:string);
+! procedure Read(var P);
+! procedure ReadLn(var P);
+  
+  
+--- 80,126 ----
+    end;
+    
+  
+! procedure NotImplemented;public;
+!  
+! function Pos(SubStr, Str:string):integer;public;
+! function Concat(S1, S2:string):string;public;
+! procedure Delete(var S: string; Index, Count:Integer);public;
+! procedure Insert(Source: string; var S: string; Index: Integer);public;
+! function Copy(Source:string; StartIndex, Length: Integer):string;public;
+! function UpCase(Letter: Char): Char;public;
+! function LoCase(Letter: Char): Char;public;
+! function StringOfChar(RepeatCharacter: Char; RepeatCount: Integer ): string; public;
+! procedure Str(X:Double; Width:integer;Decimals:integer;var S:string);public;
+! procedure Val(S:string; var V:Double; var Code: Integer);public;
+! function Ord(Value:Char):integer;public;
+! function Ord(Value:Boolean):integer;public;
+! procedure Inc(var Value:integer);public;
+! procedure Inc(var Value:integer; Amount:integer);public;
+! procedure Dec(var Value:integer);public;
+! procedure Dec(var Value:integer; Amount:integer);public;
+! function Pred(Value:Integer):Integer;public;
+! function Succ(Value:Integer):Integer;public;
+! function Round(Value:Double):Integer;public;
+! function Round(Value:TDateTime):Integer;public;
+! function Trunc(Value:Double):Integer;public;
+! function Trunc(Value:TDateTime):Integer;public;
+! function Int(X: Double): Double;public;
+! function Int(X: TDateTime): Double;public;
+! function Frac(Value:Double):Double;public;
+! function Frac(Value:TDateTime):Double;public;
+! function Odd(Value:Integer):boolean;public;
+! function Sqrt(Number:Extended):Extended;public;
+! function Sqr(Number:Extended):Extended;public;
+! function Sqr(Number:Integer):Integer;public;
+! 
+! function Abs(X:Integer):Integer;public;
+! function Abs(X:Double):Double;public;
+! function Abs(X:TDateTime):TDateTime;public;
+! function Exp(X: Double): Double;public;
+! procedure SetLength(var S; Length: integer);public;
+! procedure Write(S:string);public;
+! procedure WriteLn(S:string);public;
+! procedure Read(var P);public;
+! procedure ReadLn(var P);public;
+  
+  
+
+Index: Types.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Types.pas,v
+retrieving revision 1.10
+retrieving revision 1.11
+diff -C2 -d -r1.10 -r1.11
+*** Types.pas	27 Jun 2005 11:04:50 -0000	1.10
+--- Types.pas	28 Jun 2005 13:29:37 -0000	1.11
+***************
+*** 73,76 ****
+--- 73,77 ----
+    PFileTime = ^TFileTime;
+    TFileTime = public record
++   public 
+      dwLowDateTime: DWORD;
+      dwHighDateTime: DWORD;
+***************
+*** 355,360 ****
+      function ToType(Typ: System.Type; Provider: IFormatProvider): System.Object;
+    end;
+! 
+    TDayTable = public array [1..12] of Word;
+  
+  const
+--- 356,389 ----
+      function ToType(Typ: System.Type; Provider: IFormatProvider): System.Object;
+    end;
+!   
+    TDayTable = public array [1..12] of Word;
++   // The only difference between AnsiString and string is that AnsiString assumes that [] access is 1-based
++   // TODO: maybe implement IComparable, ICloneable, IConvertible and IEnumerable?
++   // !!! CURRENTLY EXPERIMENTAL - use at your own risk!!!
++   AnsiString = public sealed class // should this be a struct instead (avoids having to create instances explicitly)?
++   private
++     FString:string;
++     method set_Chars(Index:integer; value: Char);
++     method get_Chars(Index:integer): Char;
++   public
++     class operator Add(const Left, Right: AnsiString): AnsiString;
++     class operator Equal(const Left, Right: AnsiString): Boolean;
++     class operator NotEqual(const Left, Right: AnsiString): Boolean;
++     class operator Less(const Left, Right: AnsiString): Boolean;
++     class operator LessOrEqual(const Left, Right: AnsiString): Boolean;
++     class operator Greater(const Left, Right: AnsiString): Boolean;
++     class operator GreaterOrEqual(const Left, Right: AnsiString): Boolean;
++ 
++     class operator Implicit(const Value: string): AnsiString;
++     // TODO: should we really allow implicit conversion from AnsiString to string? 
++     // What happens when users call RTL string routines (i.e Pos) with AnsiString parameters?
++     class operator Implicit(const Value: AnsiString): string;
++     
++     function ToString(Provider: IFormatProvider): string;
++     function ToString: string;override;
++     constructor (S:string);
++     constructor (S:AnsiString);
++     property Chars[Index:integer]:Char read get_Chars write set_Chars;default;
++   end;
+  
+  const
+***************
+*** 1040,1043 ****
+--- 1069,1156 ----
+    // TODO: Should this be implemented? - LK
+    NotImplemented;
++ end;
++ 
++ 
++ method AnsiString.get_Chars(Index:integer): Char;
++ require
++   Index > 0;
++ begin
++   Result := FString[Index-1];
++ end;
++ 
++ method AnsiString.set_Chars(Index:integer; value: Char);
++ require
++   Index > 0;
++ begin
++   // string doesn't support changing chars in the string, but we make an exception for AnsiString :)
++   FString := FString.Remove(Index-1, 1).Insert(Index-1, value);
++ end;
++ 
++ constructor AnsiString(S:string); 
++ begin
++   inherited Create;
++   FString := S;
++ end;
++ 
++ constructor AnsiString(S:AnsiString); 
++ begin
++   inherited Create;
++   FString := S.ToString;
++ end;
++ 
++ class operator AnsiString.Add(const Left, Right: AnsiString): AnsiString; 
++ begin
++   Result := new AnsiString(Left.ToString + Right.ToString);
++ end;
++ 
++ class operator AnsiString.Equal(const Left, Right: AnsiString): Boolean; 
++ begin
++   Result := Left.ToString = Right.ToString;
++ end;
++ 
++ class operator AnsiString.NotEqual(const Left, Right: AnsiString): Boolean; 
++ begin
++   Result := Left.ToString <> Right.ToString;
++ end;
++ 
++ class operator AnsiString.Less(const Left, Right: AnsiString): Boolean; 
++ begin
++   Result := Left.ToString < Right.ToString;
++ end;
++ 
++ class operator AnsiString.LessOrEqual(const Left, Right: AnsiString): Boolean; 
++ begin
++   Result := Left.ToString <= Right.ToString;
++ end;
++ 
++ class operator AnsiString.Greater(const Left, Right: AnsiString): Boolean; 
++ begin
++   Result := Left.ToString > Right.ToString;
++ end;
++ 
++ class operator AnsiString.GreaterOrEqual(const Left, Right: AnsiString): Boolean; 
++ begin
++   Result := Left.ToString >= Right.ToString;
++ end;
++ 
++ 
++ class operator AnsiString.Implicit(const Value: string): AnsiString; 
++ begin
++    Result := new AnsiString(Value);
++ end;
++ 
++ class operator AnsiString.Implicit(const Value: AnsiString): string; 
++ begin
++   Result := Value.ToString;
++ end;
++ 
++ function AnsiString.ToString(Provider: IFormatProvider): string; 
++ begin
++   Result := FString.ToString(Provider);
++ end;
++ 
++ function AnsiString.ToString: string; 
++ begin
++   Result := FString;
+  end;
+  
+
+
+
+From nobody at sheep.berlios.de  Tue Jun 28 16:54:38 2005
+From: nobody at sheep.berlios.de (peter3)
+Date: Tue, 28 Jun 2005 16:54:38 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.RTL Types.pas,1.11,1.12
+Message-ID: <200506281454.j5SEscI14444@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv10180/ShineOn.RTL
+
+Modified Files:
+	Types.pas 
+Log Message:
+- FILETIME is already available from System.InteropServices, so use it as the base for TFileTime
+- type alias declarations must be marked as "public" to be visible at all (Reflector)
+
+Index: Types.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Types.pas,v
+retrieving revision 1.11
+retrieving revision 1.12
+diff -C2 -d -r1.11 -r1.12
+*** Types.pas	28 Jun 2005 13:29:37 -0000	1.11
+--- Types.pas	28 Jun 2005 14:54:35 -0000	1.12
+***************
+*** 20,24 ****
+    System,
+    System.Globalization,
+!   System.Runtime.InteropServices; // for guid attribute
+    
+  type
+--- 20,24 ----
+    System,
+    System.Globalization,
+!   System.Runtime.InteropServices; // for guid attribute and FILETIME
+    
+  type
+***************
+*** 27,82 ****
+  
+  type  
+!   HRESULT = Longint;
+  
+!   TGUID = System.GUID;
+!   PGUID = ^TGUID;
+  
+!   PLongint = ^Longint;
+!   PInteger = ^Integer;
+!   PSmallInt = ^SmallInt;
+!   PDouble = ^Double;
+!   PByte = ^Byte;
+!   DWORD = LongWord;
+  
+!   TIntegerDynArray      = array of Integer;
+!   TCardinalDynArray     = array of Cardinal;
+!   TWordDynArray         = array of Word;
+!   TSmallIntDynArray     = array of SmallInt;
+!   TByteDynArray         = array of Byte;
+!   TShortIntDynArray     = array of ShortInt;
+!   TInt64DynArray        = array of Int64;
+!   TLongWordDynArray     = array of LongWord;
+!   TSingleDynArray       = array of Single;
+!   TDoubleDynArray       = array of Double;
+!   TBooleanDynArray      = array of Boolean;
+!   TStringDynArray       = array of string;
+!   TWideStringDynArray   = array of WideString;
+  
+!   TPoint = System.Drawing.Point;
+!   TRect = System.Drawing.Rectangle; 
+!   TSize = System.Drawing.Size;
+!   TSmallPoint = System.Drawing.Point;
+  
+!   TOleChar = WideChar;
+!   POleStr = ^WideChar;
+!   PPOleStr = ^POleStr;
+  
+!   PCLSID = ^TGUID;
+!   TCLSID = TGUID;
+  
+!   Largeint = Int64;
+!   PDWORD = ^DWORD;
+    
+!   LCID = Word;
+!   LANGID = Word;
+  
+!   PFileTime = ^TFileTime;
+!   TFileTime = public record
+!   public 
+!     dwLowDateTime: DWORD;
+!     dwHighDateTime: DWORD;
+!   end;
+!   _FILETIME = TFileTime;
+!   FILETIME = TFileTime;
+  
+    [Guid('00000000-0000-0000-C000-000000000046')]
+--- 27,76 ----
+  
+  type  
+!   HRESULT = public Longint;
+  
+!   TGUID = public System.GUID;
+!   PGUID = public ^TGUID;
+  
+!   PLongint = public ^Longint;
+!   PInteger = public ^Integer;
+!   PSmallInt = public ^SmallInt;
+!   PDouble = public ^Double;
+!   PByte = public ^Byte;
+!   DWORD = public LongWord;
+  
+!   TIntegerDynArray      = public array of Integer;
+!   TCardinalDynArray     = public array of Cardinal;
+!   TWordDynArray         = public array of Word;
+!   TSmallIntDynArray     = public array of SmallInt;
+!   TByteDynArray         = public array of Byte;
+!   TShortIntDynArray     = public array of ShortInt;
+!   TInt64DynArray        = public array of Int64;
+!   TLongWordDynArray     = public array of LongWord;
+!   TSingleDynArray       = public array of Single;
+!   TDoubleDynArray       = public array of Double;
+!   TBooleanDynArray      = public array of Boolean;
+!   TStringDynArray       = public array of string;
+!   TWideStringDynArray   = public array of WideString;
+  
+!   TPoint = public System.Drawing.Point;
+!   TRect = public System.Drawing.Rectangle; 
+!   TSize = public System.Drawing.Size;
+!   TSmallPoint = public System.Drawing.Point;
+  
+!   TOleChar = public WideChar;
+!   POleStr = public ^WideChar;
+!   PPOleStr = public ^POleStr;
+  
+!   PCLSID = public ^TGUID;
+!   TCLSID = public TGUID;
+  
+!   Largeint = public Int64;
+!   PDWORD = public ^DWORD;
+    
+!   LCID = public Word;
+!   LANGID = public Word;
+  
+!   PFileTime = public ^TFileTime;
+!   TFileTime = public FILETIME;
+  
+    [Guid('00000000-0000-0000-C000-000000000046')]
+
+
+
+From nobody at sheep.berlios.de  Wed Jun 29 01:32:09 2005
+From: nobody at sheep.berlios.de (peter3)
+Date: Wed, 29 Jun 2005 01:32:09 +0200
+Subject: [Shineon-checkins] ShineOn ShineOn.2003.sln,1.2,1.3
+Message-ID: <200506282332.j5SNW9I32155@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn
+In directory sheep:/tmp/cvs-serv7783
+
+Modified Files:
+	ShineOn.2003.sln 
+Log Message:
+- some simplifications in TDateTime
+- added inc, dec, succ and pred for char type
+- Copy didn't do the right thing (Sourcce and S were mixed up)
+- alternate implementation of StringOfChar
+- Val now returns (in Code) the index (+1) of any error
+- Added and implemented several new tests
+
+Index: ShineOn.2003.sln
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.2003.sln,v
+retrieving revision 1.2
+retrieving revision 1.3
+diff -C2 -d -r1.2 -r1.3
+*** ShineOn.2003.sln	25 Apr 2005 17:51:43 -0000	1.2
+--- ShineOn.2003.sln	28 Jun 2005 23:32:05 -0000	1.3
+***************
+*** 14,17 ****
+--- 14,21 ----
+  	EndProjectSection
+  EndProject
++ Project("{656346D9-4656-40DA-A068-22D5425D4639}") = "NUnit.ShineOn.RTL", "NUnit\NUnit.ShineOn.RTL.chrome", "{78329CFC-D7AA-468C-8DF7-DBC4C14D671C}"
++ 	ProjectSection(ProjectDependencies) = postProject
++ 	EndProjectSection
++ EndProject
+  Global
+  	GlobalSection(SolutionConfiguration) = preSolution
+***************
+*** 32,35 ****
+--- 36,43 ----
+  		{0D12830E-FF40-428B-A22D-B44134F3C472}.Release.ActiveCfg = Release
+  		{0D12830E-FF40-428B-A22D-B44134F3C472}.Release.Build.0 = Release
++ 		{78329CFC-D7AA-468C-8DF7-DBC4C14D671C}.Debug.ActiveCfg = Debug
++ 		{78329CFC-D7AA-468C-8DF7-DBC4C14D671C}.Debug.Build.0 = Debug
++ 		{78329CFC-D7AA-468C-8DF7-DBC4C14D671C}.Release.ActiveCfg = Release
++ 		{78329CFC-D7AA-468C-8DF7-DBC4C14D671C}.Release.Build.0 = Release
+  	EndGlobalSection
+  	GlobalSection(ExtensibilityGlobals) = postSolution
+
+
+
+From nobody at sheep.berlios.de  Wed Jun 29 01:32:10 2005
+From: nobody at sheep.berlios.de (peter3)
+Date: Wed, 29 Jun 2005 01:32:10 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.14,1.15 Types.pas,1.12,1.13
+Message-ID: <200506282332.j5SNWAI32159@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv7783/ShineOn.RTL
+
+Modified Files:
+	System.pas Types.pas 
+Log Message:
+- some simplifications in TDateTime
+- added inc, dec, succ and pred for char type
+- Copy didn't do the right thing (Sourcce and S were mixed up)
+- alternate implementation of StringOfChar
+- Val now returns (in Code) the index (+1) of any error
+- Added and implemented several new tests
+
+Index: System.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/System.pas,v
+retrieving revision 1.14
+retrieving revision 1.15
+diff -C2 -d -r1.14 -r1.15
+*** System.pas	28 Jun 2005 13:29:37 -0000	1.14
+--- System.pas	28 Jun 2005 23:32:07 -0000	1.15
+***************
+*** 22,25 ****
+--- 22,26 ----
+  
+  uses
++   System.Text,
+    System.Globalization;
+      
+***************
+*** 43,46 ****
+--- 44,48 ----
+      class procedure Val(S:string; var V:Double; var Code: Integer);
+  
++ 
+      class function Ord(Value:Char):integer;
+      class function Ord(Value:Boolean):integer;
+***************
+*** 50,55 ****
+--- 52,64 ----
+      class procedure Dec(var Value:integer);
+      class procedure Dec(var Value:integer; Amount:integer);
++     class procedure Inc(var Value:Char);
++     class procedure Inc(var Value:Char; Amount:integer);
++     class procedure Dec(var Value:Char);
++     class procedure Dec(var Value:Char; Amount:integer);
++ 
+      class function Pred(Value:Integer):Integer;
++     class function Pred(Value:Char):Char;
+      class function Succ(Value:Integer):Integer;
++     class function Succ(Value:Char):Char;
+  
+      class function Round(Value:Double):Integer;
+***************
+*** 93,96 ****
+--- 102,110 ----
+  procedure Str(X:Double; Width:integer;Decimals:integer;var S:string);public;
+  procedure Val(S:string; var V:Double; var Code: Integer);public;
++ procedure Inc(var Value:Char); public;
++ procedure Inc(var Value:Char;Amount:integer); public;
++ procedure Dec(var Value:Char); public;
++ procedure Dec(var Value:Char;Amount:integer); public;
++ 
+  function Ord(Value:Char):integer;public;
+  function Ord(Value:Boolean):integer;public;
+***************
+*** 100,104 ****
+--- 114,120 ----
+  procedure Dec(var Value:integer; Amount:integer);public;
+  function Pred(Value:Integer):Integer;public;
++ function Pred(Value:Char):Char;public;
+  function Succ(Value:Integer):Integer;public;
++ function Succ(Value:Char):Char;public;
+  function Round(Value:Double):Integer;public;
+  function Round(Value:TDateTime):Integer;public;
+***************
+*** 158,170 ****
+  class procedure System.Insert(Source: string; var S: string; Index: Integer);
+  begin
+!   S := Source.Substring(0, Index) + S + Source.Substring(Index + 1);
+  end;
+  
+  class function System.Copy(Source:string; StartIndex, Length: Integer):string;
+  begin
+!   if Source = nil then
+      Result := ''
+!   else
+!     Result := Source.Substring(StartIndex, Length)
+  end;
+  
+--- 174,193 ----
+  class procedure System.Insert(Source: string; var S: string; Index: Integer);
+  begin
+!   S := S.Substring(0, Index) + Source + S.Substring(Index);
+  end;
+  
+  class function System.Copy(Source:string; StartIndex, Length: Integer):string;
+  begin
+!   if (Source = nil) or (StartIndex >= Source.Length) or (Length < 1) then
+      Result := ''
+!   else 
+!   begin
+!     if StartIndex + Length >= Source.Length then
+!       Result := Source.Substring(StartIndex)
+!     else if Length > 0 then
+!       Result := Source.Substring(StartIndex, Length)
+!     else
+!       Result := '';
+!   end;
+  end;
+  
+***************
+*** 180,192 ****
+  
+  class function System.StringOfChar ( RepeatCharacter : Char; RepeatCount : Integer ) : string; 
+- var
+-   TempArray: Array of Char;
+  begin
+!   TempArray := New Char[RepeatCount];
+!   for i:Integer := 0 to RepeatCount -1 do
+    begin
+!     Temparray[i] := RepeatCharacter;
+    end;
+-   result := new String(TempArray);
+  end;
+  
+--- 203,213 ----
+  
+  class function System.StringOfChar ( RepeatCharacter : Char; RepeatCount : Integer ) : string; 
+  begin
+!   with SB:StringBuilder := new StringBuilder do
+    begin
+!     for i:integer := 0 to RepeatCount - 1 do
+!       SB.Append(RepeatCharacter);
+!     Result := SB.ToString;
+    end;
+  end;
+  
+***************
+*** 197,219 ****
+  
+  class procedure System.Val(S:string; var V:Double; var Code: Integer);
+  begin
+    // TODO: should we use NumberFormatInfo.CurrentInfo here?
+    if not Double.TryParse(S, NumberStyles.Any, NumberFormatInfo.InvariantInfo, V) then
+!     Code := 1
+!   else
+!     Code := 0;
+! end;
+! 
+! class function System.Ord(Value:Char):integer;
+! begin
+!   Result := integer(Value);
+! end;
+! 
+! class function System.Ord(Value:Boolean):integer;
+! begin
+!   if Value then
+!     Result := 1
+!   else
+!     Result := 0;
+  end;
+  
+--- 218,237 ----
+  
+  class procedure System.Val(S:string; var V:Double; var Code: Integer);
++ const
++   SNumeric:string = '0123456789.+-eE';
+  begin
+    // TODO: should we use NumberFormatInfo.CurrentInfo here?
++   Code := 0;
+    if not Double.TryParse(S, NumberStyles.Any, NumberFormatInfo.InvariantInfo, V) then
+!   begin
+!     // find first non-numeric value
+!     for i:integer := 0 to S.Length - 1 do
+!       if SNumeric.IndexOf(S[i]) < 0 then
+!       begin
+!         Code := i + 1; // since Val in Delphi sets Code = 0 on success, we add an additional 1 to the result here as well
+!         Exit;
+!       end;
+!     Code := S.Length;
+!   end;
+  end;
+  
+***************
+*** 238,241 ****
+--- 256,292 ----
+  end;
+  
++ class procedure System.Inc(var Value:Char); 
++ begin
++   Value := Char(Integer(Value) + 1);
++ end;
++ 
++ class procedure System.Inc(var Value:Char; Amount:integer); 
++ begin
++   Value := Char(Integer(Value) + Amount);
++ end;
++ 
++ class procedure System.Dec(var Value:Char); 
++ begin
++   Value := Char(Integer(Value) - 1);
++ end;
++ 
++ class procedure System.Dec(var Value:Char; Amount:integer); 
++ begin
++   Value := Char(Integer(Value) - Amount);
++ end;
++ 
++ class function System.Ord(Value:Char):integer;
++ begin
++   Result := integer(Value);
++ end;
++ 
++ class function System.Ord(Value:Boolean):integer;
++ begin
++   if Value then
++     Result := 1
++   else
++     Result := 0;
++ end;
++ 
+  class function System.Pred(Value:Integer):Integer;
+  begin
+***************
+*** 248,251 ****
+--- 299,313 ----
+  end;
+  
++ class function System.Pred(Value:Char): Char; 
++ begin
++   Result := Char(Integer(Value) - 1);
++ end;
++ 
++ 
++ class function System.Succ(Value:Char): Char; 
++ begin
++   Result := Char(Integer(Value) + 1);
++ end;
++ 
+  class function System.Round(Value:Double):Integer;
+  begin
+***************
+*** 254,262 ****
+  
+  class function System.Round(Value: TDateTime): Integer;
+- var
+-   Buffer: Double;
+  begin
+!   Buffer := Value;
+!   Result := Integer(Buffer);
+  end;
+    
+--- 316,321 ----
+  
+  class function System.Round(Value: TDateTime): Integer;
+  begin
+!   Result := Integer(Math.Round(Value));
+  end;
+    
+***************
+*** 447,450 ****
+--- 506,529 ----
+    ShineOn.RTL.System.Val(S, V, Code);
+  end;
++ 
++ procedure Inc(var Value:Char); 
++ begin
++   ShineOn.RTL.System.Inc(Value);
++ end;
++ 
++ procedure Inc(var Value:Char; Amount:integer); 
++ begin
++   ShineOn.RTL.System.Inc(Value, Amount);
++ end;
++ 
++ procedure Dec(var Value:Char); 
++ begin
++   ShineOn.RTL.System.Dec(Value);
++ end;
++ 
++ procedure Dec(var Value:Char; Amount:integer); 
++ begin
++   ShineOn.RTL.System.Dec(Value, Amount);
++ end;
+    
+  function Ord(Value:Char):integer;
+***************
+*** 483,486 ****
+--- 562,570 ----
+  end;
+    
++ function Pred(Value:Char):Char;
++ begin
++   Result := ShineOn.RTL.System.Pred(Value);
++ end;
++ 
+  function Succ(Value:Integer):Integer;
+  begin
+***************
+*** 488,491 ****
+--- 572,579 ----
+  end;
+     
++ function Succ(Value:Char):Char;
++ begin
++   Result := ShineOn.RTL.System.Succ(Value);
++ end;
+  
+  function Round(Value:Double):Integer;
+***************
+*** 595,596 ****
+--- 683,687 ----
+    
+  end.
++ 
++ 
++ 
+
+Index: Types.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Types.pas,v
+retrieving revision 1.12
+retrieving revision 1.13
+diff -C2 -d -r1.12 -r1.13
+*** Types.pas	28 Jun 2005 14:54:35 -0000	1.12
+--- Types.pas	28 Jun 2005 23:32:07 -0000	1.13
+***************
+*** 235,238 ****
+--- 235,239 ----
+    TTime = TDateTime;
+  
++   // TODO: handle negative values
+    TDateTime = public class(System.Object, IFormattable, IComparable, IConvertible)
+    private
+***************
+*** 298,301 ****
+--- 299,303 ----
+  
+      class function Trunc(const Value: TDateTime): Int64;
++     class function Frac(const Value: TDateTime): Double;
+      class function Round(const Value: TDateTime): Int64;
+  
+***************
+*** 449,453 ****
+  begin
+    inherited Create;
+!   
+    FValue := DoubleToDateTime(AValue);
+  end;
+--- 451,455 ----
+  begin
+    inherited Create;
+! 
+    FValue := DoubleToDateTime(AValue);
+  end;
+***************
+*** 482,486 ****
+  function TDateTime.ToDateTime: DateTime;
+  begin
+!   Result := new DateTime(Year,Month,Day,Hour,Minute,Second,MSec);
+  end;
+  
+--- 484,488 ----
+  function TDateTime.ToDateTime: DateTime;
+  begin
+!   Result := FValue;
+  end;
+  
+***************
+*** 747,775 ****
+  
+  class function TDateTime.Trunc(const Value: TDateTime): Int64;
+- var
+-   ValAsDbl: double;
+  begin
+!   ValAsDbl := DateTimeToDouble(Value.ToDateTime);
+!   Result := Convert.ToInt64(ValAsDbl);
+  end;
+  
+  class function TDateTime.Round(const Value: TDateTime): Int64;
+- var
+-   ValAsDbl: double;
+  begin
+!   ValAsDbl := DateTimeToDouble(Value.ToDateTime);
+!   Result := Convert.ToInt64(ValAsDbl);
+  end;
+  
+  class operator TDateTime.Minus(const Value: TDateTime): TDateTime;
+  begin
+!   // TODO: Not sure what use these would be for a date/time - LK
+!   NotImplemented;
+  end;
+  
+  class operator TDateTime.Plus(const Value: TDateTime): TDateTime;
+  begin
+!   // TODO: Not sure what use these would be for a date/time - LK
+!   NotImplemented;
+  end;
+  
+--- 749,774 ----
+  
+  class function TDateTime.Trunc(const Value: TDateTime): Int64;
+  begin
+!   Result := ShineOn.RTL.System.Trunc(Value);
+! end;
+! 
+! class function TDateTime.Frac(const Value: TDateTime): Double;
+! begin
+!   Result := ShineOn.RTL.System.Frac(Value);
+  end;
+  
+  class function TDateTime.Round(const Value: TDateTime): Int64;
+  begin
+!   Result := ShineOn.RTL.System.Round(Value);
+  end;
+  
+  class operator TDateTime.Minus(const Value: TDateTime): TDateTime;
+  begin
+!   Result := new TDateTime(-DateTimeToDouble(Value));
+  end;
+  
+  class operator TDateTime.Plus(const Value: TDateTime): TDateTime;
+  begin
+!   Result := new TDateTime(Value);
+  end;
+  
+***************
+*** 932,936 ****
+  class operator TDateTime.Implicit(const Value: TDateTime): Double;
+  begin
+!   Result := new TDateTime(Value.ToDateTime);
+  end;
+  
+--- 931,935 ----
+  class operator TDateTime.Implicit(const Value: TDateTime): Double;
+  begin
+!   Result := DateTimeToDouble(Value);
+  end;
+  
+***************
+*** 942,951 ****
+  class operator TDateTime.Implicit(const Value: TDateTime): System.DateTime;
+  begin
+!   Result := Value.ToDateTime;
+  end;
+  
+  class operator TDateTime.Implicit(const Value: TDateTime): TDateTime;
+  begin
+!   Result := new TDateTime(Value.Year,Value.Month,Value.Day,Value.Hour,Value.Minute,Value.Second,Value.MSec);
+  end;
+  
+--- 941,950 ----
+  class operator TDateTime.Implicit(const Value: TDateTime): System.DateTime;
+  begin
+!   Result := new TDateTime(Value).ToDateTime;
+  end;
+  
+  class operator TDateTime.Implicit(const Value: TDateTime): TDateTime;
+  begin
+!   Result := new TDateTime(Value);
+  end;
+  
+***************
+*** 965,1069 ****
+  function TDateTime.GetTypeCode: TypeCode;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToInt16(Provider: IFormatProvider): SmallInt;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToInt32(Provider: IFormatProvider): Integer;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToSingle(Provider: IFormatProvider): Single;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToDouble(Provider: IFormatProvider): Double;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToDateTime(Provider: IFormatProvider): DateTime;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToBoolean(Provider: IFormatProvider): Boolean;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToDecimal(Provider: IFormatProvider): Decimal;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToSByte(Provider: IFormatProvider): ShortInt;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToByte(Provider: IFormatProvider): Byte;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToUInt16(Provider: IFormatProvider): Word;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToUInt32(Provider: IFormatProvider): LongWord;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToInt64(Provider: IFormatProvider): Int64;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToUInt64(Provider: IFormatProvider): UInt64;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToString(Provider: IFormatProvider): string;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToChar(Provider: IFormatProvider): Char;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToType(Typ: System.Type; Provider: IFormatProvider): System.Object;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  
+  method AnsiString.get_Chars(Index:integer): Char;
+  require
+--- 964,1052 ----
+  function TDateTime.GetTypeCode: TypeCode;
+  begin
+!   Result := TypeCode.DateTime;
+  end;
+  
+  function TDateTime.ToInt16(Provider: IFormatProvider): SmallInt;
+  begin
+!   Result := Convert.ToInt16(FValue, Provider);
+  end;
+  
+  function TDateTime.ToInt32(Provider: IFormatProvider): Integer;
+  begin
+!   Result := Convert.ToInt32(FValue, Provider);
+  end;
+  
+  function TDateTime.ToSingle(Provider: IFormatProvider): Single;
+  begin
+!   Result := Convert.ToSingle(FValue, Provider);
+  end;
+  
+  function TDateTime.ToDouble(Provider: IFormatProvider): Double;
+  begin
+!   Result := Convert.ToDouble(FValue, Provider);
+  end;
+  
+  function TDateTime.ToDateTime(Provider: IFormatProvider): DateTime;
+  begin
+!   Result := Convert.ToDateTime(FValue, Provider);
+  end;
+  
+  function TDateTime.ToBoolean(Provider: IFormatProvider): Boolean;
+  begin
+!   Result := Convert.ToBoolean(FValue, Provider);
+  end;
+  
+  function TDateTime.ToDecimal(Provider: IFormatProvider): Decimal;
+  begin
+!   Result := Convert.ToDecimal(FValue, Provider);
+  end;
+  
+  function TDateTime.ToSByte(Provider: IFormatProvider): ShortInt;
+  begin
+!   Result := Convert.ToSByte(FValue, Provider);
+  end;
+  
+  function TDateTime.ToByte(Provider: IFormatProvider): Byte;
+  begin
+!   Result := Convert.ToByte(FValue, Provider);
+  end;
+  
+  function TDateTime.ToUInt16(Provider: IFormatProvider): Word;
+  begin
+!   Result := Convert.ToUInt16(FValue, Provider);
+  end;
+  
+  function TDateTime.ToUInt32(Provider: IFormatProvider): LongWord;
+  begin
+!   Result := Convert.ToUInt32(FValue, Provider);
+  end;
+  
+  function TDateTime.ToInt64(Provider: IFormatProvider): Int64;
+  begin
+!   Result := Convert.ToInt64(FValue, Provider);
+  end;
+  
+  function TDateTime.ToUInt64(Provider: IFormatProvider): UInt64;
+  begin
+!   Result := Convert.ToUInt64(FValue, Provider);
+  end;
+  
+  function TDateTime.ToString(Provider: IFormatProvider): string;
+  begin
+!   Result := Convert.ToString(FValue, Provider);
+  end;
+  
+  function TDateTime.ToChar(Provider: IFormatProvider): Char;
+  begin
+!   Result := Convert.ToChar(FValue, Provider);
+  end;
+  
+  function TDateTime.ToType(Typ: System.Type; Provider: IFormatProvider): System.Object;
+  begin
+!   Result := Convert.ChangeType(FValue, Typ, Provider);
+  end;
+  
+  
++ { AnsiString }
+  method AnsiString.get_Chars(Index:integer): Char;
+  require
+
+
+
+From nobody at sheep.berlios.de  Wed Jun 29 01:32:38 2005
+From: nobody at sheep.berlios.de (peter3)
+Date: Wed, 29 Jun 2005 01:32:38 +0200
+Subject: [Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.2,1.3
+Message-ID: <200506282332.j5SNWcI32166@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/NUnit
+In directory sheep:/tmp/cvs-serv7783/NUnit
+
+Modified Files:
+	TestSystem.pas 
+Log Message:
+- some simplifications in TDateTime
+- added inc, dec, succ and pred for char type
+- Copy didn't do the right thing (Sourcce and S were mixed up)
+- alternate implementation of StringOfChar
+- Val now returns (in Code) the index (+1) of any error
+- Added and implemented several new tests
+
+Index: TestSystem.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/TestSystem.pas,v
+retrieving revision 1.2
+retrieving revision 1.3
+diff -C2 -d -r1.2 -r1.3
+*** TestSystem.pas	28 Jun 2005 11:26:05 -0000	1.2
+--- TestSystem.pas	28 Jun 2005 23:32:03 -0000	1.3
+***************
+*** 54,64 ****
+      method OrdBool;
+      [Test]
+!     method Inc;
+      [Test]
+!     method IncAmount;
+      [Test]
+!     method Dec;
+      [Test]
+!     method DecAmount;
+      [Test]
+      method Pred;
+--- 54,64 ----
+      method OrdBool;
+      [Test]
+!     method IncTest;
+      [Test]
+!     method IncAmountTest;
+      [Test]
+!     method DecTest;
+      [Test]
+!     method DecAmountTest;
+      [Test]
+      method Pred;
+***************
+*** 107,110 ****
+--- 107,112 ----
+      [Test]
+      method ReadLn;
++     [Test]
++     method StringOfChar;
+    end;
+  
+***************
+*** 121,130 ****
+  method SystemTests.Pos; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.Concat; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 123,145 ----
+  method SystemTests.Pos; 
+  begin
+!   //               0         1         2
+!   //               012345678901234567890
+!   var S:String := 'This is a TestString';
+!   ShineOn.RTL.System.Pos(',', S);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos(',', S), -1);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos('This', S), 0);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos('his', S), 1);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos('is', S), 2);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos('s is', S), 3);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos(' ', S), 4);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos('is a', S), 5);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos('a Test', S), 8);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos('TestString', S), 10);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos('teststring', S), -1);
+  end;
+  
+  method SystemTests.Concat; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Concat('Test','String'), 'Test' + 'String');
+  end;
+  
+***************
+*** 190,199 ****
+  method SystemTests.Insert; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.Copy; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 205,224 ----
+  method SystemTests.Insert; 
+  begin
+!  var S:String := 'TestString';
+!  ShineOn.RTL.System.Insert(' ', S, 4);
+!  NUnit.Framework.Assert.AreEqual(S, 'Test String');
+! 
+!  ShineOn.RTL.System.Insert(' ', S, 0);
+!  NUnit.Framework.Assert.AreEqual(S, ' Test String');
+! 
+!  ShineOn.RTL.System.Insert(' ', S, S.Length);
+!  NUnit.Framework.Assert.AreEqual(S, ' Test String ');
+  end;
+  
+  method SystemTests.Copy; 
+  begin
+!   NUnit.Framework.Assert.AreEqual('TestString',ShineOn.RTL.System.Copy('TestString', 0, MaxInt));
+!   NUnit.Framework.Assert.AreEqual('',ShineOn.RTL.System.Copy('TestString', 0, 0));
+!   NUnit.Framework.Assert.AreEqual('Test',ShineOn.RTL.System.Copy('TestString', 0, 4));
+  end;
+  
+***************
+*** 204,274 ****
+  
+  method SystemTests.Val; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.OrdChar; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.OrdBool; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+! method SystemTests.Inc; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+! method SystemTests.IncAmount; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+! method SystemTests.Dec; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+! method SystemTests.DecAmount; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.Pred; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.Succ; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.RoundDouble; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.RoundTDateTime; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.TruncDouble; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.TruncTDateTime; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.IntDouble; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 229,361 ----
+  
+  method SystemTests.Val; 
++ var S:String;V:Double; C:integer;
+  begin
+!   S := '11.5';
+!   ShineOn.RTL.System.Val(S, V, C);
+!   NUnit.Framework.Assert.AreEqual(V, 11.5);
+!   NUnit.Framework.Assert.AreEqual(0, C);
+!   
+!   S := '11T5'; // Val should not adjust to locale settings (i.e decimal separator should always be '.')
+!   ShineOn.RTL.System.Val(S, V, C);
+!   NUnit.Framework.Assert.AreEqual(3, C);  // remember, "C" is 1-based (0 == success)!
+  end;
+  
+  method SystemTests.OrdChar; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Ord('a'), Convert.ToInt32('a'));
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Ord('A'), Convert.ToInt32('A'));
+  end;
+  
+  method SystemTests.OrdBool; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Ord(false), 0);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Ord(true), 1);
+  end;
+  
+! method SystemTests.IncTest; 
+  begin
+!   var i:integer := 1;
+!   ShineOn.RTL.System.Inc(i);
+!   NUnit.Framework.Assert.AreEqual(i, 2);
+!   i := 0;
+!   ShineOn.RTL.System.Inc(i);
+!   NUnit.Framework.Assert.AreEqual(i, 1);
+!   i := -1;
+!   ShineOn.RTL.System.Inc(i);
+!   NUnit.Framework.Assert.AreEqual(i, 0);
+  end;
+  
+! method SystemTests.IncAmountTest; 
+  begin
+!   var i:integer := 1;
+!   ShineOn.RTL.System.Inc(i, 1);
+!   NUnit.Framework.Assert.AreEqual(i, 2);
+!   i := -1;
+!   ShineOn.RTL.System.Inc(i, 1);
+!   NUnit.Framework.Assert.AreEqual(i, 0);
+!   i := -1;
+!   ShineOn.RTL.System.Inc(i, 0);
+!   NUnit.Framework.Assert.AreEqual(i, -1);
+!   i := -1;
+!   ShineOn.RTL.System.Inc(i, -2);
+!   NUnit.Framework.Assert.AreEqual(i, -3);
+  end;
+  
+! method SystemTests.DecTest; 
+  begin
+!   var i:integer := 2;
+!   ShineOn.RTL.System.Dec(i);
+!   NUnit.Framework.Assert.AreEqual(i, 1);
+!   i := 0;
+!   ShineOn.RTL.System.Dec(i);
+!   NUnit.Framework.Assert.AreEqual(i, -1);
+!   i := -1;
+!   ShineOn.RTL.System.Dec(i);
+!   NUnit.Framework.Assert.AreEqual(i, -2);
+  end;
+  
+! method SystemTests.DecAmountTest; 
+  begin
+!   var i:integer := 2;
+!   ShineOn.RTL.System.Dec(i, 1);
+!   NUnit.Framework.Assert.AreEqual(i, 1);
+!   i := -1;
+!   ShineOn.RTL.System.Dec(i, 1);
+!   NUnit.Framework.Assert.AreEqual(i, -2);
+! 
+!   i := -1;
+!   ShineOn.RTL.System.Dec(i, 0);
+!   NUnit.Framework.Assert.AreEqual(i, -1);
+!   i := -1;
+!   ShineOn.RTL.System.Dec(i, -2);
+!   NUnit.Framework.Assert.AreEqual(i, 1);
+  end;
+  
+  method SystemTests.Pred; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pred(2), 1);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pred(-2), -3);
+  end;
+  
+  method SystemTests.Succ; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Succ(1), 2);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Succ(-1), 0);
+  end;
+  
+  method SystemTests.RoundDouble; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Round(1.4), 1);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Round(1.5), 2);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Round(1.6), 2);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Round(-1.4), -1);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Round(-1.5), -2);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Round(-1.6), -2);
+  end;
+  
+  method SystemTests.RoundTDateTime; 
+  begin
+!   var D:TDateTime := new TDateTime(2005, 01, 01, 8, 0, 0, 0);
+!   NUnit.Framework.Assert.AreEqual(D.ToInt32(nil), ShineOn.RTL.System.Round(D));
+!   D := new TDateTime(2005, 01, 01, 12, 1, 0, 0);
+!   NUnit.Framework.Assert.AreEqual(D.ToInt32(nil) + 1, ShineOn.RTL.System.Round(D));
+  end;
+  
+  method SystemTests.TruncDouble; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Trunc(1.5), 1);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Trunc(-1.5), -1);
+  end;
+  
+  method SystemTests.TruncTDateTime; 
+  begin
+!   var D:TDateTime := new TDateTime(2005, 01, 01, 23, 0, 0, 0);
+!   NUnit.Framework.Assert.AreEqual(D.ToInt32(nil), ShineOn.RTL.System.Trunc(D));
+  end;
+  
+  method SystemTests.IntDouble; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Int(1.5), 1.0);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Int(-1.5), -1.0);
+  end;
+  
+***************
+*** 280,284 ****
+  method SystemTests.FracDouble; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 367,372 ----
+  method SystemTests.FracDouble; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Frac(1.5), 0.5);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Frac(-1.5), -0.5);
+  end;
+  
+***************
+*** 290,334 ****
+  method SystemTests.Odd; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.Sqrt; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.SqrExtended; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.SqrInteger; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.AbsInteger; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.AbsDouble; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.AbsTDateTime; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.Exp; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.SetLength; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 378,434 ----
+  method SystemTests.Odd; 
+  begin
+!   var i:integer := 0;
+!   while i < 255 do
+!   begin
+!     NUnit.Framework.Assert.IsFalse(ShineOn.RTL.System.Odd(i));
+!     i := i + 1;
+!     NUnit.Framework.Assert.IsTrue(ShineOn.RTL.System.Odd(i));
+!     i := i + 1;
+!   end;
+  end;
+  
+  method SystemTests.Sqrt; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(3, ShineOn.RTL.System.Sqrt(9));
+  end;
+  
+  method SystemTests.SqrExtended; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(3.0 * 3.0, ShineOn.RTL.System.Sqr(3.0));
+  end;
+  
+  method SystemTests.SqrInteger; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(3 * 3, ShineOn.RTL.System.Sqr(3));
+  end;
+  
+  method SystemTests.AbsInteger; 
+  begin
+!   var i:integer := 1;
+!   NUnit.Framework.Assert.AreEqual(integer(i), ShineOn.RTL.System.Abs(integer(-i)));
+  end;
+  
+  method SystemTests.AbsDouble; 
+  begin
+!   var D:double := 2.0;
+!   NUnit.Framework.Assert.AreEqual(double(d), ShineOn.RTL.System.Abs(double(-d)));
+  end;
+  
+  method SystemTests.AbsTDateTime; 
+  begin
+!   var D:TDateTime := new TDateTime(DateTime.Today);
+!   NUnit.Framework.Assert.AreEqual(d, ShineOn.RTL.System.Abs(-d));
+  end;
+  
+  method SystemTests.Exp; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Exp(1.0), Math.E);
+  end;
+  
+  method SystemTests.SetLength; 
+  begin
+!   var S:String := 'This is a string';
+!   ShineOn.RTL.System.SetLength(S, 4);
+!   NUnit.Framework.Assert.AreEqual(S, 'This');
+  end;
+  
+***************
+*** 351,354 ****
+--- 451,460 ----
+  begin
+    NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
++ end;
++ 
++ method SystemTests.StringOfChar; 
++ begin
++   var S:String := ShineOn.RTL.System.StringOfChar('A', 2);
++   NUnit.Framework.Assert.AreEqual(S, 'AA');
+  end;
+  
+
+
+
+From nobody at sheep.berlios.de  Wed Jun 29 01:58:24 2005
+From: nobody at sheep.berlios.de (peter3)
+Date: Wed, 29 Jun 2005 01:58:24 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.RTL Types.pas,1.13,1.14
+Message-ID: <200506282358.j5SNwOI32575@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv24781/ShineOn.RTL
+
+Modified Files:
+	Types.pas 
+Log Message:
+
+
+Index: Types.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Types.pas,v
+retrieving revision 1.13
+retrieving revision 1.14
+diff -C2 -d -r1.13 -r1.14
+*** Types.pas	28 Jun 2005 23:32:07 -0000	1.13
+--- Types.pas	28 Jun 2005 23:58:20 -0000	1.14
+***************
+*** 1049,1052 ****
+--- 1049,1053 ----
+  
+  { AnsiString }
++ 
+  method AnsiString.get_Chars(Index:integer): Char;
+  require
+***************
+*** 1110,1114 ****
+    Result := Left.ToString >= Right.ToString;
+  end;
+- 
+  
+  class operator AnsiString.Implicit(const Value: string): AnsiString; 
+--- 1111,1114 ----
+
+
+

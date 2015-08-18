@@ -1,0 +1,1844 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/NUnit TestClasses.pas,NONE,1.1 TestContnrs.pas,NONE,1.1 TestIniFiles.pas,NONE,1.1 TestSysUtils.pas,NONE,1.1 TestSystem.pas,NONE,1.1 AssemblyInfo.pas,1.1,1.2 NUnit.ShineOn.RTL.chrome,1.1,1.2 TestMain.pas,1.2,NONE
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20TestClasses.pas%2CNONE%2C1.1%20TestContnrs.pas%2CNONE%2C1.1%20TestIniFiles.pas%2CNONE%2C1.1%20TestSysUtils.pas%2CNONE%2C1.1%20TestSystem.pas%2CNONE%2C1.1%20AssemblyInfo.pas%2C1.1%2C1.2%20NUnit.ShineOn.RTL.chrome%2C1.1%2C1.2%20TestMain.pas%2C1.2%2CNONE&In-Reply-To=%3C200505310838.j4V8crm29634%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000021.html">
+   <LINK REL="Next"  HREF="000023.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/NUnit TestClasses.pas,NONE,1.1 TestContnrs.pas,NONE,1.1 TestIniFiles.pas,NONE,1.1 TestSysUtils.pas,NONE,1.1 TestSystem.pas,NONE,1.1 AssemblyInfo.pas,1.1,1.2 NUnit.ShineOn.RTL.chrome,1.1,1.2 TestMain.pas,1.2,NONE</H1>
+    <B>peter3</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20TestClasses.pas%2CNONE%2C1.1%20TestContnrs.pas%2CNONE%2C1.1%20TestIniFiles.pas%2CNONE%2C1.1%20TestSysUtils.pas%2CNONE%2C1.1%20TestSystem.pas%2CNONE%2C1.1%20AssemblyInfo.pas%2C1.1%2C1.2%20NUnit.ShineOn.RTL.chrome%2C1.1%2C1.2%20TestMain.pas%2C1.2%2CNONE&In-Reply-To=%3C200505310838.j4V8crm29634%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/NUnit TestClasses.pas,NONE,1.1 TestContnrs.pas,NONE,1.1 TestIniFiles.pas,NONE,1.1 TestSysUtils.pas,NONE,1.1 TestSystem.pas,NONE,1.1 AssemblyInfo.pas,1.1,1.2 NUnit.ShineOn.RTL.chrome,1.1,1.2 TestMain.pas,1.2,NONE">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Tue May 31 10:38:53 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000021.html">[Shineon-checkins] ShineOn/NUnit .cvsignore,NONE,1.1
+</A></li>
+        <LI>Next message: <A HREF="000023.html">[Shineon-checkins] ShineOn/NUnit NUnit.ShineOn.RTL.2005.sln,NONE,1.1 NUnit.ShineOn.RTL.chrome,1.2,1.3
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#22">[ date ]</a>
+              <a href="thread.html#22">[ thread ]</a>
+              <a href="subject.html#22">[ subject ]</a>
+              <a href="author.html#22">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/NUnit
+In directory sheep:/tmp/cvs-serv1491/NUnit
+
+Modified Files:
+	AssemblyInfo.pas NUnit.ShineOn.RTL.chrome 
+Added Files:
+	TestClasses.pas TestContnrs.pas TestIniFiles.pas 
+	TestSysUtils.pas TestSystem.pas 
+Removed Files:
+	TestMain.pas 
+Log Message:
+- Rearranged tests into their own units
+- Stubs for basic tests added
+
+--- NEW FILE: TestClasses.pas ---
+// The contents of this file are subject to the Mozilla Public License Version 1.1 (the &quot;License&quot;); 
+// you may not use this file except in compliance with the License. You may obtain a copy of the 
+// License at <A HREF="http://www.mozilla.org/MPL/">http://www.mozilla.org/MPL/</A> 
+// 
+// Software distributed under the License is distributed on an &quot;AS IS&quot; basis, WITHOUT WARRANTY OF 
+// ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
+// limitations under the License.
+
+// $Id: TestClasses.pas,v 1.1 2005/05/31 08:38:50 peter3 Exp $
+namespace NUnit.ShineOn.RTL;
+
+interface
+uses
+  Nunit.Framework,
+  ShineOn.RTL;
+  
+type
+  [TestFixture]
+  TObjectTests = public class(TestCase)
+[...1137 lines suppressed...]
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TThreadTests.Priority; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TThreadTests.Suspended; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TThreadTests.ThreadID; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+end.
+
+--- NEW FILE: TestContnrs.pas ---
+// The contents of this file are subject to the Mozilla Public License Version 1.1 (the &quot;License&quot;); 
+// you may not use this file except in compliance with the License. You may obtain a copy of the 
+// License at <A HREF="http://www.mozilla.org/MPL/">http://www.mozilla.org/MPL/</A> 
+// 
+// Software distributed under the License is distributed on an &quot;AS IS&quot; basis, WITHOUT WARRANTY OF 
+// ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
+// limitations under the License.
+
+// $Id: TestContnrs.pas,v 1.1 2005/05/31 08:38:50 peter3 Exp $
+namespace NUnit.ShineOn.RTL;
+
+interface
+uses
+  Nunit.Framework,
+  ShineOn.RTL;
+
+type
+  [TestFixture]
+  TObjectListTests = public class(TestCase)
+  public
+    method Setup;override;
+    method TearDown;override;
+    [Test]
+    method Add;
+    [Test]
+    method Extract;
+    [Test]
+    method Remove;
+    [Test]
+    method IndexOf;
+    [Test]
+    method FindInstanceOf;
+    [Test]
+    method Insert;
+    [Test]
+    method First;
+    [Test]
+    method Last;
+    [Test]
+    method Items;
+  end;
+
+  [TestFixture]
+  TComponentListTests = public class(TestCase)
+  public
+    method Setup;override;
+    method TearDown;override;
+
+    [Test]
+    method Add;
+    [Test]
+    method Extract;
+    [Test]
+    method Remove;
+    [Test]
+    method IndexOf;
+    [Test]
+    method First;
+    [Test]
+    method Last;
+    [Test]
+    method Insert;
+    [Test]
+    method Items;
+  end;
+
+  [TestFixture]
+  TClassListTests = public class(TestCase)
+  public
+    method Setup;override;
+    method TearDown;override;
+
+    [Test]
+    method Add;
+    [Test]
+    method Extract;
+    [Test]
+    method Remove;
+    [Test]
+    method IndexOf;
+    [Test]
+    method First;
+    [Test]
+    method Last;
+    [Test]
+    method Insert;
+    [Test]
+    method Items;
+  end;
+
+  [TestFixture]
+  TStackTests = public class(TestCase)
+  public
+    method Setup;override;
+    method TearDown;override;
+
+    [Test]
+    method Count;
+    [Test]
+    method AtLeast;
+    [Test]
+    method Push;
+    [Test]
+    method Pop;
+    [Test]
+    method Peek;
+  end;
+
+  [TestFixture]
+  TObjectStackTests = public class(TestCase)
+  public
+    method Setup;override;
+    method TearDown;override;
+
+    [Test]
+    method Count;
+    [Test]
+    method AtLeast;
+    [Test]
+    method Push;
+    [Test]
+    method Pop;
+    [Test]
+    method Peek;
+  end;
+
+  [TestFixture]
+  TQueueTests = public class(TestCase)
+  public
+    method Setup;override;
+    method TearDown;override;
+
+    [Test]
+    method Count;
+    [Test]
+    method AtLeast;
+    [Test]
+    method Push;
+    [Test]
+    method Pop;
+    [Test]
+    method Peek;
+  end;
+  
+  [TestFixture]
+  TObjectQueueTests = public class(TestCase)
+  public
+    method Setup;override;
+    method TearDown;override;
+
+    [Test]
+    method Count;
+    [Test]
+    method AtLeast;
+    [Test]
+    method Push;
+    [Test]
+    method Pop;
+    [Test]
+    method Peek;
+  end;
+  
+  [TestFixture]
+  TBucketListTests = public class(TestCase)
+  public
+    method Setup;override;
+    method TearDown;override;
+
+    [Test]
+    method Clear;
+    [Test]
+    method Add;
+    [Test]
+    method Remove;
+    [Test]
+    method ForEach;
+    [Test]
+    method Assign;
+    [Test]
+    method Exists;
+    [Test]
+    method Find;
+    [Test]
+    method Data;
+  end;
+
+implementation
+
+method TObjectListTests.Setup; 
+begin
+end;
+
+method TObjectListTests.TearDown; 
+begin
+end;
+
+method TObjectListTests.Add; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TObjectListTests.Extract; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TObjectListTests.Remove; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TObjectListTests.IndexOf; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TObjectListTests.FindInstanceOf; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TObjectListTests.Insert; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TObjectListTests.First; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TObjectListTests.Last; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TObjectListTests.Items; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TComponentListTests.Setup; 
+begin
+end;
+
+method TComponentListTests.TearDown; 
+begin
+end;
+
+method TComponentListTests.Add; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TComponentListTests.Extract; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TComponentListTests.Remove; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TComponentListTests.IndexOf; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TComponentListTests.First; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TComponentListTests.Last; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TComponentListTests.Insert; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TComponentListTests.Items; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TClassListTests.Setup; 
+begin
+end;
+
+method TClassListTests.TearDown; 
+begin
+end;
+
+method TClassListTests.Add; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TClassListTests.Extract; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TClassListTests.Remove; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TClassListTests.IndexOf; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TClassListTests.First; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TClassListTests.Last; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TClassListTests.Insert; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TClassListTests.Items; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TStackTests.Setup; 
+begin
+end;
+
+method TStackTests.TearDown; 
+begin
+end;
+
+method TStackTests.Count; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TStackTests.AtLeast; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TStackTests.Push; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TStackTests.Pop; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TStackTests.Peek; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TObjectStackTests.Setup; 
+begin
+end;
+
+method TObjectStackTests.TearDown; 
+begin
+end;
+
+method TObjectStackTests.Count; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TObjectStackTests.AtLeast; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TObjectStackTests.Push; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TObjectStackTests.Pop; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TObjectStackTests.Peek; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TQueueTests.Setup; 
+begin
+end;
+
+method TQueueTests.TearDown; 
+begin
+end;
+
+method TQueueTests.Count; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TQueueTests.AtLeast; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TQueueTests.Push; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TQueueTests.Pop; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TQueueTests.Peek; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TObjectQueueTests.Setup; 
+begin
+end;
+
+method TObjectQueueTests.TearDown; 
+begin
+end;
+
+method TObjectQueueTests.Count; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TObjectQueueTests.AtLeast; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TObjectQueueTests.Push; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TObjectQueueTests.Pop; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TObjectQueueTests.Peek; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TBucketListTests.Setup; 
+begin
+end;
+
+method TBucketListTests.TearDown; 
+begin
+end;
+
+method TBucketListTests.Clear; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TBucketListTests.Add; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TBucketListTests.Remove; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TBucketListTests.ForEach; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TBucketListTests.Assign; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TBucketListTests.Exists; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TBucketListTests.Find; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TBucketListTests.Data; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+end.
+
+--- NEW FILE: TestIniFiles.pas ---
+// The contents of this file are subject to the Mozilla Public License Version 1.1 (the &quot;License&quot;); 
+// you may not use this file except in compliance with the License. You may obtain a copy of the 
+// License at <A HREF="http://www.mozilla.org/MPL/">http://www.mozilla.org/MPL/</A> 
+// 
+// Software distributed under the License is distributed on an &quot;AS IS&quot; basis, WITHOUT WARRANTY OF 
+// ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
+// limitations under the License.
+
+// $Id: TestIniFiles.pas,v 1.1 2005/05/31 08:38:50 peter3 Exp $
+namespace NUnit.ShineOn.RTL;
+
+interface
+uses
+  Nunit.Framework,
+  ShineOn.RTL;
+
+type
+  [TestFixture]
+  TIniFilesTests = public class(TestCase)
+  public
+    method Setup;override;
+    method TearDown;override;
+    [Test]
+    method Clear;
+    [Test]
+    method GetStrings;
+    [Test]
+    method SetStrings;
+    [Test]
+    method Rename;
+    [Test]
+    method SectionExists;
+    [Test]
+    method ReadString;
+    [Test]
+    method WriteString;
+    [Test]
+    method ReadInteger;
+    [Test]
+    method WriteInteger;
+    [Test]
+    method ReadBool;
+    [Test]
+    method WriteBool;
+    [Test]
+    method ReadBinaryStream;
+    [Test]
+    method ReadDate;
+    [Test]
+    method ReadDateTime;
+    [Test]
+    method ReadFloat;
+    [Test]
+    method ReadTime;
+    [Test]
+    method WriteBinaryStream;
+    [Test]
+    method WriteDate;
+    [Test]
+    method WriteDateTime;
+    [Test]
+    method WriteFloat;
+    [Test]
+    method WriteTime;
+    [Test]
+    method ReadSection;
+    [Test]
+    method ReadSections;
+    [Test]
+    method ReadSectionValues;
+    [Test]
+    method EraseSection;
+    [Test]
+    method DeleteKey;
+    [Test]
+    method UpdateFile;
+    [Test]
+    method ValueExists;
+  end;
+  
+implementation
+
+method TIniFilesTests.Setup; 
+begin
+end;
+
+method TIniFilesTests.TearDown; 
+begin
+end;
+
+method TIniFilesTests.Clear; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.GetStrings; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.SetStrings; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.Rename; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.SectionExists; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.ReadString; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.WriteString; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.ReadInteger; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.WriteInteger; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.ReadBool; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.WriteBool; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.ReadBinaryStream; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.ReadDate; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.ReadDateTime; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.ReadFloat; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.ReadTime; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.WriteBinaryStream; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.WriteDate; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.WriteDateTime; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.WriteFloat; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.WriteTime; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.ReadSection; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.ReadSections; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.ReadSectionValues; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.EraseSection; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.DeleteKey; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.UpdateFile; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method TIniFilesTests.ValueExists; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+end.
+
+--- NEW FILE: TestSysUtils.pas ---
+// The contents of this file are subject to the Mozilla Public License Version 1.1 (the &quot;License&quot;); 
+// you may not use this file except in compliance with the License. You may obtain a copy of the 
+// License at <A HREF="http://www.mozilla.org/MPL/">http://www.mozilla.org/MPL/</A> 
+// 
+// Software distributed under the License is distributed on an &quot;AS IS&quot; basis, WITHOUT WARRANTY OF 
+// ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
+// limitations under the License.
+
+// $Id: TestSysUtils.pas,v 1.1 2005/05/31 08:38:50 peter3 Exp $
+namespace NUnit.ShineOn.RTL;
+
+interface
+uses
+  Nunit.Framework,
+  ShineOn.RTL;
+
+type
+  [TestFixture]
+  SysUtilsTests = public class(TestCase)
+  public
+    method Setup;override;
+    method TearDown;override;
+    [Test]
+    method AnsiUpperCase;
+    [Test]
+    method AnsiLowerCase;
+    [Test]
+    method AnsiCompareStr;
+    [Test]
+    method AnsiSameStr;
+    [Test]
+    method AnsiCompareText;
+    [Test]
+    method AnsiSameText;
+    [Test]
+    method AnsiStrComp;
+    [Test]
+    method AnsiStrIComp;
+    [Test]
+    method AnsiStrLComp;
+    [Test]
+    method AnsiStrLIComp;
+    [Test]
+    method AnsiStrLower;
+    [Test]
+    method AnsiStrUpper;
+    [Test]
+    method AnsiLastChar;
+    [Test]
+    method AnsiStrLastChar;
+    [Test]
+    method WideUpperCase;
+    [Test]
+    method WideLowerCase;
+    [Test]
+    method WideCompareStr;
+    [Test]
+    method WideSameStr;
+    [Test]
+    method WideCompareText;
+    [Test]
+    method WideSameText;
+    [Test]
+    method Trim;
+    [Test]
+    method TrimLeft;
+    [Test]
+    method TrimRight;
+    [Test]
+    method AnsiQuotedStr;
+    [Test]
+    method AnsiExtractQuotedStr;
+    [Test]
+    method AnsiDequotedStr;
+    [Test]
+    method IntToStr;
+    [Test]
+    method IntToHex;
+    [Test]
+    method StrToInt;
+    [Test]
+    method StrToIntDef;
+    [Test]
+    method TryStrToInt;
+    [Test]
+    method StrToInt64;
+    [Test]
+    method StrToInt64Def;
+    [Test]
+    method TryStrToInt64;
+    [Test]
+    method StrToBool;
+    [Test]
+    method BoolToStr;
+    [Test]
+    method StrToDate;
+    [Test]
+    method StrToDateDef;
+    [Test]
+    method StrToDateTime;
+    [Test]
+    method StrToDateTimeDef;
+    [Test]
+    method StrToTime;
+    [Test]
+    method StrToTimeDef;
+    [Test]
+    method DateToStr;
+    [Test]
+    method DateTimeToStr;
+    [Test]
+    method TimeToStr;
+    [Test]
+    method FreeAndNil;
+    [Test]
+    method FileExists;
+    [Test]
+    method DirectoryExists;
+    [Test]
+    method ForceDirectories;
+    [Test]
+    method DeleteFile;
+    [Test]
+    method RenameFile;
+    [Test]
+    method ChangeFileExt;
+    [Test]
+    method ExtractFilePath;
+    [Test]
+    method ExtractFileDir;
+    [Test]
+    method ExtractFileDrive;
+    [Test]
+    method ExtractFileName;
+    [Test]
+    method ExtractFileExt;
+    [Test]
+    method ExpandFileName;
+    [Test]
+    method ExpandUNCFileName;
+    [Test]
+    method ExtractRelativePath;
+    [Test]
+    method ExtractShortPathName;
+    [Test]
+    method GetCurrentDir;
+    [Test]
+    method SetCurrentDir;
+    [Test]
+    method CreateDir;
+    [Test]
+    method RemoveDir;
+    [Test]
+    method IsPathDelimiter;
+    [Test]
+    method IsDelimiter;
+    [Test]
+    method IncludeTrailingPathDelimiter;
+    [Test]
+    method IncludeTrailingBackslash;
+    [Test]
+    method ExcludeTrailingPathDelimiter;
+    [Test]
+    method ExcludeTrailingBackslash;
+    [Test]
+    method LastDelimiter;
+    [Test]
+    method AnsiCompareFileName;
+    [Test]
+    method SameFileName;
+    [Test]
+    method AnsiLowerCaseFileName;
+    [Test]
+    method AnsiUpperCaseFileName;
+    [Test]
+    method AnsiPos;
+    [Test]
+    method AnsiStrPos;
+    [Test]
+    method AnsiStrRScan;
+    [Test]
+    method AnsiStrScan;
+    [Test]
+    method StringReplace;
+    [Test]
+    method GetEnvironmentVariable;
+  end;
+
+implementation
+
+method SysUtilsTests.Setup; 
+begin
+end;
+
+method SysUtilsTests.TearDown; 
+begin
+end;
+
+method SysUtilsTests.AnsiUpperCase; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiLowerCase; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiCompareStr; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiSameStr; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiCompareText; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiSameText; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiStrComp; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiStrIComp; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiStrLComp; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiStrLIComp; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiStrLower; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiStrUpper; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiLastChar; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiStrLastChar; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.WideUpperCase; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.WideLowerCase; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.WideCompareStr; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.WideSameStr; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.WideCompareText; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.WideSameText; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.Trim; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.TrimLeft; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.TrimRight; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiQuotedStr; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiExtractQuotedStr; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiDequotedStr; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.IntToStr; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.IntToHex; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.StrToInt; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.StrToIntDef; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.TryStrToInt; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.StrToInt64; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.StrToInt64Def; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.TryStrToInt64; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.StrToBool; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.BoolToStr; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.StrToDate; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.StrToDateDef; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.StrToDateTime; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.StrToDateTimeDef; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.StrToTime; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.StrToTimeDef; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.DateToStr; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.DateTimeToStr; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.TimeToStr; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.FreeAndNil; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.FileExists; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.DirectoryExists; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.ForceDirectories; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.DeleteFile; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.RenameFile; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.ChangeFileExt; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.ExtractFilePath; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.ExtractFileDir; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.ExtractFileDrive; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.ExtractFileName; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.ExtractFileExt; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.ExpandFileName; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.ExpandUNCFileName; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.ExtractRelativePath; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.ExtractShortPathName; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.GetCurrentDir; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.SetCurrentDir; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.CreateDir; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.RemoveDir; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.IsPathDelimiter; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.IsDelimiter; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.IncludeTrailingPathDelimiter; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.IncludeTrailingBackslash; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.ExcludeTrailingPathDelimiter; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.ExcludeTrailingBackslash; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.LastDelimiter; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiCompareFileName; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.SameFileName; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiLowerCaseFileName; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiUpperCaseFileName; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiPos; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiStrPos; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiStrRScan; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.AnsiStrScan; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.StringReplace; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SysUtilsTests.GetEnvironmentVariable; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+end.
+
+--- NEW FILE: TestSystem.pas ---
+// The contents of this file are subject to the Mozilla Public License Version 1.1 (the &quot;License&quot;); 
+// you may not use this file except in compliance with the License. You may obtain a copy of the 
+// License at <A HREF="http://www.mozilla.org/MPL/">http://www.mozilla.org/MPL/</A> 
+// 
+// Software distributed under the License is distributed on an &quot;AS IS&quot; basis, WITHOUT WARRANTY OF 
+// ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
+// limitations under the License.
+
+// $Id: TestSystem.pas,v 1.1 2005/05/31 08:38:50 peter3 Exp $
+namespace NUnit.ShineOn.RTL;
+
+interface
+uses
+  Nunit.Framework,
+  ShineOn.RTL;
+
+type
+  [TestFixture]
+  SystemTests = public class(TestCase)
+  public
+    method Setup;override;
+    method TearDown;override;
+    [Test]
+    method Pos;
+    [Test]
+    method Concat;
+    [Test]
+    method Delete;
+    [Test]
+    method Insert;
+    [Test]
+    method Copy;
+    [Test]
+    method Str;
+    [Test]
+    method Val;
+    [Test]
+    method OrdChar;
+    [Test]
+    method OrdBool;
+    [Test]
+    method Inc;
+    [Test]
+    method IncAmount;
+    [Test]
+    method Dec;
+    [Test]
+    method DecAmount;
+    [Test]
+    method Pred;
+    [Test]
+    method Succ;
+    [Test]
+    method RoundDouble;
+    [Test]
+    method RoundTDateTime;
+    [Test]
+    method TruncDouble;
+    [Test]
+    method TruncTDateTime;
+    [Test]
+    method IntDouble;
+    [Test]
+    method IntTDateTime;
+    [Test]
+    method FracDouble;
+    [Test]
+    method FracTDateTime;
+    [Test]
+    method Odd;
+    [Test]
+    method Sqrt;
+    [Test]
+    method SqrExtended;
+    [Test]
+    method SqrInteger;
+    [Test]
+    method AbsInteger;
+    [Test]
+    method AbsDouble;
+    [Test]
+    method AbsTDateTime;
+    [Test]
+    method Exp;
+    [Test]
+    method SetLength;
+    [Test]
+    method Write;
+    [Test]
+    method WriteLn;
+    [Test]
+    method Read;
+    [Test]
+    method ReadLn;
+  end;
+
+implementation
+
+method SystemTests.Setup; 
+begin
+end;
+
+method SystemTests.TearDown; 
+begin
+end;
+
+method SystemTests.Pos; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.Concat; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.Delete; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.Insert; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.Copy; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.Str; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.Val; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.OrdChar; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.OrdBool; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.Inc; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.IncAmount; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.Dec; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.DecAmount; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.Pred; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.Succ; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.RoundDouble; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.RoundTDateTime; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.TruncDouble; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.TruncTDateTime; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.IntDouble; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.IntTDateTime; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.FracDouble; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.FracTDateTime; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.Odd; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.Sqrt; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.SqrExtended; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.SqrInteger; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.AbsInteger; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.AbsDouble; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.AbsTDateTime; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.Exp; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.SetLength; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.Write; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.WriteLn; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.Read; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+method SystemTests.ReadLn; 
+begin
+  NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+end;
+
+end.
+
+Index: AssemblyInfo.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/AssemblyInfo.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** AssemblyInfo.pas	30 May 2005 13:43:32 -0000	1.1
+--- AssemblyInfo.pas	31 May 2005 08:38:50 -0000	1.2
+***************
+*** 1,3 ****
+--- 1,24 ----
++ // The contents of this file are subject to the Mozilla Public License Version 1.1 (the &quot;License&quot;); 
++ // you may not use this file except in compliance with the License. You may obtain a copy of the 
++ // License at <A HREF="http://www.mozilla.org/MPL/">http://www.mozilla.org/MPL/</A> 
++ // 
++ // Software distributed under the License is distributed on an &quot;AS IS&quot; basis, WITHOUT WARRANTY OF 
++ // ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
++ // limitations under the License.
++ 
++ // $Id$
+  namespace NUnit.ShineOn.RTL;
++ // TODO:
++ // - Add test fixtures and methods for all classes and methods
++ // - Implement all tests
++ 
++ // NOTE: you will probably have to change the Start Application path for the project to match the install folder
++ // on your system. You can also run the tests manually from the NUnit GUI (or console) if you prefer.
++ 
++ // To add a NUnit command to the Tools menu, add a new External Tool with these parameters:
++ // Title: NUnit
++ // Command: &lt;path to nunit-gui.exe or nunit-console.exe&gt;
++ // Arguments: $(TargetPath) 
++ // Initial Directory: $(TargetDir)
+  
+  interface
+
+Index: NUnit.ShineOn.RTL.chrome
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/NUnit.ShineOn.RTL.chrome,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** NUnit.ShineOn.RTL.chrome	30 May 2005 13:43:32 -0000	1.1
+--- NUnit.ShineOn.RTL.chrome	31 May 2005 08:38:50 -0000	1.2
+***************
+*** 68,71 ****
+--- 68,91 ----
+        &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+      &lt;/File&gt;
++     &lt;File Filename=&quot;TestClasses.pas&quot;&gt;
++       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
++       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
++     &lt;/File&gt;
++     &lt;File Filename=&quot;TestContnrs.pas&quot;&gt;
++       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
++       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
++     &lt;/File&gt;
++     &lt;File Filename=&quot;TestSystem.pas&quot;&gt;
++       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
++       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
++     &lt;/File&gt;
++     &lt;File Filename=&quot;TestSysUtils.pas&quot;&gt;
++       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
++       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
++     &lt;/File&gt;
++     &lt;File Filename=&quot;TestIniFiles.pas&quot;&gt;
++       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
++       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
++     &lt;/File&gt;
+    &lt;/Files&gt;
+  &lt;/ChromeProject&gt;
+
+--- TestMain.pas DELETED ---
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000021.html">[Shineon-checkins] ShineOn/NUnit .cvsignore,NONE,1.1
+</A></li>
+	<LI>Next message: <A HREF="000023.html">[Shineon-checkins] ShineOn/NUnit NUnit.ShineOn.RTL.2005.sln,NONE,1.1 NUnit.ShineOn.RTL.chrome,1.2,1.3
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#22">[ date ]</a>
+              <a href="thread.html#22">[ thread ]</a>
+              <a href="subject.html#22">[ subject ]</a>
+              <a href="author.html#22">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

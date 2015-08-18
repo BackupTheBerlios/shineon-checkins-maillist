@@ -1,0 +1,609 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/NUnit TestTDateTime.pas,NONE,1.1
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2006-March/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20TestTDateTime.pas%2CNONE%2C1.1&In-Reply-To=%3C200603211727.k2LHRZt26707%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000058.html">
+   <LINK REL="Next"  HREF="000060.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/NUnit TestTDateTime.pas,NONE,1.1</H1>
+    <B>msgclb</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20TestTDateTime.pas%2CNONE%2C1.1&In-Reply-To=%3C200603211727.k2LHRZt26707%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/NUnit TestTDateTime.pas,NONE,1.1">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Tue Mar 21 18:27:36 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000058.html">[Shineon-checkins] ShineOn/ShineOn.RTL.Win32 ShineOn.RTL.Win32.chrome,1.5,1.6
+</A></li>
+        <LI>Next message: <A HREF="000060.html">[Shineon-checkins] ShineOn/ShineOn.RTL IniFiles.pas,1.7,1.8
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#59">[ date ]</a>
+              <a href="thread.html#59">[ thread ]</a>
+              <a href="subject.html#59">[ subject ]</a>
+              <a href="author.html#59">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/NUnit
+In directory sheep:/tmp/cvs-serv10814/NUnit
+
+Added Files:
+	TestTDateTime.pas 
+Log Message:
+Initial NUnit add to test TDateTime
+
+--- NEW FILE: TestTDateTime.pas ---
+// The contents of this file are subject to the Mozilla Public License Version 1.1 (the &quot;License&quot;); 
+// you may not use this file except in compliance with the License. You may obtain a copy of the 
+// License at <A HREF="http://www.mozilla.org/MPL/">http://www.mozilla.org/MPL/</A> 
+// 
+// Software distributed under the License is distributed on an &quot;AS IS&quot; basis, WITHOUT WARRANTY OF 
+// ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
+// limitations under the License.
+
+// History:
+//
+// 2006-03-19   :   Corwin Burgess    : Converted to Chrome from DateTime
+
+namespace NUnit.ShineOn.RTL;
+
+interface
+
+uses
+  NUnit.Framework,
+  System,
+  System.Threading,
+  System.Globalization,
+  ShineOn.RTL;
+
+type
+	[TestFixture]
+  TDateTimeTest = public class(TestCase)
+  private
+      var oldcult:CultureInfo;
+		var myTicks:Array of Int64 := [
+											 631501920000000000,	// 25 Feb 2002 - 00:00:00
+											 631502475130080000,	// 25 Feb 2002 - 15:25:13,8
+											 631502115130080000,	// 25 Feb 2002 - 05:25:13,8
+											 631502115000000000,	// 25 Feb 2002 - 05:25:00
+											 631502115130000000,	// 25 Feb 2002 - 05:25:13
+											 631502079130000000,	// 25 Feb 2002 - 04:25:13
+											 629197085770000000	// 06 Nov 1994 - 08:49:37 
+										 ];
+  
+  protected
+  public
+  	[SetUp]
+ 		method SetUp;override;
+		[TearDown]
+		method TearDown;override;
+		[Test]
+    [Ignore('Ignore this test')]
+		method TestCtors;
+		[Test]
+    [Ignore('Ignore this test')]
+ 		method TestToString;
+		[Test]
+    [Ignore('Ignore this test')]
+ 		method TestParseExact;
+		[Test]
+    [Ignore('Ignore this test')]
+		method TestParse;
+		[Test]
+    [Ignore('Ignore this test')]
+		method TestTicks;
+		[Test]
+		method TestCtorsFailures;
+    constructor;		
+  end;
+  
+implementation
+
+method TDateTimeTest.SetUp; 
+begin
+  // the current culture determines the result of formatting
+	oldcult := Thread.CurrentThread.CurrentCulture;
+	Thread.CurrentThread.CurrentCulture := new CultureInfo ('');
+end;
+
+method TDateTimeTest.TearDown; 
+begin
+  Thread.CurrentThread.CurrentCulture := oldcult;		
+end;
+
+method TDateTimeTest.TestCtors; 
+begin
+  var t1:DateTime := new DateTime (2002,2,25);
+  var td1:TDateTime := new TDateTime (2002,2,25,0,0,0,0);
+  // Year, Month, Day, Hour, Minute, Second, MSec
+ 	NUnit.Framework.Assert.AreEqual(myTicks[0], td1.Ticks, 'A01');
+	var t2:DateTime := new DateTime (2002,2,25,15,25,13,8);
+	var td2:TDateTime := new TDateTime (2002,2,25,15,25,13,8);
+	NUnit.Framework.Assert.AreEqual(myTicks[1], td2.Ticks, 'A02');
+  // NUnit.ShineOn.RTL.TDateTimeTest.TestCtors : A03
+	// expected: &lt;-2137800704&gt;
+	// but was: &lt;38795&gt; 	
+ 	NUnit.Framework.Assert.AreEqual(myTicks[0], td2.Date.Ticks, 'A03');
+	NUnit.Framework.Assert.AreEqual(2002, td2.Year, 'A04');
+	NUnit.Framework.Assert.AreEqual(2, td2.Month, 'A05');
+	NUnit.Framework.Assert.AreEqual(25, td2.Day, 'A06');
+	NUnit.Framework.Assert.AreEqual(15, td2.Hour, 'A07');
+	NUnit.Framework.Assert.AreEqual(25, td2.Minute, 'A08');
+	NUnit.Framework.Assert.AreEqual(13, td2.Second, 'A09');
+	NUnit.Framework.Assert.AreEqual(8, td2.Msec, 'A10');
+	var td3:TDateTime := new TDateTime (2002,2,25,5,25,13,8);
+	NUnit.Framework.Assert.AreEqual(myTicks[2], td3.Ticks, 'A11');
+  // added	
+  NUnit.Framework.Assert.AreEqual(t1.Year, td1.Year, 'A12');
+  NUnit.Framework.Assert.AreEqual(t1.Month, td1.Month, 'A13');
+  NUnit.Framework.Assert.AreEqual(t1.Day, td1.Day, 'A14');
+  NUnit.Framework.Assert.AreEqual(t2.Year, td2.Year, 'A15');
+  NUnit.Framework.Assert.AreEqual(t2.Month, td2.Month, 'A16');
+  NUnit.Framework.Assert.AreEqual(t2.Day, td2.Day, 'A17');
+  NUnit.Framework.Assert.AreEqual(t2.Hour, td2.Hour, 'A18');
+  NUnit.Framework.Assert.AreEqual(t2.Minute, td2.Minute, 'A19');
+  NUnit.Framework.Assert.AreEqual(t2.Second, td2.Second, 'A20');
+     
+end;
+
+method TDateTimeTest.TestToString; 
+begin
+  var t1:TDateTime := new TDateTime (myTicks[2]);
+  var td1:TDateTime := new TDateTime (myTicks[2]);
+	var t2:DateTime := new DateTime (myTicks[1]);
+	var td2:TDateTime := new TDateTime (myTicks[1]);
+	// Standard patterns
+	//NUnit.Framework.Assert.AreEqual('02/25/2002', td1.ToString ('d'), 'B01');
+	//NUnit.Framework.Assert.AreEqual('Monday, 25 February 2002', td1.ToString ('D'), 'B02');
+	//NUnit.Framework.Assert.AreEqual('Monday, 25 February 2002 05:25', td1.ToString ('f'), 'B03');
+	//NUnit.Framework.Assert.AreEqual('Monday, 25 February 2002 05:25:13', t1.ToString ('F'), 'B04');
+	//NUnit.Framework.Assert.AreEqual('02/25/2002 05:25', td1.ToString ('g'), 'B05');
+	//NUnit.Framework.Assert.AreEqual('02/25/2002 05:25:13', td1.ToString ('G'), 'B06');
+	//NUnit.Framework.Assert.AreEqual('February 25', td1.ToString ('m'), 'B07');
+	//NUnit.Framework.Assert.AreEqual('February 25', td1.ToString ('M'), 'B08');
+	//NUnit.Framework.Assert.AreEqual('Mon, 25 Feb 2002 05:25:13 GMT', td1.ToString ('r'), 'B09');
+	//NUnit.Framework.Assert.AreEqual('Mon, 25 Feb 2002 05:25:13 GMT', td1.ToString ('R'), 'B10');
+	//NUnit.Framework.Assert.AreEqual('2002-02-25T05:25:13', td1.ToString ('s'), 'B11');
+	//NUnit.Framework.Assert.AreEqual('05:25', td1.ToString ('t'), 'B12');
+	//NUnit.Framework.Assert.AreEqual('05:25:13', td1.ToString ('T'), 'B13');
+	//NUnit.Framework.Assert.AreEqual('2002-02-25 05:25:13Z', td1.ToString ('u'), 'B14');
+  // when I remove comment I got this error. bugzilla by original developer
+  // MonoTests.System.DateTimeTest.TestToString : B15
+	// String lengths are both 33.
+	// Strings differ at index 0.
+	// expected: &lt;&quot;Sunday, 24 February 2002 11:25:13&quot;&gt;
+	// but was:   &lt;&quot;Monday, 25 February 2002 17:25:13&quot;&gt;
+	// -----------------^
+	// FIXME: bugzilla #30030 
+	//NUnit.Framework.Assert.AreEqual('Sunday, 24 February 2002 11:25:13', td1.ToUniversalTime().ToString ('U'), 'B15');
+	//NUnit.Framework.Assert.AreEqual('2002 February', td1.ToString ('y'), 'B16');
+	//NUnit.Framework.Assert.AreEqual('2002 February', td1.ToString ('Y'), 'B17');
+
+	// Custom patterns
+	//NUnit.Framework.Assert.AreEqual('25', td1.ToString ('%d'), 'C01');
+	//NUnit.Framework.Assert.AreEqual('25', td1.ToString ('dd'), 'C02');
+	//NUnit.Framework.Assert.AreEqual('Mon', td1.ToString ('ddd'), 'C03');
+	//NUnit.Framework.Assert.AreEqual('Monday', td1.ToString ('dddd'), 'C04');
+	//NUnit.Framework.Assert.AreEqual(string('2'), td1.ToString ('%M'), 'C05');
+	//NUnit.Framework.Assert.AreEqual('02', td1.ToString ('MM'), 'C06');
+	//NUnit.Framework.Assert.AreEqual('Feb', td1.ToString ('MMM'), 'C07');
+	//NUnit.Framework.Assert.AreEqual('February', td1.ToString ('MMMM'), 'C08');
+	//NUnit.Framework.Assert.AreEqual(string('2'), td1.ToString ('%y'), 'C09');
+	//NUnit.Framework.Assert.AreEqual('02', td1.ToString ('yy'), 'C10');
+	//NUnit.Framework.Assert.AreEqual('2002', td1.ToString ('yyyy'), 'C11');
+	//NUnit.Framework.Assert.AreEqual(string('5'), td1.ToString ('%h'), 'C12');
+	//NUnit.Framework.Assert.AreEqual('05', td1.ToString ('hh'), 'C13');
+	//NUnit.Framework.Assert.AreEqual(string('3'), td2.ToString ('%h'), 'C14');
+	//NUnit.Framework.Assert.AreEqual('03', td2.ToString ('hh'), 'C15');
+	//NUnit.Framework.Assert.AreEqual('15', td2.ToString ('%H'), 'C16');
+	//NUnit.Framework.Assert.AreEqual('15', td2.ToString ('HH'), 'C17');
+	//NUnit.Framework.Assert.AreEqual('25', td2.ToString ('%m'), 'C18');
+	//NUnit.Framework.Assert.AreEqual('25', td2.ToString ('mm'), 'C19');
+	//NUnit.Framework.Assert.AreEqual('13', td2.ToString ('%s'), 'C20');
+	//NUnit.Framework.Assert.AreEqual('13', td2.ToString ('ss'), 'C21');
+	//NUnit.Framework.Assert.AreEqual(string('A'), td1.ToString ('%t'), 'C22');
+	//NUnit.Framework.Assert.AreEqual(string('P'), td2.ToString ('%t'), 'C23');
+	//NUnit.Framework.Assert.AreEqual('AM', td1.ToString ('tt'), 'C24');
+	//NUnit.Framework.Assert.AreEqual('PM', td2.ToString ('tt'), 'C25');
+	//var offset:Int64 := TimeZone.CurrentTimeZone.GetUtcOffset(td1).Ticks div 36000000000;
+	//NUnit.Framework.Assert.AreEqual(offset.ToString('+#;-#;0'), td1.ToString ('%z'), 'C26');
+	//NUnit.Framework.Assert.AreEqual(offset.ToString('+00;-00;00'), td1.ToString ('zz'), 'C27');
+	//NUnit.Framework.Assert.AreEqual(offset.ToString('+00;-00;00') + ':00', td1.ToString ('zzz'), 'C28');
+	//NUnit.Framework.Assert.AreEqual(' : ', td1.ToString (' : '), 'C29');
+	//NUnit.Framework.Assert.AreEqual(' / ', td1.ToString (' / '), 'C30');
+	//NUnit.Framework.Assert.AreEqual(' yyy ', td1.ToString (' ''yyy'' '), 'C31');
+ 	//NUnit.Framework.Assert.AreEqual(' d', td1.ToString (' \d'), 'C32');
+end;
+
+method TDateTimeTest.TestParseExact; 
+begin
+  // Standard patterns
+	//var td1:TDateTime := TDateTime.ParseExact ('02/25/2002', 'd', nil);
+	//NUnit.Framework.Assert.AreEqual (myTicks[0], td1.Ticks, 'D01');
+	//td1 := TDateTime.ParseExact ('Monday, 25 February 2002', 'D', nil);
+	//NUnit.Framework.Assert.AreEqual (myTicks[0], td1.Ticks, 'D02');
+	//td1 := TDateTime.ParseExact ('Monday, 25 February 2002 05:25', 'f', nil);
+	//NUnit.Framework.Assert.AreEqual (myTicks[3], td1.Ticks, 'D03');
+	//td1 := TDateTime.ParseExact ('Monday, 25 February 2002 05:25:13', 'F', nil);
+	//NUnit.Framework.Assert.AreEqual (myTicks[4], td1.Ticks, 'D04');
+	//td1 := TDateTime.ParseExact ('02/25/2002 05:25', 'g', nil);
+	//NUnit.Framework.Assert.AreEqual (myTicks[3], td1.Ticks, 'D05');
+	//td1 := TDateTime.ParseExact ('02/25/2002 05:25:13', 'G', nil);
+	//NUnit.Framework.Assert.AreEqual (myTicks[4], td1.Ticks, 'D06');
+	//td1 := TDateTime.ParseExact ('2002-02-25 04:25:13Z', 'u', nil);
+	//NUnit.Framework.Assert.AreEqual (2002, td1.Year, 'D07a');
+	//NUnit.Framework.Assert.AreEqual (02, td1.Month, 'D07b');
+	//NUnit.Framework.Assert.AreEqual (25, td1.Day, 'D07c');
+	//NUnit.Framework.Assert.AreEqual (04, td1.Hour, 'D07d');
+	//NUnit.Framework.Assert.AreEqual (25, td1.Minute, 'D07e');
+	//NUnit.Framework.Assert.AreEqual (13, td1.Second, 'D07f');
+	//td1 := TDateTime.ParseExact ('Monday, 25 February 2002 04:25:13', 'U', nil);
+	//td1 := TimeZone.CurrentTimeZone.ToUniversalTime(td1);
+	//NUnit.Framework.Assert.AreEqual (2002, td1.Year, 'D08a');
+	//NUnit.Framework.Assert.AreEqual (02, td1.Month, 'D08b');
+	//NUnit.Framework.Assert.AreEqual (25, td1.Day, 'D08c');
+	//NUnit.Framework.Assert.AreEqual (04, td1.Hour, 'D08d');
+	//NUnit.Framework.Assert.AreEqual (25, td1.Minute, 'D08e');
+	//NUnit.Framework.Assert.AreEqual (13, td1.Second, 'D08f');
+
+	//var td2:TDateTime := new TDateTime (TDateTime.Today.Year, 2, 25);
+	//td1 := TDateTime.ParseExact ('February 25', 'm', nil);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'D09');
+
+	//td2 := new DateTime (DateTime.Today.Year, 2, 25);
+	//td1 := DateTime.ParseExact ('February 25', 'M', nil);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'D10');
+
+	//td1 := TDateTime.ParseExact ('Mon, 25 Feb 2002 04:25:13 GMT', 'r', nil);
+	//NUnit.Framework.Assert.AreEqual (2002, td1.Year, 'D11a');
+	//NUnit.Framework.Assert.AreEqual (02, td1.Month, 'D11b');
+	//NUnit.Framework.Assert.AreEqual (25, td1.Day, 'D11c');
+	//NUnit.Framework.Assert.AreEqual (04, td1.Hour, 'D11d');
+	//NUnit.Framework.Assert.AreEqual (25, td1.Minute, 'D11e');
+	//NUnit.Framework.Assert.AreEqual (13, td1.Second, 'D11f');
+
+	//td1 := TDateTime.ParseExact ('Mon, 25 Feb 2002 04:25:13 GMT', 'R', nil);
+	//NUnit.Framework.Assert.AreEqual (2002, td1.Year, 'D12a');
+	//NUnit.Framework.Assert.AreEqual (02, td1.Month, 'D12b');
+	//NUnit.Framework.Assert.AreEqual (25, td1.Day, 'D12c');
+	//NUnit.Framework.Assert.AreEqual (04, td1.Hour, 'D12d');
+	//NUnit.Framework.Assert.AreEqual (25, td1.Minute, 'D12e');
+	//NUnit.Framework.Assert.AreEqual (13, td1.Second, 'D12f');
+
+	//td1 := TDateTime.ParseExact ('2002-02-25T05:25:13', 's', nil);
+	//NUnit.Framework.Assert.AreEqual (myTicks[4], td1.Ticks, 'D13');
+
+	//td2 := TDateTime.Today + new TimeSpan (5,25,0);
+	//td1 := TDateTime.ParseExact ('05:25', 't', nil);
+	//NUnit.Framework.Assert.AreEqual(td2.Ticks, td1.Ticks, 'D14');
+
+	//td2 := TDateTime.Today + new TimeSpan (5,25,13);
+	//td1 := TDateTime.ParseExact ('05:25:13', 'T', nil);
+	//NUnit.Framework.Assert.AreEqual(td2.Ticks, td1.Ticks, 'D15');
+
+	//td2 := new TDateTime (2002, 2, 1);
+	//td1 := TDateTime.ParseExact ('2002 February', 'y', nil);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'D16');
+
+	//td2 := new TDateTime (2002, 2, 1);
+	//td1 := TDateTime.ParseExact ('2002 February', 'Y', nil);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'D16');
+
+	// Custom patterns
+	//td2 := new TDateTime (2003, 1, 25);
+	//td1 := TDateTime.ParseExact ('25', '%d', nil);
+  // MonoTests.System.DateTimeTest.TestParseExact : E01
+	// expected: &lt;-695451648&gt;
+	// but was: &lt;1800028160&gt;	
+	// NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'E01');
+	//td1 := TDateTime.ParseExact ('25', 'dd', nil);
+  // MonoTests.System.DateTimeTest.TestParseExact : E02
+	// expected: &lt;-695451648&gt;
+	// but was: &lt;1800028160&gt;
+  //NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'E02');
+	//td2 := new TDateTime (TDateTime.Today.Year, 2, 1);
+	//td1 := DateTime.ParseExact ('2', '%M', nil);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'E03');
+	//td1 := TDateTime.ParseExact ('02', 'MM', nil);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'E04');
+	//td1 := TDateTime.ParseExact ('Feb', 'MMM', nil);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'E05');
+	//td1 := TDateTime.ParseExact ('February', 'MMMM', nil);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'E06');
+
+	//td2 := new TDateTime (2005, 1, 1);
+	//td1 := TDateTime.ParseExact ('5', '%y', nil);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'E07');
+	//td1 := TDateTime.ParseExact ('05', 'yy', nil);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'E08');
+	//td1 := TDateTime.ParseExact ('2005', 'yyyy', nil);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'E09');
+
+	//td2 := TDateTime.Today + new TimeSpan (5, 0, 0);
+	//td1 := TDateTime.ParseExact ('5A', 'ht', nil);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'E10');
+	//td1 := TDateTime.ParseExact ('05A', 'hht', nil);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'E11');
+
+	//td2 := TDateTime.Today + new TimeSpan (15, 0, 0);
+	//td1 := TDateTime.ParseExact ('3P', 'ht', nil);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'E12');
+	//td1 := TDateTime.ParseExact ('03P', 'hht', nil);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'E13');
+
+	//td2 := TDateTime.Today + new TimeSpan (5, 0, 0);
+	//td1 := TDateTime.ParseExact ('5', '%H', nil);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'E14');
+
+	//td2 := TDateTime.Today + new TimeSpan (15, 0, 0);
+	//td1 := TDateTime.ParseExact ('15', '%H', nil);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'E15');
+	//td1 := TDateTime.ParseExact ('15', 'HH', nil);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'E16');
+
+	// Time zones
+	//td2 := TDateTime.Today + new TimeSpan (17, 18, 0);
+	//td1 := TDateTime.ParseExact ('11:18AM -5', 'h:mmtt z', nil);
+	//td1 := TimeZone.CurrentTimeZone.ToUniversalTime(td1);
+	//if (not TimeZone.CurrentTimeZone.IsDaylightSavingTime(td1)) then
+	//  	td1 := td1 + new TimeSpan(1, 0, 0);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'F01');
+
+	//td1 := TDateTime.ParseExact ('11:18AM -05:00', 'h:mmtt zzz', nil);
+	//td1 := TimeZone.CurrentTimeZone.ToUniversalTime(td1);
+	//if (not TimeZone.CurrentTimeZone.IsDaylightSavingTime(td1)) then
+	//			td1 := td1 + new TimeSpan(1, 0, 0);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'F02');
+
+	//td1 := TDateTime.ParseExact ('7:18PM +03', 'h:mmtt zz', nil);
+	//td1 := TimeZone.CurrentTimeZone.ToUniversalTime(t1);
+	//if (not TimeZone.CurrentTimeZone.IsDaylightSavingTime(td1)) then
+	//			td1 := td1 + new TimeSpan(1, 0, 0);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'F03');
+
+	//td1 := TDateTime.ParseExact ('7:48PM +03:30', 'h:mmtt zzz', nil);
+	//td1 := TimeZone.CurrentTimeZone.ToUniversalTime(td1);
+	//if (not TimeZone.CurrentTimeZone.IsDaylightSavingTime(td1)) then
+	//			td1 := td1 + new TimeSpan(1, 0, 0);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'F04');
+
+	// Options
+	//td2 := TDateTime.Today + new TimeSpan (16, 18, 0);
+	//td1 := TDateTime.ParseExact ('11:18AM -5', 'h:mmtt z',
+	// 		 nil, DateTimeStyles.AdjustToUniversal);
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'G01');
+
+	//td1 := TDateTime.ParseExact ('Monday, 25 February 2002 05:25:13', 'F',
+	//			nil, DateTimeStyles.AdjustToUniversal);
+	//NUnit.Framework.Assert.AreEqual (myTicks[4], td1.Ticks, 'G02');
+	//td1 := DateTime.ParseExact ('Monday, 25 February 2002 05:25:13',
+	//			'dddd, dd MMMM yyyy HH:mm:ss',
+	//	  nil, DateTimeStyles.AdjustToUniversal);
+	//NUnit.Framework.Assert.AreEqual (myTicks[4], td1.Ticks, 'G03');
+
+	//td1 := TDateTime.ParseExact ('02/25/2002', 'd', nil,
+	//			DateTimeStyles.AllowWhiteSpaces);
+	//NUnit.Framework.Assert.AreEqual (myTicks[0], td1.Ticks, 'G04');
+
+	//td1 := TDateTime.ParseExact ('    02/25/2002', 'd', nil,
+	//			DateTimeStyles.AllowLeadingWhite);
+	//NUnit.Framework.Assert.AreEqual (myTicks[0], td1.Ticks, 'G05');
+
+	//td1 := TDateTime.ParseExact ('02/25/2002    ', 'd', nil,
+	//			DateTimeStyles.AllowTrailingWhite);
+	//NUnit.Framework.Assert.AreEqual (myTicks[0], td1.Ticks, 'G06');
+
+	//td1 := TDateTime.ParseExact ('  02 / 25 / 2002    ', 'd', nil,
+	//			DateTimeStyles.AllowWhiteSpaces);
+	//NUnit.Framework.Assert.AreEqual (myTicks[0], td1.Ticks, 'G07');
+
+	// Multi Custom Patterns
+	//var rfc1123_date:string := 'r';
+	//var rfc850_date:string := 'dddd, dd&quot;-&quot;MMM&quot;-&quot;yy HH&quot;:&quot;mm&quot;:&quot;ss GMT';
+	//var asctime_date:string := 'ddd MMM d HH&quot;:&quot;mm&quot;:&quot;ss yyyy';
+	//var formats:Array of string := [rfc1123_date, rfc850_date, asctime_date];
+	//var enUS:CultureInfo := new CultureInfo('en-US', false);
+	//td1 := TDateTime.ParseExact ('Sun, 06 Nov 1994 08:49:37 GMT', formats[0], enUS, 
+	//	  DateTimeStyles.AllowWhiteSpaces);
+	//NUnit.Framework.Assert.AreEqual (myTicks[6], td1.Ticks, 'M01');
+	//td1 := TDateTime.ParseExact ('Sunday, 06-Nov-94 08:49:37 GMT', formats[1], enUS, 
+	//			DateTimeStyles.AllowWhiteSpaces);
+  // MonoTests.System.DateTimeTest.TestParseExact : M02
+	// expected: &lt;1997022848&gt;
+	// but was: &lt;745387648&gt;
+  // NUnit.Framework.Assert.AreEqual ('M02', myTicks[6], td1.Ticks);
+	//td1 := TDateTime.ParseExact ('Sun Nov  6 08:49:37 1994', formats[2], enUS, 
+	//			DateTimeStyles.AllowWhiteSpaces);
+	//NUnit.Framework.Assert.AreEqual (myTicks[6], td1.Ticks, 'M03');
+	//td1 := TDateTime.ParseExact ('Sun, 06 Nov 1994 08:49:37 GMT', formats, enUS, 
+	//			DateTimeStyles.AllowWhiteSpaces);
+	//NUnit.Framework.Assert.AreEqual (myTicks[6], td1.Ticks, 'M04');
+	//td1 := TDateTime.ParseExact ('Sunday, 06-Nov-94 08:49:37 GMT', formats, enUS, 
+	//			DateTimeStyles.AllowWhiteSpaces);
+  // MonoTests.System.DateTimeTest.TestParseExact : M05
+	// expected: &lt;1997022848&gt;
+	// but was: &lt;745387648&gt;
+  // NUnit.Framework.Assert.AreEqual (myTicks[6], td1.Ticks, 'M05');
+	//td1 := TDateTime.ParseExact ('Sun Nov  6 08:49:37 1994', formats, enUS, 
+	//			DateTimeStyles.AllowWhiteSpaces);
+	//NUnit.Framework.Assert.AreEqual (myTicks[6], td1.Ticks, 'M06');
+end;
+
+method TDateTimeTest.TestParse; 
+begin
+  // Standard patterns
+	//var td1:TDateTime := TDateTime.Parse ('02/25/2002');
+	//NUnit.Framework.Assert.AreEqual (myTicks[0], td1.Ticks, 'H00');
+	//try 
+	//  td1 := TDateTime.Parse ('2002-02-25');
+	//except
+	//  on E: Exception do begin
+  //    Fail ('Unexpected exception. E=' + E.Message);
+	//  end;
+  //end;	  
+	//NUnit.Framework.Assert.AreEqual (myTicks[0], td1.Ticks, 'H01');
+	//td1 := TDateTime.Parse ('Monday, 25 February 2002');
+	//NUnit.Framework.Assert.AreEqual (myTicks[0], td1.Ticks, 'H02');
+	//td1 := TDateTime.Parse ('Monday, 25 February 2002 05:25');
+	//NUnit.Framework.Assert.AreEqual (myTicks[3], td1.Ticks, 'H03');
+	//td1 := TDateTime.Parse ('Monday, 25 February 2002 05:25:13');
+	//NUnit.Framework.Assert.AreEqual (myTicks[4], td1.Ticks, 'H04');
+	//td1 := TDateTime.Parse ('02/25/2002 05:25');
+	//NUnit.Framework.Assert.AreEqual (myTicks[3], td1.Ticks, 'H05');
+	//td1 := TDateTime.Parse ('02/25/2002 05:25:13');
+	//NUnit.Framework.Assert.AreEqual (myTicks[4], td1.Ticks, 'H06');
+	//td1 := TDateTime.Parse ('2002-02-25 04:25:13Z');
+	//td1 := TimeZone.CurrentTimeZone.ToUniversalTime(td1);
+	//NUnit.Framework.Assert.AreEqual (2002, td1.Year, 'H07a');
+	//NUnit.Framework.Assert.AreEqual (02, td1.Month, 'H07b');
+	//NUnit.Framework.Assert.AreEqual (25, td1.Day, 'H07c');
+	//NUnit.Framework.Assert.AreEqual (04, td1.Hour, 'H07d');
+	//NUnit.Framework.Assert.AreEqual (25, td1.Minute, 'H07e');
+	//NUnit.Framework.Assert.AreEqual (13, td1.Second, 'H07f');
+
+	//var td2:TDateTime := new TDateTime (TDateTime.Today.Year, 2, 25);
+	//td1 := TDateTime.Parse ('February 25');
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'H08');
+
+	//td2 := new TDateTime (TDateTime.Today.Year, 2, 8);
+	//td1 := TDateTime.Parse ('February 08');
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'H09');
+
+	//td1 := TDateTime.Parse ('Mon, 25 Feb 2002 04:25:13 GMT');
+	//td1 := TimeZone.CurrentTimeZone.ToUniversalTime(t1);
+	//NUnit.Framework.Assert.AreEqual (2002, td1.Year, 'H10a');
+	//NUnit.Framework.Assert.AreEqual (02, td1.Month, 'H10b');
+	//NUnit.Framework.Assert.AreEqual (25, td1.Day, 'H10c');
+	//NUnit.Framework.Assert.AreEqual (04, td1.Hour, 'H10d');
+	//NUnit.Framework.Assert.AreEqual (25, td1.Minute, 'H10e');
+	//NUnit.Framework.Assert.AreEqual (13, td1.Second, 'H10f');
+
+	//td1 := TDateTime.Parse ('2002-02-25T05:25:13');
+	//NUnit.Framework.Assert.AreEqual (myTicks[4], td1.Ticks, 'H11');
+
+	//td2 := TDateTime.Today + new TimeSpan (5,25,0);
+	//td1 := TDateTime.Parse ('05:25');
+	//NUnit.Framework.Assert.AreEqual(td2.Ticks, td1.Ticks, 'H12');
+
+	//td2 := TDateTime.Today + new TimeSpan (5,25,13);
+	//td1 := TDateTime.Parse ('05:25:13');
+	//NUnit.Framework.Assert.AreEqual(td2.Ticks, td1.Ticks, 'H13');
+
+	//td2 := new TDateTime (2002, 2, 1);
+	//td1 := TDateTime.Parse ('2002 February');
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'H14');
+
+	//td2 := new TDateTime (2002, 2, 1);
+	//td1 := TDateTime.Parse ('2002 February');
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'H15');
+
+	//td2 := new TDateTime (TDateTime.Today.Year, 2, 8);
+	//td1 := TDateTime.Parse ('February 8');
+	//NUnit.Framework.Assert.AreEqual (td2.Ticks, td1.Ticks, 'H16');
+end;
+
+constructor TDateTimeTest; 
+begin
+end;
+
+method TDateTimeTest.TestTicks; 
+begin
+ 	var t1:DateTime := new DateTime (myTicks[0]);
+ 	var td1:TDateTime := new TDateTime (myTicks[0]);
+	NUnit.Framework.Assert.AreEqual(t1.Ticks, td1.Ticks, 'Z01');
+ 	var t2:DateTime := new DateTime (myTicks[1]);
+ 	var td2:TDateTime := new TDateTime (myTicks[1]);
+	NUnit.Framework.Assert.AreEqual(t2.Ticks, td2.Ticks, 'Z02');
+ 	var t3:DateTime := new DateTime (myTicks[2]);
+ 	var td3:TDateTime := new TDateTime (myTicks[2]);
+	NUnit.Framework.Assert.AreEqual(t3.Ticks, td3.Ticks, 'Z03');
+ 	var t4:DateTime := new DateTime (myTicks[3]);
+ 	var td4:TDateTime := new TDateTime (myTicks[3]);
+	NUnit.Framework.Assert.AreEqual(t4.Ticks, td4.Ticks, 'Z04');
+ 	var t5:DateTime := new DateTime (myTicks[4]);
+ 	var td5:TDateTime := new TDateTime (myTicks[4]);
+	NUnit.Framework.Assert.AreEqual(t5.Ticks, td5.Ticks, 'Z05');
+ 	var t6:DateTime := new DateTime (myTicks[5]);
+ 	var td6:TDateTime := new TDateTime (myTicks[5]);
+	NUnit.Framework.Assert.AreEqual(t6.Ticks, td6.Ticks, 'Z06');
+ 	var t7:DateTime := new DateTime (myTicks[6]);
+ 	var td7:TDateTime := new TDateTime (myTicks[6]);
+	NUnit.Framework.Assert.AreEqual(t7.Ticks, td7.Ticks, 'Z07');
+end;
+
+method TDateTimeTest.TestCtorsFailures; 
+begin
+	var t2:DateTime := new DateTime (2002,2,25,15,25,13,8);
+	var td2:TDateTime := new TDateTime (2002,2,25,15,25,13,8);
+  // 25 Feb 2002 - 15:25:13,8 index 2
+  // NUnit.ShineOn.RTL.TDateTimeTest.TestFailures : TF02
+	// expected: &lt;-281249024&gt;
+	// but was: &lt;38795&gt; 	
+ 	NUnit.Framework.Assert.AreEqual(myTicks[2], td2.Date.Ticks, 'TF02');
+  // NUnit.ShineOn.RTL.TDateTimeTest.TestFailures : TF03
+	// expected: &lt;-281249024&gt;
+	// but was: &lt;2002&gt;
+  NUnit.Framework.Assert.AreEqual(myTicks[2], td2.Year, 'TF03');
+  // NUnit.ShineOn.RTL.TDateTimeTest.TestFailures : TF04
+	// expected: &lt;-281249024&gt;
+	// but was: &lt;2&gt;
+  NUnit.Framework.Assert.AreEqual(myTicks[2], td2.Month, 'TF04');
+  // NUnit.ShineOn.RTL.TDateTimeTest.TestFailures : TF05
+	// expected: &lt;-281249024&gt;
+	// but was: &lt;25&gt;
+  NUnit.Framework.Assert.AreEqual(myTicks[2], td2.Day, 'TF05');
+  // NUnit.ShineOn.RTL.TDateTimeTest.TestFailures : TF06
+	// expected: &lt;-281249024&gt;
+	// but was: &lt;15&gt;
+  NUnit.Framework.Assert.AreEqual(myTicks[2], td2.Hour, 'TF06');
+  // NUnit.ShineOn.RTL.TDateTimeTest.TestFailures : TF07
+	// expected: &lt;-281249024&gt;
+	// but was: &lt;25&gt;
+  NUnit.Framework.Assert.AreEqual(myTicks[2], td2.Minute, 'TF07');
+  // NUnit.ShineOn.RTL.TDateTimeTest.TestFailures : TF08
+	// expected: &lt;-281249024&gt;
+	// but was: &lt;13&gt; 	
+  NUnit.Framework.Assert.AreEqual(myTicks[2], td2.Second, 'TF08');
+  // NUnit.ShineOn.RTL.TDateTimeTest.TestFailures : TF09
+	// expected: &lt;-281249024&gt;
+	// but was: &lt;8&gt; 
+  NUnit.Framework.Assert.AreEqual(myTicks[2], td2.MSec, 'TF09');
+     	
+end;
+
+end.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000058.html">[Shineon-checkins] ShineOn/ShineOn.RTL.Win32 ShineOn.RTL.Win32.chrome,1.5,1.6
+</A></li>
+	<LI>Next message: <A HREF="000060.html">[Shineon-checkins] ShineOn/ShineOn.RTL IniFiles.pas,1.7,1.8
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#59">[ date ]</a>
+              <a href="thread.html#59">[ thread ]</a>
+              <a href="subject.html#59">[ subject ]</a>
+              <a href="author.html#59">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

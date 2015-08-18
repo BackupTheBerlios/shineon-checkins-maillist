@@ -1,0 +1,423 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/NUnit TestSysUtils.pas,1.2,1.3
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2006-March/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20TestSysUtils.pas%2C1.2%2C1.3&In-Reply-To=%3C200603171542.k2HFgJb17152%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000053.html">
+   <LINK REL="Next"  HREF="000055.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/NUnit TestSysUtils.pas,1.2,1.3</H1>
+    <B>loonquawl</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20TestSysUtils.pas%2C1.2%2C1.3&In-Reply-To=%3C200603171542.k2HFgJb17152%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/NUnit TestSysUtils.pas,1.2,1.3">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Fri Mar 17 16:42:19 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000053.html">[Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.6,1.7
+</A></li>
+        <LI>Next message: <A HREF="000055.html">[Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.14,1.15 IniFiles.pas,1.6,1.7 ShineOn.RTL.chrome,1.9,1.10
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#54">[ date ]</a>
+              <a href="thread.html#54">[ thread ]</a>
+              <a href="subject.html#54">[ subject ]</a>
+              <a href="author.html#54">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/NUnit
+In directory sheep:/tmp/cvs-serv30132/NUnit
+
+Modified Files:
+	TestSysUtils.pas 
+Log Message:
+Added the [Test, Ignore('Test not implemented')]  attribute to not implemented test methods.
+
+Index: TestSysUtils.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/TestSysUtils.pas,v
+retrieving revision 1.2
+retrieving revision 1.3
+diff -C2 -d -r1.2 -r1.3
+*** TestSysUtils.pas	18 Jul 2005 13:09:31 -0000	1.2
+--- TestSysUtils.pas	17 Mar 2006 14:43:39 -0000	1.3
+***************
+*** 8,11 ****
+--- 8,12 ----
+  
+  // $Id$
++ 
+  namespace NUnit.ShineOn.RTL;
+  
+***************
+*** 23,189 ****
+      [TearDown]
+      method TearDown;override;
+!     [Test]
+      method AnsiUpperCase;
+!     [Test]
+      method AnsiLowerCase;
+!     [Test]
+      method AnsiCompareStr;
+!     [Test]
+      method AnsiSameStr;
+!     [Test]
+      method AnsiCompareText;
+!     [Test]
+      method AnsiSameText;
+!     [Test]
+      method AnsiStrComp;
+!     [Test]
+      method AnsiStrIComp;
+!     [Test]
+      method AnsiStrLComp;
+!     [Test]
+      method AnsiStrLIComp;
+!     [Test]
+      method AnsiStrLower;
+!     [Test]
+      method AnsiStrUpper;
+!     [Test]
+      method AnsiLastChar;
+!     [Test]
+      method AnsiStrLastChar;
+!     [Test]
+      method WideUpperCase;
+!     [Test]
+      method WideLowerCase;
+!     [Test]
+      method WideCompareStr;
+!     [Test]
+      method WideSameStr;
+!     [Test]
+      method WideCompareText;
+!     [Test]
+      method WideSameText;
+!     [Test]
+      method Trim;
+!     [Test]
+      method TrimLeft;
+!     [Test]
+      method TrimRight;
+!     [Test]
+      method AnsiQuotedStr;
+!     [Test]
+      method AnsiExtractQuotedStr;
+!     [Test]
+      method AnsiDequotedStr;
+!     [Test]
+      method IntToStr;
+!     [Test]
+      method IntToHex;
+!     [Test]
+      method StrToInt;
+!     [Test]
+      method StrToIntDef;
+!     [Test]
+      method TryStrToInt;
+!     [Test]
+      method StrToInt64;
+!     [Test]
+      method StrToInt64Def;
+!     [Test]
+      method TryStrToInt64;
+!     [Test]
+      method StrToBool;
+!     [Test]
+      method BoolToStr;
+!     [Test]
+      method StrToDate;
+!     [Test]
+      method StrToDateDef;
+!     [Test]
+      method StrToDateTime;
+!     [Test]
+      method StrToDateTimeDef;
+!     [Test]
+      method StrToTime;
+!     [Test]
+      method StrToTimeDef;
+!     [Test]
+      method DateToStr;
+!     [Test]
+      method DateTimeToStr;
+!     [Test]
+      method TimeToStr;
+!     [Test]
+      method FreeAndNil;
+!     [Test]
+      method FileExists;
+!     [Test]
+      method DirectoryExists;
+!     [Test]
+      method ForceDirectories;
+!     [Test]
+      method DeleteFile;
+!     [Test]
+      method RenameFile;
+!     [Test]
+      method ChangeFileExt;
+!     [Test]
+      method ExtractFilePath;
+!     [Test]
+      method ExtractFileDir;
+!     [Test]
+      method ExtractFileDrive;
+!     [Test]
+      method ExtractFileName;
+!     [Test]
+      method ExtractFileExt;
+!     [Test]
+      method ExpandFileName;
+!     [Test]
+      method ExpandUNCFileName;
+!     [Test]
+      method ExtractRelativePath;
+!     [Test]
+      method ExtractShortPathName;
+!     [Test]
+      method GetCurrentDir;
+!     [Test]
+      method SetCurrentDir;
+!     [Test]
+      method CreateDir;
+!     [Test]
+      method RemoveDir;
+!     [Test]
+      method IsPathDelimiter;
+!     [Test]
+      method IsDelimiter;
+!     [Test]
+      method IncludeTrailingPathDelimiter;
+!     [Test]
+      method IncludeTrailingBackslash;
+!     [Test]
+      method ExcludeTrailingPathDelimiter;
+!     [Test]
+      method ExcludeTrailingBackslash;
+!     [Test]
+      method LastDelimiter;
+!     [Test]
+      method AnsiCompareFileName;
+!     [Test]
+      method SameFileName;
+!     [Test]
+      method AnsiLowerCaseFileName;
+!     [Test]
+      method AnsiUpperCaseFileName;
+!     [Test]
+      method AnsiPos;
+!     [Test]
+      method AnsiStrPos;
+!     [Test]
+      method AnsiStrRScan;
+!     [Test]
+      method AnsiStrScan;
+!     [Test]
+      method StringReplace;
+!     [Test]
+      method GetEnvironmentVariable;
+    end;
+--- 24,190 ----
+      [TearDown]
+      method TearDown;override;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiUpperCase;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiLowerCase;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiCompareStr;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiSameStr;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiCompareText;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiSameText;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiStrComp;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiStrIComp;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiStrLComp;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiStrLIComp;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiStrLower;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiStrUpper;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiLastChar;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiStrLastChar;
+!     [Test, Ignore('Test not implemented')] 
+      method WideUpperCase;
+!     [Test, Ignore('Test not implemented')] 
+      method WideLowerCase;
+!     [Test, Ignore('Test not implemented')] 
+      method WideCompareStr;
+!     [Test, Ignore('Test not implemented')] 
+      method WideSameStr;
+!     [Test, Ignore('Test not implemented')] 
+      method WideCompareText;
+!     [Test, Ignore('Test not implemented')] 
+      method WideSameText;
+!     [Test, Ignore('Test not implemented')] 
+      method Trim;
+!     [Test, Ignore('Test not implemented')] 
+      method TrimLeft;
+!     [Test, Ignore('Test not implemented')] 
+      method TrimRight;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiQuotedStr;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiExtractQuotedStr;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiDequotedStr;
+!     [Test, Ignore('Test not implemented')] 
+      method IntToStr;
+!     [Test, Ignore('Test not implemented')] 
+      method IntToHex;
+!     [Test, Ignore('Test not implemented')] 
+      method StrToInt;
+!     [Test, Ignore('Test not implemented')] 
+      method StrToIntDef;
+!     [Test, Ignore('Test not implemented')] 
+      method TryStrToInt;
+!     [Test, Ignore('Test not implemented')] 
+      method StrToInt64;
+!     [Test, Ignore('Test not implemented')] 
+      method StrToInt64Def;
+!     [Test, Ignore('Test not implemented')] 
+      method TryStrToInt64;
+!     [Test, Ignore('Test not implemented')] 
+      method StrToBool;
+!     [Test, Ignore('Test not implemented')] 
+      method BoolToStr;
+!     [Test, Ignore('Test not implemented')] 
+      method StrToDate;
+!     [Test, Ignore('Test not implemented')] 
+      method StrToDateDef;
+!     [Test, Ignore('Test not implemented')] 
+      method StrToDateTime;
+!     [Test, Ignore('Test not implemented')] 
+      method StrToDateTimeDef;
+!     [Test, Ignore('Test not implemented')] 
+      method StrToTime;
+!     [Test, Ignore('Test not implemented')] 
+      method StrToTimeDef;
+!     [Test, Ignore('Test not implemented')] 
+      method DateToStr;
+!     [Test, Ignore('Test not implemented')] 
+      method DateTimeToStr;
+!     [Test, Ignore('Test not implemented')] 
+      method TimeToStr;
+!     [Test, Ignore('Test not implemented')] 
+      method FreeAndNil;
+!     [Test, Ignore('Test not implemented')] 
+      method FileExists;
+!     [Test, Ignore('Test not implemented')] 
+      method DirectoryExists;
+!     [Test, Ignore('Test not implemented')] 
+      method ForceDirectories;
+!     [Test, Ignore('Test not implemented')] 
+      method DeleteFile;
+!     [Test, Ignore('Test not implemented')] 
+      method RenameFile;
+!     [Test, Ignore('Test not implemented')] 
+      method ChangeFileExt;
+!     [Test, Ignore('Test not implemented')] 
+      method ExtractFilePath;
+!     [Test, Ignore('Test not implemented')] 
+      method ExtractFileDir;
+!     [Test, Ignore('Test not implemented')] 
+      method ExtractFileDrive;
+!     [Test, Ignore('Test not implemented')] 
+      method ExtractFileName;
+!     [Test, Ignore('Test not implemented')] 
+      method ExtractFileExt;
+!     [Test, Ignore('Test not implemented')] 
+      method ExpandFileName;
+!     [Test, Ignore('Test not implemented')] 
+      method ExpandUNCFileName;
+!     [Test, Ignore('Test not implemented')] 
+      method ExtractRelativePath;
+!     [Test, Ignore('Test not implemented')] 
+      method ExtractShortPathName;
+!     [Test, Ignore('Test not implemented')] 
+      method GetCurrentDir;
+!     [Test, Ignore('Test not implemented')] 
+      method SetCurrentDir;
+!     [Test, Ignore('Test not implemented')] 
+      method CreateDir;
+!     [Test, Ignore('Test not implemented')] 
+      method RemoveDir;
+!     [Test, Ignore('Test not implemented')] 
+      method IsPathDelimiter;
+!     [Test, Ignore('Test not implemented')] 
+      method IsDelimiter;
+!     [Test, Ignore('Test not implemented')] 
+      method IncludeTrailingPathDelimiter;
+!     [Test, Ignore('Test not implemented')] 
+      method IncludeTrailingBackslash;
+!     [Test, Ignore('Test not implemented')] 
+      method ExcludeTrailingPathDelimiter;
+!     [Test, Ignore('Test not implemented')] 
+      method ExcludeTrailingBackslash;
+!     [Test, Ignore('Test not implemented')] 
+      method LastDelimiter;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiCompareFileName;
+!     [Test, Ignore('Test not implemented')] 
+      method SameFileName;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiLowerCaseFileName;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiUpperCaseFileName;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiPos;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiStrPos;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiStrRScan;
+!     [Test, Ignore('Test not implemented')] 
+      method AnsiStrScan;
+!     [Test, Ignore('Test not implemented')] 
+      method StringReplace;
+!     [Test, Ignore('Test not implemented')] 
+      method GetEnvironmentVariable;
+    end;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000053.html">[Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.6,1.7
+</A></li>
+	<LI>Next message: <A HREF="000055.html">[Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.14,1.15 IniFiles.pas,1.6,1.7 ShineOn.RTL.chrome,1.9,1.10
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#54">[ date ]</a>
+              <a href="thread.html#54">[ thread ]</a>
+              <a href="subject.html#54">[ subject ]</a>
+              <a href="author.html#54">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

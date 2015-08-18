@@ -1,0 +1,324 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/NUnit AssemblyInfo.pas,NONE,1.1 NUnit.ShineOn.RTL.2003.sln,NONE,1.1 NUnit.ShineOn.RTL.chrome,NONE,1.1 TestMain.pas,NONE,1.1
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20AssemblyInfo.pas%2CNONE%2C1.1%20NUnit.ShineOn.RTL.2003.sln%2CNONE%2C1.1%20NUnit.ShineOn.RTL.chrome%2CNONE%2C1.1%20TestMain.pas%2CNONE%2C1.1&In-Reply-To=%3C200505301343.j4UDhZm26911%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000018.html">
+   <LINK REL="Next"  HREF="000020.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/NUnit AssemblyInfo.pas,NONE,1.1 NUnit.ShineOn.RTL.2003.sln,NONE,1.1 NUnit.ShineOn.RTL.chrome,NONE,1.1 TestMain.pas,NONE,1.1</H1>
+    <B>peter3</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20AssemblyInfo.pas%2CNONE%2C1.1%20NUnit.ShineOn.RTL.2003.sln%2CNONE%2C1.1%20NUnit.ShineOn.RTL.chrome%2CNONE%2C1.1%20TestMain.pas%2CNONE%2C1.1&In-Reply-To=%3C200505301343.j4UDhZm26911%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/NUnit AssemblyInfo.pas,NONE,1.1 NUnit.ShineOn.RTL.2003.sln,NONE,1.1 NUnit.ShineOn.RTL.chrome,NONE,1.1 TestMain.pas,NONE,1.1">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Mon May 30 15:43:35 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000018.html">[Shineon-checkins] ShineOn/NUnit - New directory
+</A></li>
+        <LI>Next message: <A HREF="000020.html">[Shineon-checkins] ShineOn/NUnit TestMain.pas,1.1,1.2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#19">[ date ]</a>
+              <a href="thread.html#19">[ thread ]</a>
+              <a href="subject.html#19">[ subject ]</a>
+              <a href="author.html#19">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/NUnit
+In directory sheep:/tmp/cvs-serv2469/NUnit
+
+Added Files:
+	AssemblyInfo.pas NUnit.ShineOn.RTL.2003.sln 
+	NUnit.ShineOn.RTL.chrome TestMain.pas 
+Log Message:
+- Initial NUnit test fixture
+- Feel free to expand!
+
+--- NEW FILE: AssemblyInfo.pas ---
+namespace NUnit.ShineOn.RTL;
+
+interface
+
+uses
+  System.Reflection;
+
+[assembly: AssemblyTitle('NUnit.ShineOn.RTL')]
+[assembly: AssemblyDescription('NUnit tests for ShineOn')]
+[assembly: AssemblyConfiguration('')]
+[assembly: AssemblyCompany('')]
+[assembly: AssemblyProduct('')]
+[assembly: AssemblyCopyright('')]
+[assembly: AssemblyTrademark('')]
+[assembly: AssemblyCulture('')]
+[assembly: AssemblyVersion('1.0.0.1')]
+
+//
+// In order to sign your assembly you must specify a key to use. Refer to the 
+// Microsoft .NET Framework documentation for more information on assembly signing.
+//
+// Use the attributes below to control which key is used for signing. 
+//
+// Notes: 
+//   (*) If no key is specified, the assembly is not signed.
+//   (*) KeyName refers to a key that has been installed in the Crypto Service
+//       Provider (CSP) on your machine. KeyFile refers to a file which contains
+//       a key.
+//   (*) If the KeyFile and the KeyName values are both specified, the 
+//       following processing occurs:
+//       (1) If the KeyName can be found in the CSP, that key is used.
+//       (2) If the KeyName does not exist and the KeyFile does exist, the key 
+//           in the KeyFile is installed into the CSP and used.
+//   (*) In order to create a KeyFile, you can use the sn.exe (Strong Name) utility.
+//       When specifying the KeyFile, the location of the KeyFile should be
+//       relative to the project output directory, which in Chrome by default is the
+//       same as the project directory. For example, if your KeyFile is
+//       located in the project directory, you would specify the AssemblyKeyFile 
+//       attribute as [assembly: AssemblyKeyFile('mykey.snk')]
+//   (*) Delay Signing is an advanced option - see the Microsoft .NET Framework
+//       documentation for more information on this.
+//
+[assembly: AssemblyDelaySign(false)]
+[assembly: AssemblyKeyFile('')]
+[assembly: AssemblyKeyName('')]
+
+implementation
+
+end.
+
+--- NEW FILE: NUnit.ShineOn.RTL.2003.sln ---
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project(&quot;{656346D9-4656-40DA-A068-22D5425D4639}&quot;) = &quot;Nunit&quot;, &quot;Nunit.ShineOn.RTL.chrome&quot;, &quot;{78329CFC-D7AA-468C-8DF7-DBC4C14D671C}&quot;
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{78329CFC-D7AA-468C-8DF7-DBC4C14D671C}.Debug.ActiveCfg = Debug
+		{78329CFC-D7AA-468C-8DF7-DBC4C14D671C}.Debug.Build.0 = Debug
+		{78329CFC-D7AA-468C-8DF7-DBC4C14D671C}.Release.ActiveCfg = Release
+		{78329CFC-D7AA-468C-8DF7-DBC4C14D671C}.Release.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
+
+--- NEW FILE: NUnit.ShineOn.RTL.chrome ---
+&lt;ChromeProject&gt;
+  &lt;ProjectOptions Name=&quot;NUnit.ShineOn.RTL&quot;&gt;
+    &lt;ProjectID&gt;{78329CFC-D7AA-468C-8DF7-DBC4C14D671C}&lt;/ProjectID&gt;
+    &lt;DefaultNamespace&gt;NUnit.ShineOn.RTL&lt;/DefaultNamespace&gt;
+    &lt;StartupClass&gt;
+    &lt;/StartupClass&gt;
+    &lt;OutputType&gt;library&lt;/OutputType&gt;
+    &lt;AssemblyName&gt;Nunit.ShineOn.RTL&lt;/AssemblyName&gt;
+    &lt;AllowGlobals&gt;False&lt;/AllowGlobals&gt;
+    &lt;AllowLegacyWith&gt;False&lt;/AllowLegacyWith&gt;
+    &lt;AllowLegacyOutParams&gt;True&lt;/AllowLegacyOutParams&gt;
+    &lt;AllowUnsafeCode&gt;False&lt;/AllowUnsafeCode&gt;
+    &lt;AllowLegacyCreate&gt;True&lt;/AllowLegacyCreate&gt;
+    &lt;ApplicationIcon&gt;
+    &lt;/ApplicationIcon&gt;
+  &lt;/ProjectOptions&gt;
+  &lt;References&gt;
+    &lt;Reference Assembly=&quot;$(Framework)\mscorlib.dll&quot; Display=&quot;mscorlib&quot; CopyLocal=&quot;False&quot; /&gt;
+    &lt;Reference Assembly=&quot;$(Framework)\System.dll&quot; Display=&quot;System&quot; CopyLocal=&quot;False&quot; /&gt;
+    &lt;Reference Assembly=&quot;$(Framework)\System.Drawing.dll&quot; Display=&quot;System.Drawing&quot; CopyLocal=&quot;False&quot; /&gt;
+    &lt;Reference Assembly=&quot;$(Framework)\System.Windows.Forms.dll&quot; Display=&quot;System.Windows.Forms&quot; CopyLocal=&quot;False&quot; /&gt;
+    &lt;Reference Assembly=&quot;..\..\..\..\..\NUnit 2.2\bin\nunit.framework.dll&quot; Display=&quot;nunit.framework&quot; CopyLocal=&quot;False&quot; /&gt;
+    &lt;Reference Assembly=&quot;..\bin\ShineOn.RTL.dll&quot; Display=&quot;ShineOn.RTL.dll&quot; CopyLocal=&quot;False&quot; /&gt;
+  &lt;/References&gt;
+  &lt;Configurations&gt;
+    &lt;Configuration Name=&quot;Debug&quot;&gt;
+      &lt;Conditionals&gt;DEBUG;TRACE;&lt;/Conditionals&gt;
+      &lt;OutputPath&gt;..\bin&lt;/OutputPath&gt;
+      &lt;GeneratePDB&gt;True&lt;/GeneratePDB&gt;
+      &lt;GenerateMDB&gt;False&lt;/GenerateMDB&gt;
+      &lt;EnableAsserts&gt;True&lt;/EnableAsserts&gt;
+      &lt;TreatWarningsAsErrors&gt;False&lt;/TreatWarningsAsErrors&gt;
+      &lt;CaptureConsoleOutput&gt;False&lt;/CaptureConsoleOutput&gt;
+      &lt;StartMode&gt;Application&lt;/StartMode&gt;
+      &lt;StartApp&gt;..\..\..\..\..\NUnit 2.2\bin\nunit-gui.exe&lt;/StartApp&gt;
+      &lt;StartAppParams&gt;NUnit.ShineOn.RTL.dll&lt;/StartAppParams&gt;
+      &lt;WorkingDir&gt;..\bin&lt;/WorkingDir&gt;
+      &lt;RegisterForComInterop&gt;False&lt;/RegisterForComInterop&gt;
+      &lt;CpuType&gt;anycpu&lt;/CpuType&gt;
+      &lt;RuntimeVersion&gt;v25&lt;/RuntimeVersion&gt;
+      &lt;XmlDoc&gt;False&lt;/XmlDoc&gt;
+      &lt;XmlDocWarningLevel&gt;WarningOnPublicMembers&lt;/XmlDocWarningLevel&gt;
+      &lt;EnableUnmanagedDebugging&gt;False&lt;/EnableUnmanagedDebugging&gt;
+    &lt;/Configuration&gt;
+    &lt;Configuration Name=&quot;Release&quot;&gt;
+      &lt;OutputPath&gt;..\bin&lt;/OutputPath&gt;
+      &lt;GeneratePDB&gt;False&lt;/GeneratePDB&gt;
+      &lt;GenerateMDB&gt;False&lt;/GenerateMDB&gt;
+      &lt;EnableAsserts&gt;False&lt;/EnableAsserts&gt;
+      &lt;TreatWarningsAsErrors&gt;False&lt;/TreatWarningsAsErrors&gt;
+      &lt;CaptureConsoleOutput&gt;False&lt;/CaptureConsoleOutput&gt;
+      &lt;StartMode&gt;Project&lt;/StartMode&gt;
+      &lt;RegisterForComInterop&gt;False&lt;/RegisterForComInterop&gt;
+      &lt;CpuType&gt;anycpu&lt;/CpuType&gt;
+      &lt;RuntimeVersion&gt;v25&lt;/RuntimeVersion&gt;
+      &lt;XmlDoc&gt;False&lt;/XmlDoc&gt;
+      &lt;XmlDocWarningLevel&gt;WarningOnPublicMembers&lt;/XmlDocWarningLevel&gt;
+      &lt;EnableUnmanagedDebugging&gt;False&lt;/EnableUnmanagedDebugging&gt;
+    &lt;/Configuration&gt;
+  &lt;/Configurations&gt;
+  &lt;Files&gt;
+    &lt;File Filename=&quot;AssemblyInfo.pas&quot;&gt;
+      &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+      &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+    &lt;/File&gt;
+    &lt;File Filename=&quot;TestMain.pas&quot;&gt;
+      &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+      &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+    &lt;/File&gt;
+  &lt;/Files&gt;
+&lt;/ChromeProject&gt;
+--- NEW FILE: TestMain.pas ---
+// The contents of this file are subject to the Mozilla Public License Version 1.1 (the &quot;License&quot;); 
+// you may not use this file except in compliance with the License. You may obtain a copy of the 
+// License at <A HREF="http://www.mozilla.org/MPL/">http://www.mozilla.org/MPL/</A> 
+// 
+// Software distributed under the License is distributed on an &quot;AS IS&quot; basis, WITHOUT WARRANTY OF 
+// ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
+// limitations under the License.
+
+// $Id: TestMain.pas,v 1.1 2005/05/30 13:43:32 peter3 Exp $
+
+namespace NUnit.ShineOn.RTL;
+// TODO:
+// - Add test fixtures and methods for all classes and methods
+// - Currently, the tests are trivial and only provided as an example 
+
+// NOTE: you will probably have to change the Start Application path for the project to match the install folder
+// on your system. You can also run the tests manually from the NUnit GUI (or console) if you prefer.
+
+// To add a NUnit command to the Tools menu, add a new External Tool with these parameters:
+// Title: NUnit
+// Command: &lt;path to nunit-gui.exe or nunit-console.exe&gt;
+// Arguments: $(TargetPath) 
+// Initial Directory: $(TargetDir)
+
+interface
+uses
+  Nunit.Framework,
+  ShineOn.RTL;
+
+type
+  [TestFixture]
+  TestSysUtils = public class(TestCase)
+  public
+    method Setup;override;
+    method TearDown;override;
+
+    [Test]
+    method StringListAdd;
+    [Test]
+    method StringListDelete1;
+    [Test]
+    method StringListDelete2;
+    [Test]
+    method StringListClear;
+  end;
+
+implementation
+
+method TestSysUtils.StringListAdd;
+begin
+  with T:TStringlist := new TStringlist do
+  begin
+    T.Add('A');
+    T.Add('B');
+    NUnit.Framework.Assert.AreEqual(2, T.Count, 'TStringlist.Count is wrong');
+  end;
+end;
+
+
+method TestSysUtils.StringListDelete1; 
+begin
+  with T:TStringlist := new TStringlist do
+  begin
+    T.Add('AAA');
+    T.Add('BBB');
+    T.Delete(T.IndexOf('AAA'));
+    NUnit.Framework.Assert.AreEqual(1, T.Count, 'TStringlist.Count is wrong');
+  end;
+end;
+
+method TestSysUtils.StringListDelete2; 
+begin
+  with T:TStringlist := new TStringlist do
+  begin
+    T.Add('BBB');
+    T.Add('AAA');
+    T.Delete(0);
+    NUnit.Framework.Assert.AreEqual(T[0], 'AAA', 'TStringlist content is wrong');
+  end;
+end;
+
+method TestSysUtils.StringListClear; 
+begin
+  with T:TStringlist := new TStringlist do
+  begin
+    T.Add('AAA');
+    T.Add('AAA');
+    T.Add('BBB');
+    T.Add('BBB');
+    T.Clear;
+    NUnit.Framework.Assert.AreEqual(0, T.Count, 'TStringlist.Count is wrong');
+  end;
+end;
+
+method TestSysUtils.Setup; 
+begin
+  // add setup code here
+end;
+
+method TestSysUtils.TearDown; 
+begin
+  // add tear down code here
+end;
+
+end.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000018.html">[Shineon-checkins] ShineOn/NUnit - New directory
+</A></li>
+	<LI>Next message: <A HREF="000020.html">[Shineon-checkins] ShineOn/NUnit TestMain.pas,1.1,1.2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#19">[ date ]</a>
+              <a href="thread.html#19">[ thread ]</a>
+              <a href="subject.html#19">[ subject ]</a>
+              <a href="author.html#19">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

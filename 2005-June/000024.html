@@ -1,0 +1,990 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/ShineOn.RTL Globals.pas,1.4,1.5 SysUtils.pas,1.10,1.11 System.pas,1.8,1.9 Types.pas,1.8,1.9
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20Globals.pas%2C1.4%2C1.5%20SysUtils.pas%2C1.10%2C1.11%20System.pas%2C1.8%2C1.9%20Types.pas%2C1.8%2C1.9&In-Reply-To=%3C200506152347.j5FNlWI31252%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000025.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/ShineOn.RTL Globals.pas,1.4,1.5 SysUtils.pas,1.10,1.11 System.pas,1.8,1.9 Types.pas,1.8,1.9</H1>
+    <B>lloydkinsella</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20Globals.pas%2C1.4%2C1.5%20SysUtils.pas%2C1.10%2C1.11%20System.pas%2C1.8%2C1.9%20Types.pas%2C1.8%2C1.9&In-Reply-To=%3C200506152347.j5FNlWI31252%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/ShineOn.RTL Globals.pas,1.4,1.5 SysUtils.pas,1.10,1.11 System.pas,1.8,1.9 Types.pas,1.8,1.9">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Thu Jun 16 01:47:32 CEST 2005</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000025.html">[Shineon-checkins] ShineOn/ShineOn.RTL Globals.pas,1.5,1.6 ShineOn.RTL.chrome,1.6,1.7
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#24">[ date ]</a>
+              <a href="thread.html#24">[ thread ]</a>
+              <a href="subject.html#24">[ subject ]</a>
+              <a href="author.html#24">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv11283/ShineOn.RTL
+
+Modified Files:
+	Globals.pas SysUtils.pas System.pas Types.pas 
+Log Message:
+
+
+Index: Globals.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Globals.pas,v
+retrieving revision 1.4
+retrieving revision 1.5
+diff -C2 -d -r1.4 -r1.5
+*** Globals.pas	29 May 2005 19:47:57 -0000	1.4
+--- Globals.pas	15 Jun 2005 23:47:26 -0000	1.5
+***************
+*** 8,12 ****
+--- 8,14 ----
+  
+  // $Id$
++ 
+  namespace ShineOn.RTL;
++ 
+  // NOTES FOR THIS UNIT:
+  // This unit should only contain global variables and constants (except string constants used in messages which
+***************
+*** 20,23 ****
+--- 22,26 ----
+  
+  interface
++ 
+  uses
+    System.Windows.Forms;
+***************
+*** 28,45 ****
+      class var ApplicationMainForm:Form := nil; // used by TThread.Synchronize();
+    public
+!     class const MaxInt:integer = Int16.MaxValue;
+!     class const MaxLongint:Longint = UInt32.MaxValue;
+      class const MaxListSize = MaxInt div 16;
+!     class const MaxComp:Int64 = Int64.MaxValue;
+      class const MaxDouble: Double = Double.MaxValue;
+      class const MaxExtended: Extended = Extended.MaxValue;
+!     class const MaxSingle:Single = Single.MaxValue;
+!     class const MinComp:Int64 = Int64.MinValue;
+      class const MinDouble: Double = Double.MinValue;
+      class const MinExtended: Extended = Extended.MinValue;
+      class const MinSingle: Single = Single.MinValue;
+      // TODO: figure out how to declare these as consts isto vars:
+!     class var MaxDateTime:TDateTime := new TDateTime(2958465.99999);
+!     class var MinDateTime:TDateTime := new TDateTime(-657434.0);
+      class const soFromBeginning = 0;
+      class const soFromCurrent = 1;
+--- 31,48 ----
+      class var ApplicationMainForm:Form := nil; // used by TThread.Synchronize();
+    public
+!     class const MaxInt: Integer = Int16.MaxValue;
+!     class const MaxLongint: Longint = UInt32.MaxValue;
+      class const MaxListSize = MaxInt div 16;
+!     class const MaxComp: Int64 = Int64.MaxValue;
+      class const MaxDouble: Double = Double.MaxValue;
+      class const MaxExtended: Extended = Extended.MaxValue;
+!     class const MaxSingle: Single = Single.MaxValue;
+!     class const MinComp: Int64 = Int64.MinValue;
+      class const MinDouble: Double = Double.MinValue;
+      class const MinExtended: Extended = Extended.MinValue;
+      class const MinSingle: Single = Single.MinValue;
+      // TODO: figure out how to declare these as consts isto vars:
+!     class var MaxDateTime: TDateTime := new TDateTime(MaxDateTimeAsDouble);
+!     class var MinDateTime: TDateTime := new TDateTime(MinDateTimeAsDouble);
+      class const soFromBeginning = 0;
+      class const soFromCurrent = 1;
+***************
+*** 114,117 ****
+--- 117,122 ----
+      class const bl128 = TBucketListSizes.BucketSize128;
+      class const bl256 = TBucketListSizes.BucketSize256;
++     class const loInvariantLocale = TLocaleOptions.InvariantLocale;
++     class const loUserLocale = TLocaleOptions.UserLocale;
+    end;
+  
+
+Index: SysUtils.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/SysUtils.pas,v
+retrieving revision 1.10
+retrieving revision 1.11
+diff -C2 -d -r1.10 -r1.11
+*** SysUtils.pas	4 Jun 2005 18:01:35 -0000	1.10
+--- SysUtils.pas	15 Jun 2005 23:47:29 -0000	1.11
+***************
+*** 9,31 ****
+  // $Id$
+  
+  namespace ShineOn.RTL;
+- // HISTORY:
+- // May 10 2005   :   Jeroen Vandezande   : Implemented StringReplace
+  
+  interface
+! uses
+!   System.Globalization;
+  
+  type
+-   EShineOnError = public class(Exception);
+    TReplaceFlags = public set of (ReplaceAll, IgnoreCase);
+    
+  type
+    SysUtils = public sealed class
+    public
+      class function AnsiUpperCase(S: string): string;
+      class function AnsiLowerCase(S: string): string;
+!     class function AnsiCompareStr(S1, S2: string): Integer;
+!     class function AnsiSameStr(S1, S2: string): Boolean;
+      class function AnsiCompareText(S1, S2: string): Integer;
+      class function AnsiSameText(S1, S2: string): Boolean;
+--- 9,123 ----
+  // $Id$
+  
++ // History:
++ //
++ // 2005-05-10   :   Jeroen Vandezande   :   Implemented StringReplace
++ // 2005-06-04   :   Lloyd Kinsella      :   More complete implementation of TDateTime
++ // 2005-06-05   :   Lloyd Kinsella      :   Moved NotImplemented to System
++ //                                          Implemented a wad of routines...
++ 
+  namespace ShineOn.RTL;
+  
+  interface
+! 
+! uses System,
+!      System.Collections,
+!      System.Globalization,
+!      System.IO,
+!      System.Text,
+!      System.Threading,
+!      System.Windows.Forms;
+  
+  type
+    TReplaceFlags = public set of (ReplaceAll, IgnoreCase);
+    
++   SeparatorType = public string;
++ 
++   TSysLocale = public record
++     DefaultLCID: LCID;
++     PriLangID: LANGID;
++     SubLangID: LANGID;
++     FarEast: Boolean;
++     MiddleEast: Boolean;
++   end;
++   
++   TFormatSettings = public record
++     CurrencyFormat: Byte;
++     NegCurrFormat: Byte;
++     ThousandSeparator: SeparatorType;
++     DecimalSeparator: SeparatorType;
++     CurrencyDecimals: Byte;
++     DateSeparator: SeparatorType;
++     TimeSeparator: SeparatorType;
++     ListSeparator: SeparatorType;
++     CurrencyString: string;
++     ShortDateFormat: string;
++     LongDateFormat: string;
++     TimeAMString: string;
++     TimePMString: string;
++     ShortTimeFormat: string;
++     LongTimeFormat: string;
++     ShortMonthNames: array [1..12] of string;
++     LongMonthNames: array [1..12] of string;
++     ShortDayNames: array [1..7] of string;
++     LongDayNames: array [1..7] of string;
++     TwoDigitYearCenturyWindow: Word;
++   end;
++ 
++ // Should these be members of the SysUtils class? - LK
++ var
++   SysLocale: TSysLocale;
++ 
++   CurrencyString: string;
++   CurrencyFormat: System.Byte;
++   NegCurrFormat: Byte;
++   ThousandSeparator: SeparatorType;
++   DecimalSeparator: SeparatorType;
++   CurrencyDecimals: Byte;
++   DateSeparator: SeparatorType;
++   ShortDateFormat: string;
++   LongDateFormat: string;
++   TimeSeparator: SeparatorType;
++   TimeAMString: string;
++   TimePMString: string;
++   ShortTimeFormat: string;
++   LongTimeFormat: string;
++   ShortMonthNames: array [1..12] of string;
++   LongMonthNames: array [1..12] of string;
++   ShortDayNames: array [1..7] of string;
++   LongDayNames: array [1..7] of string;
++   TwoDigitYearCenturyWindow: Word;
++   ListSeparator: SeparatorType;
++ 
++ type
++   TLocaleOptions = public (InvariantLocale, UserLocale);
++   
+  type
+    SysUtils = public sealed class
++   private
++     class function _CompareText(const S1, S2: string; Culture: CultureInfo): Integer;
+    public
++     class function UpperCase(const S: string): string; 
++     class function UpperCase(const S: string; LocaleOptions: TLocaleOptions): string; 
++ 
++     class function LowerCase(const S: string): string;
++     class function LowerCase(const S: string; LocaleOptions: TLocaleOptions): string; 
++ 
++     class function CompareStr(const S1, S2: string): Integer; 
++     class function CompareStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer; 
++ 
++     class function SameStr(const S1, S2: string): Boolean; 
++     class function SameStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean; 
++ 
++     class function CompareText(const S1, S2: string): Integer; 
++     class function CompareText(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer; 
++ 
++     class function SameText(const S1, S2: string): Boolean; 
++     class function SameText(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean; 
++ 
+      class function AnsiUpperCase(S: string): string;
+      class function AnsiLowerCase(S: string): string;
+!     
+!     class function AnsiCompareStr(S1, S2: string): Integer;  
+!     class function AnsiSameStr(S1, S2: string): Boolean;  
+      class function AnsiCompareText(S1, S2: string): Integer;
+      class function AnsiSameText(S1, S2: string): Boolean;
+***************
+*** 38,41 ****
+--- 130,134 ----
+      class function AnsiLastChar(S: string): string;
+      class function AnsiStrLastChar(P: string): string;
++     
+      class function WideUpperCase(S: WideString): WideString;
+      class function WideLowerCase(S: WideString): WideString;
+***************
+*** 44,53 ****
+      class function WideCompareText(S1, S2: WideString): Integer;
+      class function WideSameText(S1, S2: WideString): Boolean;
+      class function Trim(S: string): string; 
+      class function TrimLeft(S: string): string; 
+      class function TrimRight(S: string): string; 
+!     class function AnsiQuotedStr(S: string; AQuote: Char): string;
+!     class function AnsiExtractQuotedStr(var Src: string; AQuote: Char): string;
+!     class function AnsiDequotedStr(S: string; AQuote: Char): string;
+      class function IntToStr(Value: Integer): string; 
+      class function IntToHex(Value: Integer; Digits: Integer): string; 
+--- 137,160 ----
+      class function WideCompareText(S1, S2: WideString): Integer;
+      class function WideSameText(S1, S2: WideString): Boolean;
++     
+      class function Trim(S: string): string; 
+      class function TrimLeft(S: string): string; 
+      class function TrimRight(S: string): string; 
+!     
+!     class function AnsiPos(const SubS, S: string): Integer;
+!     
+!     class function QuotedStr(const S: string): string;
+!     class function QuotedStr(const S: string; QuoteChar: Char): string;
+!     
+!     class function AnsiQuotedStr(const S: string; Quote: Char): string;
+!     
+!     class function DequotedStr(const S: string): string;
+!     class function DequotedStr(const S: string; QuoteChar: Char): string;
+!     class function DequotedStr(const S: string; QuoteChar: Char; var p: integer): string;
+!     
+!     class function AnsiDequotedStr(const S: string; Quote: Char): string;
+!     class function AdjustLineBreaks(const S: string; Style: TTextLineBreakStyle): string;
+!     class function IsValidIdent(const Ident: string; AllowDots: Boolean): Boolean;    
+! 
+      class function IntToStr(Value: Integer): string; 
+      class function IntToHex(Value: Integer; Digits: Integer): string; 
+***************
+*** 102,106 ****
+      class function AnsiLowerCaseFileName(S: string): string;
+      class function AnsiUpperCaseFileName(S: string): string;
+-     class function AnsiPos(Substr, S: string): Integer;
+      class function AnsiStrPos(Str, SubStr: string): string;
+      class function AnsiStrRScan(Str: string; Chr: Char): string;
+--- 209,212 ----
+***************
+*** 110,113 ****
+--- 216,237 ----
+    end;
+    
++ function UpperCase(const S: string): string;
++ function UpperCase(const S: string; LocaleOptions: TLocaleOptions): string;
++ 
++ function LowerCase(const S: string): string;
++ function LowerCase(const S: string; LocaleOptions: TLocaleOptions): string;
++ 
++ function CompareStr(const S1, S2: string): Integer;
++ function CompareStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer;
++ 
++ function SameStr(const S1, S2: string): Boolean;
++ function SameStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean;
++ 
++ function CompareText(const S1, S2: string): Integer;
++ function CompareText(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer;
++ 
++ function SameText(const S1, S2: string): Boolean;
++ function SameText(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean;
++    
+  function AnsiUpperCase(S: string): string;
+  function AnsiLowerCase(S: string): string;
+***************
+*** 124,127 ****
+--- 248,252 ----
+  function AnsiLastChar(S: string): string;
+  function AnsiStrLastChar(P: string): string;
++ 
+  function WideUpperCase(S: WideString): WideString;
+  function WideLowerCase(S: WideString): WideString;
+***************
+*** 130,139 ****
+  function WideCompareText(S1, S2: WideString): Integer;
+  function WideSameText(S1, S2: WideString): Boolean;
+  function Trim(S: string): string; 
+  function TrimLeft(S: string): string; 
+  function TrimRight(S: string): string; 
+! function AnsiQuotedStr(S: string; AQuote: Char): string;
+! function AnsiExtractQuotedStr(var Src: string; AQuote: Char): string;
+! function AnsiDequotedStr(S: string; AQuote: Char): string;
+  function IntToStr(Value: Integer): string; 
+  function IntToHex(Value: Integer; Digits: Integer): string; 
+--- 255,279 ----
+  function WideCompareText(S1, S2: WideString): Integer;
+  function WideSameText(S1, S2: WideString): Boolean;
++ 
+  function Trim(S: string): string; 
+  function TrimLeft(S: string): string; 
+  function TrimRight(S: string): string; 
+! 
+! function AnsiPos(const SubS, S: string): Integer;
+! 
+! function QuotedStr(const S: string): string;
+! function QuotedStr(const S: string; QuoteChar: Char): string;
+! 
+! function AnsiQuotedStr(const S: string; Quote: Char): string;
+! 
+! function DequotedStr(const S: string): string;
+! function DequotedStr(const S: string; QuoteChar: Char): string;
+! function DequotedStr(const S: string; QuoteChar: Char; var p: integer): string;
+! 
+! function AnsiDequotedStr(const S: string; Quote: Char): string;
+! 
+! function AdjustLineBreaks(const S: string; Style: TTextLineBreakStyle): string;
+! function IsValidIdent(const Ident: string; AllowDots: Boolean): Boolean;
+! 
+  function IntToStr(Value: Integer): string; 
+  function IntToHex(Value: Integer; Digits: Integer): string; 
+***************
+*** 188,192 ****
+  function AnsiLowerCaseFileName(S: string): string;
+  function AnsiUpperCaseFileName(S: string): string;
+- function AnsiPos(Substr, S: string): Integer;
+  function AnsiStrPos(Str, SubStr: string): string;
+  function AnsiStrRScan(Str: string; Chr: Char): string;
+--- 328,331 ----
+***************
+*** 195,210 ****
+  function GetEnvironmentVariable(Name: string): string;   
+  
+-  
+- procedure NotImplemented;
+- 
+  implementation
+  uses
+    System.Text, System.Text.RegularExpressions;
+!   
+! procedure NotImplemented;
+  begin
+!   {$IFNDEF SHINEON_DISABLE_NOTIMPLEMENTED_ERROR}
+!   raise EShineOnError.Create('Not implemented');
+!   {$ENDIF} 
+  end;
+  
+--- 334,470 ----
+  function GetEnvironmentVariable(Name: string): string;   
+  
+  implementation
++ 
+  uses
+    System.Text, System.Text.RegularExpressions;
+! 
+! class function SysUtils.UpperCase(const S: string): string;
+  begin
+!   if S &lt;&gt; nil then
+!     Result := S.ToUpper
+!   else
+!     Result := '';
+! end;
+! 
+! class function SysUtils.UpperCase(const S: string; LocaleOptions: TLocaleOptions): string;
+! var
+!   Culture: CultureInfo;
+! begin
+!   if S &lt;&gt; nil then
+!     begin
+!       Culture := System.Threading.Thread.CurrentThread.CurrentCulture;
+!       
+!       if LocaleOptions = TLocaleOptions.UserLocale then
+!         Result := S.ToUpper
+!       else
+!         Result := S.ToUpper(Culture.InvariantCulture)
+!     end
+!   else
+!     Result := '';
+! end;
+! 
+! class function SysUtils.LowerCase(const S: string): string;
+! begin
+!   if S &lt;&gt; nil then
+!     Result := S.ToLower
+!   else
+!     Result := '';
+! end;
+! 
+! class function SysUtils.LowerCase(const S: string; LocaleOptions: TLocaleOptions): string;
+! var
+!   Culture: CultureInfo;
+! begin
+!   if S &lt;&gt; nil then
+!     begin
+!       Culture := System.Threading.Thread.CurrentThread.CurrentCulture;
+! 
+!       if LocaleOptions = TLocaleOptions.UserLocale then
+!         Result := S.ToLower
+!       else
+!         Result := S.ToLower(Culture.InvariantCulture)
+!     end
+!   else
+!     Result := '';
+! end;
+! 
+! class function SysUtils.CompareStr(const S1, S2: string): Integer;
+! begin
+!   Result := System.String.Compare(S1,S2,False);
+! end;
+! 
+! class function SysUtils.CompareStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer;
+! var
+!   Culture: CultureInfo;
+! begin
+!   Culture := System.Threading.Thread.CurrentThread.CurrentCulture;
+! 
+!   if LocaleOptions = TLocaleOptions.UserLocale then
+!     Result := System.String.Compare(S1, S2, False)
+!   else
+!     Result := System.String.Compare(S1,S2,False,Culture.InvariantCulture);
+! end;
+! 
+! class function SysUtils.SameStr(const S1, S2: string): Boolean;
+! begin
+!   Result := (CompareStr(S1,S2) = 0);
+! end;
+! 
+! class function SysUtils.SameStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean;
+! begin
+!   Result := (CompareStr(S1,S2,LocaleOptions) = 0);
+! end;
+! 
+! class function SysUtils._CompareText(const S1, S2: string; Culture: CultureInfo): Integer;
+! var
+!   I, LA, LB: Integer;
+! begin
+!   LA := Length(S1);
+!   LB := Length(S2);
+! 
+!   for I := 1 to LA do
+!     begin
+!       if I &gt; LB then
+!         begin
+!           Result := 1;
+!           Exit;
+!         end;
+! 
+!       Result := Ord(System.Char.ToUpper(S1[I],Culture)) - Ord(System.Char.ToUpper(S2[I],Culture));
+! 
+!       if Result &lt;&gt; 0 then Exit;
+!     end;
+! 
+!   Result := LA - LB;
+! end;
+! 
+! class function SysUtils.CompareText(const S1, S2: string): Integer;
+! var
+!   Culture: CultureInfo;
+! begin
+!   Culture := System.Threading.Thread.CurrentThread.CurrentCulture;
+!   Result := _CompareText(S1,S2,Culture);
+! end;
+! 
+! class function SysUtils.CompareText(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer;
+! var
+!   Culture: CultureInfo;
+! begin
+!   Culture := System.Threading.Thread.CurrentThread.CurrentCulture;
+! 
+!   if LocaleOptions = TLocaleOptions.UserLocale then
+!     Result := _CompareText(S1,S2,Culture)
+!   else
+!     Result := _CompareText(S1,S2,Culture.InvariantCulture);
+! end;
+! 
+! class function SysUtils.SameText(const S1, S2: string): Boolean;
+! begin
+!   Result := (CompareText(S1,S2) = 0);
+! end;
+! 
+! class function SysUtils.SameText(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean;
+! begin
+!   Result := (CompareText(S1,S2,LocaleOptions) = 0);
+  end;
+  
+***************
+*** 342,370 ****
+  end;
+  
+! class function SysUtils.AnsiQuotedStr(S: string; AQuote: Char): string;
+  begin
+!   if S = nil then
+!     Result := AQuote + AQuote
+!   else
+!     Result := AQuote + S.Replace(AQuote, AQuote + AQuote) + AQuote;
+  end;
+  
+! class function SysUtils.AnsiExtractQuotedStr(var Src: string; AQuote: Char): string;
+  begin
+!   if Src = nil then
+!     Result := ''
+!   else
+!   begin
+!     Src := Src.Replace(AQuote + AQuote, AQuote);
+!     if Src.StartsWith(AQuote) and Src.EndsWith(AQuote) then
+!       Src := Src.Substring(1,Src.Length-2);
+!     Result := Src;
+!   end;
+  end;
+  
+! class function SysUtils.AnsiDequotedStr(S: string; AQuote: Char): string;
+  begin
+    Result := S;
+!   AnsiExtractQuotedStr(Result, AQuote);
+  end;
+  
+--- 602,675 ----
+  end;
+  
+! class function SysUtils.AnsiPos(const SubS, S: string): Integer;
+  begin
+!   Result := Pos(SubS,S);
+  end;
+  
+! class function SysUtils.QuotedStr(const S: string): string;
+  begin
+!   Result := QuotedStr(S,'&quot;');
+  end;
+  
+! class function SysUtils.QuotedStr(const S: string; QuoteChar: Char): string;
+! begin
+!   Result := QuoteChar + S + QuoteChar;
+! end;
+! 
+! class function SysUtils.AnsiQuotedStr(const S: string; Quote: Char): string;
+! begin
+!   Result := QuotedStr(S,Quote);
+! end;
+! 
+! class function SysUtils.DequotedStr(const S: string): string;
+! begin
+!   Result := DequotedStr(S,'&quot;');
+! end;
+! 
+! class function SysUtils.DequotedStr(const S: string; QuoteChar: Char): string;
+! var
+!   I: Integer;
+  begin
+    Result := S;
+! 
+!   for I := 1 to Length(Result) do
+!     begin
+!       if Result[I] = QuoteChar then
+!         begin
+!           Delete(Result,I,1);
+!           Break;
+!         end;
+!     end;
+! 
+!   for I := Length(Result) downto 1 do
+!     begin
+!       if Result[I] = QuoteChar then
+!         begin
+!           Delete(Result,I,1);
+!           Break;
+!         end;
+!     end;
+! end;
+! 
+! class function SysUtils.DequotedStr(const S: string; QuoteChar: Char; var p: integer): string;
+! begin
+!   NotImplemented;
+! end;
+! 
+! class function SysUtils.AnsiDequotedStr(const S: string; Quote: Char): string;
+! begin
+!   Result := DequotedStr(S,Quote);
+! end;
+! 
+! class function SysUtils.AdjustLineBreaks(const S: string; Style: TTextLineBreakStyle): string;
+! begin
+!   NotImplemented;
+! end;
+! 
+! class function SysUtils.IsValidIdent(const Ident: string; AllowDots: Boolean): Boolean;
+! begin
+!   Result := False;
+! 
+!   NotImplemented;
+  end;
+  
+***************
+*** 753,761 ****
+  end;
+  
+- class function SysUtils.AnsiPos(Substr, S: string): Integer;
+- begin
+-   Result := Pos(SubStr, S);
+- end;
+- 
+  class function SysUtils.AnsiStrPos(Str, SubStr: string): string;
+  var i:integer;
+--- 1058,1061 ----
+***************
+*** 828,831 ****
+--- 1128,1191 ----
+  // DELPHI COMPATIBLE GLOBAL METHODS
+  
++ function UpperCase(const S: string): string;
++ begin
++   Result := ShineOn.RTL.SysUtils.UpperCase(S);
++ end;
++ 
++ function UpperCase(const S: string; LocaleOptions: TLocaleOptions): string;
++ begin
++   Result := ShineOn.RTL.SysUtils.UpperCase(S,LocaleOptions);
++ end;
++ 
++ function LowerCase(const S: string): string;
++ begin
++   Result := ShineOn.RTL.SysUtils.LowerCase(S);
++ end;
++ 
++ function LowerCase(const S: string; LocaleOptions: TLocaleOptions): string;
++ begin
++   Result := ShineOn.RTL.SysUtils.LowerCase(S,LocaleOptions);
++ end;
++ 
++ function CompareStr(const S1, S2: string): Integer;
++ begin
++   Result := ShineOn.RTL.SysUtils.CompareStr(S1,S2);
++ end;
++ 
++ function CompareStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer;
++ begin
++   Result := ShineOn.RTL.SysUtils.CompareStr(S1,S2,LocaleOptions);
++ end;
++ 
++ function SameStr(const S1, S2: string): Boolean;
++ begin
++   Result := ShineOn.RTL.SysUtils.SameStr(S1,S2);
++ end;
++ 
++ function SameStr(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean;
++ begin
++   Result := ShineOn.RTL.SysUtils.SameStr(S1,S2,LocaleOptions);
++ end;
++ 
++ function CompareText(const S1, S2: string): Integer;
++ begin
++   Result := ShineOn.RTL.SysUtils.CompareText(S1,S2);
++ end;
++ 
++ function CompareText(const S1, S2: string; LocaleOptions: TLocaleOptions): Integer;
++ begin
++   Result := ShineOn.RTL.SysUtils.CompareText(S1,S2,LocaleOptions);
++ end;
++ 
++ function SameText(const S1, S2: string): Boolean;
++ begin
++   Result := ShineOn.RTL.SysUtils.SameText(S1,S2);
++ end;
++ 
++ function SameText(const S1, S2: string; LocaleOptions: TLocaleOptions): Boolean;
++ begin
++   Result := ShineOn.RTL.SysUtils.SameText(S1,S2,LocaleOptions);
++ end;
++ 
+  function AnsiUpperCase(S: string): string;
+  begin
+***************
+*** 942,961 ****
+    Result := ShineOn.RTL.SysUtils.TrimRight(S);
+  end;
+!   
+! function AnsiQuotedStr(S: string; AQuote: Char): string;
+  begin
+!   Result := ShineOn.RTL.SysUtils.AnsiQuotedStr(S, AQuote);
+  end;
+!   
+! function AnsiExtractQuotedStr(var Src: string; AQuote: Char): string;
+  begin
+!   Result := ShineOn.RTL.SysUtils.AnsiExtractQuotedStr(Src, AQuote);
+  end;
+!   
+! function AnsiDequotedStr(S: string; AQuote: Char): string;
+  begin
+!   Result := ShineOn.RTL.SysUtils.AnsiDequotedStr(S, AQuote);
+  end;
+!   
+  function IntToStr(Value: Integer): string; 
+  begin
+--- 1302,1356 ----
+    Result := ShineOn.RTL.SysUtils.TrimRight(S);
+  end;
+! 
+! function AnsiPos(const SubS, S: string): Integer;
+  begin
+!   Result := ShineOn.RTL.SysUtils.AnsiPos(SubS,S);
+  end;
+! 
+! function QuotedStr(const S: string): string;
+  begin
+!   Result := ShineOn.RTL.SysUtils.QuotedStr(S);
+  end;
+! 
+! function QuotedStr(const S: string; QuoteChar: Char): string;
+  begin
+!   Result := ShineOn.RTL.SysUtils.QuotedStr(S,QuoteChar);
+  end;
+! 
+! function AnsiQuotedStr(const S: string; Quote: Char): string;
+! begin
+!   Result := ShineOn.RTL.SysUtils.AnsiQuotedStr(S,Quote);
+! end;
+! 
+! function DequotedStr(const S: string): string;
+! begin
+!   Result := ShineOn.RTL.SysUtils.DequotedStr(S);
+! end;
+! 
+! function DequotedStr(const S: string; QuoteChar: Char): string;
+! begin
+!   Result := ShineOn.RTL.SysUtils.DequotedStr(S,QuoteChar);
+! end;
+! 
+! function DequotedStr(const S: string; QuoteChar: Char; var p: integer): string;
+! begin
+!   Result := ShineOn.RTL.SysUtils.DequotedStr(S,QuoteChar,P);
+! end;
+! 
+! function AnsiDequotedStr(const S: string; Quote: Char): string;
+! begin
+!   Result := ShineOn.RTL.SysUtils.AnsiDequotedStr(S,Quote);
+! end;
+! 
+! function AdjustLineBreaks(const S: string; Style: TTextLineBreakStyle): string;
+! begin
+!   Result := ShineOn.RTL.SysUtils.AdjustLineBreaks(S,Style);
+! end;
+! 
+! function IsValidIdent(const Ident: string; AllowDots: Boolean): Boolean;
+! begin
+!   Result := ShineOn.RTL.SysUtils.IsValidIdent(Ident,AllowDots);
+! end;
+! 
+  function IntToStr(Value: Integer): string; 
+  begin
+***************
+*** 1207,1216 ****
+    Result := ShineOn.RTL.SysUtils.AnsiUpperCaseFileName(S);
+  end;
+!   
+! function AnsiPos(Substr, S: string): Integer;
+! begin
+!   Result := ShineOn.RTL.SysUtils.AnsiPos(SubStr, S);
+! end;
+!   
+  function AnsiStrPos(Str, SubStr: string): string;
+  begin
+--- 1602,1606 ----
+    Result := ShineOn.RTL.SysUtils.AnsiUpperCaseFileName(S);
+  end;
+! 
+  function AnsiStrPos(Str, SubStr: string): string;
+  begin
+***************
+*** 1239,1242 ****
+--- 1629,1653 ----
+    
+  
++ // This class takes the place of the initialization section which isn't available
++ // in Chrome.It simply sets up all the global variables and then returns.
++ type
++   TInitializer = class
++     public
++       constructor Create;
++     end;
++     
++ var
++   InitClass: TInitializer := TInitializer.Create;
++   
++ constructor TInitializer.Create;
++ begin
++   //PathDelim  := System.IO.Path.DirectorySeparatorChar;
++   //DriveDelim := System.IO.Path.VolumeSeparatorChar;
++   //PathSep    := System.IO.Path.PathSeparator;
++ 
++   //SysUtils.GetFormatSettings;
++   
++   InitClass := nil;
++ end; 
+    
+  end.
+
+Index: System.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/System.pas,v
+retrieving revision 1.8
+retrieving revision 1.9
+diff -C2 -d -r1.8 -r1.9
+*** System.pas	4 Jun 2005 18:01:35 -0000	1.8
+--- System.pas	15 Jun 2005 23:47:29 -0000	1.9
+***************
+*** 11,15 ****
+  // History:
+  //
+! // 2005-06-04   :   Lloyd Kinsella    : Modifications to support newer TDateTime implementation
+  
+  namespace ShineOn.RTL;
+--- 11,16 ----
+  // History:
+  //
+! // 2005-06-04   :   Lloyd Kinsella    :   Modifications to support newer TDateTime implementation
+! // 2005-06-16   :   Lloyd Kinsella    :   Implemented NotImplemented as a method of the System class
+  
+  namespace ShineOn.RTL;
+***************
+*** 18,26 ****
+  
+  uses
+!   System.Globalization;  
+!   
+  type
+    System = public sealed class 
+    public
+      class function Pos(SubStr, Str:string):integer;
+      class function Concat(S1, S2:string):string;
+--- 19,31 ----
+  
+  uses
+!   System.Globalization;
+!     
+  type
++   EShineOnError = public class(Exception);
++   
+    System = public sealed class 
+    public
++     class procedure NotImplemented;
++     
+      class function Pos(SubStr, Str:string):integer;
+      class function Concat(S1, S2:string):string;
+***************
+*** 69,72 ****
+--- 74,79 ----
+    end;
+    
++ procedure NotImplemented;
++   
+  function Pos(SubStr, Str:string):integer;
+  function Concat(S1, S2:string):string;
+***************
+*** 110,113 ****
+--- 117,126 ----
+  implementation
+  
++ class procedure System.NotImplemented;
++ begin
++   {$IFNDEF SHINEON_DISABLE_NOTIMPLEMENTED_ERROR}
++   raise EShineOnError.Create('Not implemented.');
++   {$ENDIF} 
++ end;
+  
+  class function System.Pos(SubStr, Str:string):integer;
+***************
+*** 341,344 ****
+--- 354,362 ----
+  
+  // DELPHI COMPATIBLE GLOBAL METHODS
++ 
++ procedure NotImplemented;
++ begin
++   ShineOn.RTL.System.NotImplemented;
++ end;
+  
+  function Pos(SubStr, Str:string):integer;
+
+Index: Types.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Types.pas,v
+retrieving revision 1.8
+retrieving revision 1.9
+diff -C2 -d -r1.8 -r1.9
+*** Types.pas	4 Jun 2005 18:01:19 -0000	1.8
+--- Types.pas	15 Jun 2005 23:47:29 -0000	1.9
+***************
+*** 67,70 ****
+--- 67,73 ----
+    Largeint = Int64;
+    PDWORD = ^DWORD;
++   
++   LCID = Word;
++   LANGID = Word;
+  
+    PFileTime = ^TFileTime;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000025.html">[Shineon-checkins] ShineOn/ShineOn.RTL Globals.pas,1.5,1.6 ShineOn.RTL.chrome,1.6,1.7
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#24">[ date ]</a>
+              <a href="thread.html#24">[ thread ]</a>
+              <a href="subject.html#24">[ subject ]</a>
+              <a href="author.html#24">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

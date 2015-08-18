@@ -1,0 +1,787 @@
+From nobody at sheep.berlios.de  Mon Jul 18 15:09:34 2005
+From: nobody at sheep.berlios.de (peter3)
+Date: Mon, 18 Jul 2005 15:09:34 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.12,1.13 Globals.pas,1.6,1.7 IniFiles.pas,1.5,1.6 Types.pas,1.14,1.15
+Message-ID: <200507181309.j6ID9YI22680@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv31196/ShineOn.RTL
+
+Modified Files:
+	Classes.pas Globals.pas IniFiles.pas Types.pas 
+Log Message:
+- type initializer (cctor) for Globals class has some problems with MinDateTime in Globals, probably because the TDateTime.MinDateTime value converts to an invalid DateTime value. No solution yet. Commented out for the time being. MaxDateTime is still in effect
+- TStrings.SaveToFile/LoadFromFile were using wrong share flags
+- Setup/TearDown methods decorated with correct attributes (won't be called otherwise)
+
+Index: Classes.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Classes.pas,v
+retrieving revision 1.12
+retrieving revision 1.13
+diff -C2 -d -r1.12 -r1.13
+*** Classes.pas	30 Jun 2005 12:09:16 -0000	1.12
+--- Classes.pas	18 Jul 2005 13:09:32 -0000	1.13
+***************
+*** 1860,1864 ****
+  var F:TFileStream;
+  begin
+!   F := TFileStream.Create(Filename, fmOpenRead);
+    try
+      LoadFromStream(F);
+--- 1860,1864 ----
+  var F:TFileStream;
+  begin
+!   F := TFileStream.Create(Filename, fmOpenRead or fmShareDenyWrite);
+    try
+      LoadFromStream(F);
+***************
+*** 1895,1899 ****
+  var F:TFileStream;
+  begin
+!   F := TFileStream.Create(Filename, fmCreate);
+    try
+      SaveToStream(F);
+--- 1895,1899 ----
+  var F:TFileStream;
+  begin
+!   F := TFileStream.Create(Filename, fmCreate or fmShareExclusive);
+    try
+      SaveToStream(F);
+***************
+*** 2284,2289 ****
+    end;
+  
+!   if Mode and fmShareCompat = fmShareCompat then
+!     FileShare := System.IO.FileShare.Inheritable 
+    else if Mode and fmShareDenyWrite = fmShareDenyWrite then
+      FileShare := System.IO.FileShare.Read
+--- 2284,2289 ----
+    end;
+  
+!   if (Mode <> 0) and (Mode and fmShareCompat = fmShareCompat) then
+!     FileShare := System.IO.FileShare.ReadWrite 
+    else if Mode and fmShareDenyWrite = fmShareDenyWrite then
+      FileShare := System.IO.FileShare.Read
+
+Index: Globals.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Globals.pas,v
+retrieving revision 1.6
+retrieving revision 1.7
+diff -C2 -d -r1.6 -r1.7
+*** Globals.pas	16 Jun 2005 15:01:55 -0000	1.6
+--- Globals.pas	18 Jul 2005 13:09:32 -0000	1.7
+***************
+*** 44,48 ****
+      // TODO: figure out how to declare these as consts isto vars:
+      class var MaxDateTime: TDateTime := new TDateTime(MaxDateTimeAsDouble);
+!     class var MinDateTime: TDateTime := new TDateTime(MinDateTimeAsDouble);
+      class const soFromBeginning = 0;
+      class const soFromCurrent = 1;
+--- 44,48 ----
+      // TODO: figure out how to declare these as consts isto vars:
+      class var MaxDateTime: TDateTime := new TDateTime(MaxDateTimeAsDouble);
+! //    class var MinDateTime: TDateTime := new TDateTime(MinDateTimeAsDouble);
+      class const soFromBeginning = 0;
+      class const soFromCurrent = 1;
+***************
+*** 389,395 ****
+   
+  var
+!  ApplicationMainForm:Form := Globals.ApplicationMainForm;
+!  MaxDateTime:TDateTime := Globals.MaxDateTime;
+!  MinDateTime:TDateTime := Globals.MinDateTime;
+    
+  
+--- 389,395 ----
+   
+  var
+!   ApplicationMainForm:Form := Globals.ApplicationMainForm;
+!   MaxDateTime:TDateTime := Globals.MaxDateTime;
+! //  MinDateTime:TDateTime := Globals.MinDateTime;
+    
+  
+
+Index: IniFiles.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/IniFiles.pas,v
+retrieving revision 1.5
+retrieving revision 1.6
+diff -C2 -d -r1.5 -r1.6
+*** IniFiles.pas	27 Jun 2005 11:04:50 -0000	1.5
+--- IniFiles.pas	18 Jul 2005 13:09:32 -0000	1.6
+***************
+*** 65,69 ****
+    public
+      constructor Create(FileName: string);
+!     procedure Free;reintroduce;
+      procedure Clear;
+      procedure DeleteKey(Section, Name: String); override;
+--- 65,69 ----
+    public
+      constructor Create(FileName: string);
+!     procedure Destroy;override;
+      procedure Clear;
+      procedure DeleteKey(Section, Name: String); override;
+***************
+*** 80,84 ****
+    end;
+    
+!   TIniFile = public class(TCustomIniFile);
+  
+  
+--- 80,84 ----
+    end;
+    
+!   TIniFile = public class(TMemIniFile);
+  
+  
+***************
+*** 167,171 ****
+  procedure TCustomIniFile.WriteDate(Section, Name: string; Value: TDateTime); 
+  begin
+!   WriteDateTime(Section, Name, Value);
+  end;
+  
+--- 167,172 ----
+  procedure TCustomIniFile.WriteDate(Section, Name: string; Value: TDateTime); 
+  begin
+!   
+!   WriteDateTime(Section, Name, TDateTime.Trunc(Value));
+  end;
+  
+***************
+*** 182,186 ****
+  procedure TCustomIniFile.WriteTime(Section, Name: string; Value: TDateTime); 
+  begin
+!   WriteString(Section, Name, Value.ToString);
+  end;
+  
+--- 183,187 ----
+  procedure TCustomIniFile.WriteTime(Section, Name: string; Value: TDateTime); 
+  begin
+!   WriteDateTime(Section, Name, TDateTime.Frac(Value));
+  end;
+  
+***************
+*** 226,233 ****
+  end;
+  
+! procedure TMemIniFile.Free; 
+  begin
+    UpdateFile; // flush to disk
+!   inherited Free;
+  end;
+  
+--- 227,234 ----
+  end;
+  
+! procedure TMemIniFile.Destroy; 
+  begin
+    UpdateFile; // flush to disk
+!   inherited Destroy;
+  end;
+  
+
+Index: Types.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Types.pas,v
+retrieving revision 1.14
+retrieving revision 1.15
+diff -C2 -d -r1.14 -r1.15
+*** Types.pas	28 Jun 2005 23:58:20 -0000	1.14
+--- Types.pas	18 Jul 2005 13:09:32 -0000	1.15
+***************
+*** 591,600 ****
+  class function TDateTime.Time: TDateTime;
+  begin
+!   Result := Now;
+  end;
+  
+  class function TDateTime.Date: TDateTime;
+  begin
+!   Result := Now;
+  end;
+  
+--- 591,600 ----
+  class function TDateTime.Time: TDateTime;
+  begin
+!   Result := TDateTime.Frac(Now);
+  end;
+  
+  class function TDateTime.Date: TDateTime;
+  begin
+!   Result := TDateTime.Trunc(Now);
+  end;
+  
+
+
+
+From nobody at sheep.berlios.de  Mon Jul 18 15:09:34 2005
+From: nobody at sheep.berlios.de (peter3)
+Date: Mon, 18 Jul 2005 15:09:34 +0200
+Subject: [Shineon-checkins] ShineOn/NUnit TestClasses.pas,1.1,1.2 TestContnrs.pas,1.1,1.2 TestIniFiles.pas,1.1,1.2 TestSysUtils.pas,1.1,1.2 TestSystem.pas,1.4,1.5
+Message-ID: <200507181309.j6ID9YI22676@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/NUnit
+In directory sheep:/tmp/cvs-serv31196/NUnit
+
+Modified Files:
+	TestClasses.pas TestContnrs.pas TestIniFiles.pas 
+	TestSysUtils.pas TestSystem.pas 
+Log Message:
+- type initializer (cctor) for Globals class has some problems with MinDateTime in Globals, probably because the TDateTime.MinDateTime value converts to an invalid DateTime value. No solution yet. Commented out for the time being. MaxDateTime is still in effect
+- TStrings.SaveToFile/LoadFromFile were using wrong share flags
+- Setup/TearDown methods decorated with correct attributes (won't be called otherwise)
+
+Index: TestClasses.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/TestClasses.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** TestClasses.pas	31 May 2005 08:38:50 -0000	1.1
+--- TestClasses.pas	18 Jul 2005 13:09:31 -0000	1.2
+***************
+*** 19,23 ****
+--- 19,25 ----
+    TObjectTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+      [Test]
+***************
+*** 36,40 ****
+--- 38,44 ----
+    TListTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+  
+***************
+*** 86,90 ****
+--- 90,96 ----
+    TInterfaceListTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+      [Test]
+***************
+*** 123,127 ****
+--- 129,135 ----
+    TBitsTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+  
+***************
+*** 137,141 ****
+--- 145,151 ----
+    TPersistentTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+  
+***************
+*** 149,153 ****
+--- 159,165 ----
+    TStringlistTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+  
+***************
+*** 237,241 ****
+--- 249,255 ----
+    THandleStreamTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+  
+***************
+*** 259,263 ****
+--- 273,279 ----
+    TFileStreamTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+  
+***************
+*** 282,286 ****
+--- 298,304 ----
+    TMemoryStreamTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+  
+***************
+*** 315,319 ****
+--- 333,339 ----
+    TStringStreamTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+  
+***************
+*** 342,346 ****
+--- 362,368 ----
+    TResourceStreamTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+  
+***************
+*** 364,368 ****
+--- 386,392 ----
+    TThreadTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+  
+
+Index: TestContnrs.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/TestContnrs.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** TestContnrs.pas	31 May 2005 08:38:50 -0000	1.1
+--- TestContnrs.pas	18 Jul 2005 13:09:31 -0000	1.2
+***************
+*** 19,23 ****
+--- 19,25 ----
+    TObjectListTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+      [Test]
+***************
+*** 44,48 ****
+--- 46,52 ----
+    TComponentListTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+  
+***************
+*** 68,72 ****
+--- 72,78 ----
+    TClassListTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+  
+***************
+*** 92,96 ****
+--- 98,104 ----
+    TStackTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+  
+***************
+*** 110,114 ****
+--- 118,124 ----
+    TObjectStackTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+  
+***************
+*** 128,132 ****
+--- 138,144 ----
+    TQueueTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+  
+***************
+*** 146,150 ****
+--- 158,164 ----
+    TObjectQueueTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+  
+***************
+*** 164,168 ****
+--- 178,184 ----
+    TBucketListTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+  
+
+Index: TestIniFiles.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/TestIniFiles.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** TestIniFiles.pas	31 May 2005 08:38:50 -0000	1.1
+--- TestIniFiles.pas	18 Jul 2005 13:09:31 -0000	1.2
+***************
+*** 12,15 ****
+--- 12,16 ----
+  interface
+  uses
++   System.IO,
+    Nunit.Framework,
+    ShineOn.RTL;
+***************
+*** 18,23 ****
+--- 19,30 ----
+    [TestFixture]
+    TIniFilesTests = public class(TestCase)
++   private
++     FFilename:string;
++     IniFile:TIniFile;
++     method AddSomeData;
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+      [Test]
+***************
+*** 83,95 ****
+  method TIniFilesTests.Setup; 
+  begin
+  end;
+  
+  method TIniFilesTests.TearDown; 
+  begin
+  end;
+  
+  method TIniFilesTests.Clear; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 90,114 ----
+  method TIniFilesTests.Setup; 
+  begin
++   FFilename := Path.GetTempPath + 'IniFileTest.ini'; 
++   IniFile := new TIniFile(FFilename);
++   AddSomeData;
+  end;
+  
+  method TIniFilesTests.TearDown; 
+  begin
++   IniFile.Free;
++   IniFile := nil;
++   if File.Exists(FFilename) then
++     File.Delete(FFilename);
+  end;
+  
+  method TIniFilesTests.Clear; 
+  begin
+!   IniFile.Clear;
+!   with S := new TStringlist do
+!   begin
+!     IniFile.ReadSections(S);
+!     NUnit.Framework.Assert.AreEqual(0, S.Count);
+!  end;
+  end;
+  
+***************
+*** 227,230 ****
+--- 246,272 ----
+  begin
+    NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
++ end;
++ 
++ method TIniFilesTests.AddSomeData; 
++ begin
++   IniFile.WriteString('Test','String','TextData');
++ 
++   IniFile.WriteInteger('Test','Int0',0);
++   IniFile.WriteInteger('Test','Int1',1);
++   IniFile.WriteInteger('Test','Int2',-1);
++   IniFile.WriteInteger('Test','Int3',2);
++ 
++   IniFile.WriteBool('Test','BoolTrue',True);
++   IniFile.WriteBool('Test','BoolFalse',False);
++ 
++   //IniFile.WriteDate('Test', 'Date', TDateTime.Date);
++   //IniFile.WriteDateTime('Test', 'Now', TDateTime.Now);
++   //IniFile.WriteTime('Test', 'Time', TDateTime.Time);
++ 
++   IniFile.WriteFloat('Test','Float1',0.0);
++   IniFile.WriteFloat('Test','Float2',1.5);
++   IniFile.WriteFloat('Test','Float3',3.141592);
++   IniFile.WriteFloat('Test','Float4',-1.0);
++   IniFile.WriteFloat('Test','Float4',-0.0);
+  end;
+  
+
+Index: TestSysUtils.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/TestSysUtils.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** TestSysUtils.pas	31 May 2005 08:38:50 -0000	1.1
+--- TestSysUtils.pas	18 Jul 2005 13:09:31 -0000	1.2
+***************
+*** 19,23 ****
+--- 19,25 ----
+    SysUtilsTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+      [Test]
+
+Index: TestSystem.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/TestSystem.pas,v
+retrieving revision 1.4
+retrieving revision 1.5
+diff -C2 -d -r1.4 -r1.5
+*** TestSystem.pas	30 Jun 2005 10:26:36 -0000	1.4
+--- TestSystem.pas	18 Jul 2005 13:09:31 -0000	1.5
+***************
+*** 19,23 ****
+--- 19,25 ----
+    SystemTests = public class(TestCase)
+    public
++     [Setup]
+      method Setup;override;
++     [TearDown]
+      method TearDown;override;
+      [Test]
+
+
+
+From nobody at sheep.berlios.de  Mon Jul 18 15:28:19 2005
+From: nobody at sheep.berlios.de (peter3)
+Date: Mon, 18 Jul 2005 15:28:19 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.RTL Globals.pas,1.7,1.8 Types.pas,1.15,1.16
+Message-ID: <200507181328.j6IDSJI23184@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv32651/ShineOn.RTL
+
+Modified Files:
+	Globals.pas Types.pas 
+Log Message:
+- Chrome demoted MinDateTime from double to integer (there was no fractional), thus calling the wrong TDateTime constructor in Globals. Declaring MinDateTime as Double fixes the problem
+- Removed redundant "day" constructor with Integer parameter:use existing with double parameter instead
+- DoubleToDateTime and DateTimeToDouble now uses built in DateTime functions for conversion (FromOADate/ToOADate)
+
+Index: Globals.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Globals.pas,v
+retrieving revision 1.7
+retrieving revision 1.8
+diff -C2 -d -r1.7 -r1.8
+*** Globals.pas	18 Jul 2005 13:09:32 -0000	1.7
+--- Globals.pas	18 Jul 2005 13:28:16 -0000	1.8
+***************
+*** 44,48 ****
+      // TODO: figure out how to declare these as consts isto vars:
+      class var MaxDateTime: TDateTime := new TDateTime(MaxDateTimeAsDouble);
+! //    class var MinDateTime: TDateTime := new TDateTime(MinDateTimeAsDouble);
+      class const soFromBeginning = 0;
+      class const soFromCurrent = 1;
+--- 44,48 ----
+      // TODO: figure out how to declare these as consts isto vars:
+      class var MaxDateTime: TDateTime := new TDateTime(MaxDateTimeAsDouble);
+!     class var MinDateTime: TDateTime := new TDateTime(MinDateTimeAsDouble);
+      class const soFromBeginning = 0;
+      class const soFromCurrent = 1;
+***************
+*** 391,395 ****
+    ApplicationMainForm:Form := Globals.ApplicationMainForm;
+    MaxDateTime:TDateTime := Globals.MaxDateTime;
+! //  MinDateTime:TDateTime := Globals.MinDateTime;
+    
+  
+--- 391,395 ----
+    ApplicationMainForm:Form := Globals.ApplicationMainForm;
+    MaxDateTime:TDateTime := Globals.MaxDateTime;
+!   MinDateTime:TDateTime := Globals.MinDateTime;
+    
+  
+
+Index: Types.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Types.pas,v
+retrieving revision 1.15
+retrieving revision 1.16
+diff -C2 -d -r1.15 -r1.16
+*** Types.pas	18 Jul 2005 13:09:32 -0000	1.15
+--- Types.pas	18 Jul 2005 13:28:16 -0000	1.16
+***************
+*** 236,239 ****
+--- 236,240 ----
+  
+    // TODO: handle negative values
++   EDateTimeException = public class(Exception);
+    TDateTime = public class(System.Object, IFormattable, IComparable, IConvertible)
+    private
+***************
+*** 243,248 ****
+      constructor Create(const ADateTime: TDateTime);
+      constructor Create(const ADateTime: System.DateTime);
+!     constructor Create(const AValue: Double);
+!     constructor Create(const ADays: Integer);
+      constructor Create(const ATime: Int64);
+      constructor Create(const AYear, AMonth, ADay, AHour, AMinute, ASecond, AMSec: Word);
+--- 244,248 ----
+      constructor Create(const ADateTime: TDateTime);
+      constructor Create(const ADateTime: System.DateTime);
+!     constructor Create(const ADays: Double);
+      constructor Create(const ATime: Int64);
+      constructor Create(const AYear, AMonth, ADay, AHour, AMinute, ASecond, AMSec: Word);
+***************
+*** 407,412 ****
+    DateDelta = 693594;
+  
+!   MinDateTimeAsDouble = -657434.0;     //  1/01/0100  0:00:00.000 AM
+!   MaxDateTimeAsDouble = 2958465.99999; // 12/31/9999 11:59:59.999 PM
+    
+  implementation
+--- 407,412 ----
+    DateDelta = 693594;
+  
+!   MinDateTimeAsDouble:Double = -657434.0;     //  1/01/0100  0:00:00.000 AM
+!   MaxDateTimeAsDouble:Double = 2958465.99999; // 12/31/9999 11:59:59.999 PM
+    
+  implementation
+***************
+*** 419,428 ****
+  function DateTimeToDouble(const Value: DateTime): Double;
+  begin
+!   Result := (Value.Ticks - DelphiEpoch.Ticks) / TicksPerDay;
+  end;
+  
+  function DoubleToDateTime(const Value: Double): DateTime;
+  begin
+!   Result := new DateTime(Int64((Value * TicksPerDay) + DelphiEpoch.Ticks));
+  end;
+  
+--- 419,428 ----
+  function DateTimeToDouble(const Value: DateTime): Double;
+  begin
+!   Result := Value.ToOADate;
+  end;
+  
+  function DoubleToDateTime(const Value: Double): DateTime;
+  begin
+!   Result := DateTime.FromOADate(Value);
+  end;
+  
+***************
+*** 430,434 ****
+  begin
+    inherited Create;
+- 
+    FValue := System.DateTime.Now;
+  end;
+--- 430,433 ----
+***************
+*** 437,441 ****
+  begin
+    inherited Create;
+-   
+    FValue := new DateTime(ADateTime.Ticks);
+  end;
+--- 436,439 ----
+***************
+*** 444,464 ****
+  begin
+    inherited Create;
+- 
+    FValue := new DateTime(ADateTime.Ticks);
+  end;
+  
+! constructor TDateTime.Create(const AValue: Double);
+! begin
+!   inherited Create;
+! 
+!   FValue := DoubleToDateTime(AValue);
+! end;
+! 
+! constructor TDateTime.Create(const ADays: Integer);
+  begin
+    inherited Create;
+!   
+!   FValue := new DateTime(1,1,1,0,0,0,0);
+!   FValue.AddDays(Double(ADays));
+  end;
+  
+--- 442,452 ----
+  begin
+    inherited Create;
+    FValue := new DateTime(ADateTime.Ticks);
+  end;
+  
+! constructor TDateTime.Create(const ADays: Double);
+  begin
+    inherited Create;
+!   FValue := DoubleToDateTime(ADays);
+  end;
+  
+***************
+*** 466,470 ****
+  begin
+    inherited Create;
+-   
+    FValue := new DateTime(ATime);
+  end;
+--- 454,457 ----
+***************
+*** 473,477 ****
+  begin
+    inherited Create;
+-   
+    FValue := new DateTime(AYear,AMonth,ADay,AHour,AMinute,ASecond,AMSec);
+  end;
+--- 460,463 ----
+
+
+

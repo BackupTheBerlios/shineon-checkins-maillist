@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.10,1.11
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20System.pas%2C1.10%2C1.11&In-Reply-To=%3C200506280132.j5S1W5I17516%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000029.html">
+   <LINK REL="Next"  HREF="000031.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.10,1.11</H1>
+    <B>loonquawl</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20System.pas%2C1.10%2C1.11&In-Reply-To=%3C200506280132.j5S1W5I17516%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.10,1.11">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Tue Jun 28 03:32:05 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000029.html">[Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.9,1.10
+</A></li>
+        <LI>Next message: <A HREF="000031.html">[Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.11,1.12
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#30">[ date ]</a>
+              <a href="thread.html#30">[ thread ]</a>
+              <a href="subject.html#30">[ subject ]</a>
+              <a href="author.html#30">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv18628/ShineOn.RTL
+
+Modified Files:
+	System.pas 
+Log Message:
+Implemented the LoCase and UpCase functions.
+
+Index: System.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/System.pas,v
+retrieving revision 1.10
+retrieving revision 1.11
+diff -C2 -d -r1.10 -r1.11
+*** System.pas	27 Jun 2005 17:21:55 -0000	1.10
+--- System.pas	28 Jun 2005 01:31:59 -0000	1.11
+***************
+*** 14,17 ****
+--- 14,18 ----
+  // 2005-06-16   :   Lloyd Kinsella    :   Implemented NotImplemented as a method of the System class
+  // 2005-06-27   :   Jeroen Vandezande :   Fixed the Delete implementation, it copied a part of the string instead of deleting a part.
++ // 2005-06-27   :   Jeroen Vandezande :   Implemented the LoCase and UpCase functions.
+  
+  namespace ShineOn.RTL;
+***************
+*** 34,37 ****
+--- 35,40 ----
+      class procedure Insert(Source: string; var S: string; Index: Integer);
+      class function Copy(Source:string; StartIndex, Length: Integer):string;
++     class function UpCase(Letter: Char): Char;
++     class function LoCase(Letter: Char): Char;
+  
+      class procedure Str(X:Double; Width:integer;Decimals:integer;var S:string);
+***************
+*** 82,85 ****
+--- 85,90 ----
+  procedure Insert(Source: string; var S: string; Index: Integer);
+  function Copy(Source:string; StartIndex, Length: Integer):string;
++ function UpCase(Letter: Char): Char;
++ function LoCase(Letter: Char): Char;
+  procedure Str(X:Double; Width:integer;Decimals:integer;var S:string);
+  procedure Val(S:string; var V:Double; var Code: Integer);
+***************
+*** 154,157 ****
+--- 159,172 ----
+  end;
+  
++ class function System.UpCase ( Letter : Char ) : Char; 
++ begin
++   Result := Letter.ToString.ToUpper[0];
++ end;
++ 
++ class function System.LoCase ( Letter : Char ) : Char; 
++ begin
++   Result := Letter.ToString.ToLower[0];
++ end;
++ 
+  class procedure System.Str(X:Double; Width:integer;Decimals:integer;var S:string);
+  begin
+***************
+*** 384,387 ****
+--- 399,412 ----
+  begin
+    Result := ShineOn.RTL.System.Copy(Source, StartIndex, Length);
++ end;
++ 
++ function UpCase(Letter: Char): Char;
++ begin
++   result := ShineOn.RTL.System.UpCase(Letter);
++ end;
++ 
++ function LoCase(Letter: Char): Char;
++ begin
++   result := ShineOn.RTL.System.LoCase(Letter);
+  end;
+    
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000029.html">[Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.9,1.10
+</A></li>
+	<LI>Next message: <A HREF="000031.html">[Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.11,1.12
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#30">[ date ]</a>
+              <a href="thread.html#30">[ thread ]</a>
+              <a href="subject.html#30">[ subject ]</a>
+              <a href="author.html#30">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

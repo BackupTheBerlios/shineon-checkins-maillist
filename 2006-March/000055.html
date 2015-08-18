@@ -1,0 +1,367 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.14,1.15 IniFiles.pas,1.6,1.7 ShineOn.RTL.chrome,1.9,1.10
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2006-March/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20Classes.pas%2C1.14%2C1.15%20IniFiles.pas%2C1.6%2C1.7%20ShineOn.RTL.chrome%2C1.9%2C1.10&In-Reply-To=%3C200603211624.k2LGO3t24545%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000054.html">
+   <LINK REL="Next"  HREF="000056.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.14,1.15 IniFiles.pas,1.6,1.7 ShineOn.RTL.chrome,1.9,1.10</H1>
+    <B>msgclb</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20Classes.pas%2C1.14%2C1.15%20IniFiles.pas%2C1.6%2C1.7%20ShineOn.RTL.chrome%2C1.9%2C1.10&In-Reply-To=%3C200603211624.k2LGO3t24545%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.14,1.15 IniFiles.pas,1.6,1.7 ShineOn.RTL.chrome,1.9,1.10">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Tue Mar 21 17:24:03 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000054.html">[Shineon-checkins] ShineOn/NUnit TestSysUtils.pas,1.2,1.3
+</A></li>
+        <LI>Next message: <A HREF="000056.html">[Shineon-checkins] ShineOn/NUnit NUnit.ShineOn.RTL.chrome,1.3,1.4 TestFileStream.pas,1.1,1.2 TestIniFiles.pas,1.3,1.4 TestStringRead.pas,1.1,1.2 TestStringWrite.pas,1.1,1.2 TestSystem.pas,1.7,1.8
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#55">[ date ]</a>
+              <a href="thread.html#55">[ thread ]</a>
+              <a href="subject.html#55">[ subject ]</a>
+              <a href="author.html#55">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv1618/ShineOn.RTL
+
+Modified Files:
+	Classes.pas IniFiles.pas ShineOn.RTL.chrome 
+Log Message:
+Removed Console code from TestFileStream
+In TestIniFiles added TIniFilesTests.ReadString, IniFilesTests.WriteString, TIniFilesTests.ReadInteger, TIniFilesTests.WriteInteger, TIniFilesTests.ReadBool, TIniFilesTests.WriteBool, TIniFilesTests.ReadFloat, TIniFilesTests.WriteFloat, TIniFilesTests.Clear, TIniFilesTests.UpdateFile, TIniFilesTests.ReadSection, TIniFilesTests.GetStrings, TIniFilesTests.SetStrings and fixed code in AddSomeData.
+In TestSystem changed Math.Truncate(D2) to Decimal.Truncate so it would build on vs2003.
+In Classes fixed file not writing in THandleStream.WriteLine by adding Flush, fixed truncating problem in TStrings.IndexOfObject and fixed truncating problem in TStrings.GetName.
+In IniFiles fixed index outofbounds in TMemIniFile.SetStrings.
+
+Index: Classes.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Classes.pas,v
+retrieving revision 1.14
+retrieving revision 1.15
+diff -C2 -d -r1.14 -r1.15
+*** Classes.pas	16 Mar 2006 18:33:56 -0000	1.14
+--- Classes.pas	21 Mar 2006 16:24:27 -0000	1.15
+***************
+*** 18,21 ****
+--- 18,24 ----
+  // May 11 2005    :   Jeroen Vandezande   : Implemented IEnumerator on TList
+  // March 16 2006  :   Jeroen Vandezande   : Fixed THandleStream.WriteLine
++ // March 21 2006  :  Corwin Burgess : Fixed file not writing problem in THandleStream.WriteLine
++ // March 21 2006  :  Corwin Burgess : Fixed truncating problem in TStrings.IndexOfObject
++ // March 21 2006  :  Corwin Burgess : Fixed truncating problem in TStrings.GetName
+  
+  interface
+***************
+*** 1595,1599 ****
+    i := Strings[Index].IndexOf('=');
+    if i &gt;= 0 then
+!     Result := Strings[Index].SubString(0, i - 1)
+    else
+      Result := '';
+--- 1598,1604 ----
+    i := Strings[Index].IndexOf('=');
+    if i &gt;= 0 then
+!     // truncating SubString
+!     //Result := Strings[Index].SubString(0, i - 1)
+!     Result := Strings[Index].SubString(0, i)
+    else
+      Result := '';
+***************
+*** 1836,1840 ****
+      if i &gt;= 0 then
+      begin
+!       AName := Strings[Result].SubString(0,i-1);
+        if CompareStrings(AName, Name) = 0 then
+          Exit;
+--- 1841,1847 ----
+      if i &gt;= 0 then
+      begin
+!       // Truncating string    
+!       //AName := Strings[Result].SubString(0,i-1);
+!       AName := Strings[Result].SubString(0,i);
+        if CompareStrings(AName, Name) = 0 then
+          Exit;
+***************
+*** 2247,2251 ****
+    with T := new System.IO.StreamWriter(FStream) do 
+    begin  
+!     T.WriteLine(Value); 
+    end;
+  end;
+--- 2254,2259 ----
+    with T := new System.IO.StreamWriter(FStream) do 
+    begin  
+!     T.WriteLine(Value);
+!    T.Flush; // Need Flush to write files
+    end;
+  end;
+
+Index: IniFiles.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/IniFiles.pas,v
+retrieving revision 1.6
+retrieving revision 1.7
+diff -C2 -d -r1.6 -r1.7
+*** IniFiles.pas	18 Jul 2005 13:09:32 -0000	1.6
+--- IniFiles.pas	21 Mar 2006 16:24:27 -0000	1.7
+***************
+*** 12,15 ****
+--- 12,16 ----
+  //
+  // 2005-06-04   :   Lloyd Kinsella    : Modifications to support newer TDateTime implementation
++ // 2006-03-21   :   Corwin Burgess  : Fixed index outofbounds in TMemIniFile.SetStrings
+  
+  namespace ShineOn.RTL;
+***************
+*** 336,340 ****
+          j := S.IndexOf('=');
+          if j &gt; -1 then
+!           S := S.SubString(0, j - 1).Trim + '=' + S.SubString(j + 1, S.Length).Trim; // VCL trims spaces before and after the first &quot;=&quot; (if found), so we better do the same
+          Str.Add(S);  
+        end;
+--- 337,343 ----
+          j := S.IndexOf('=');
+          if j &gt; -1 then
+!           // truncate and index outofbounds        
+!           //S := S.SubString(0, j - 1).Trim + '=' + S.SubString(j + 1, S.Length).Trim; // VCL trims spaces before and after the first &quot;=&quot; (if found), so we better do the same
+!           S := S.SubString(0, j).Trim + '=' + S.SubString(j + 1, S.Length - (j + 1)).Trim; // VCL trims spaces before and after the first &quot;=&quot; (if found), so we better do the same
+          Str.Add(S);  
+        end;
+
+Index: ShineOn.RTL.chrome
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/ShineOn.RTL.chrome,v
+retrieving revision 1.9
+retrieving revision 1.10
+diff -C2 -d -r1.9 -r1.10
+*** ShineOn.RTL.chrome	28 Jun 2005 13:29:37 -0000	1.9
+--- ShineOn.RTL.chrome	21 Mar 2006 16:24:27 -0000	1.10
+***************
+*** 1,99 ****
+! &lt;ChromeProject&gt;
+!   &lt;ProjectOptions Name=&quot;ShineOn.RTL&quot;&gt;
+!     &lt;ProjectID&gt;{EADE7853-FDBE-4770-B0B2-5FF5FDD2DBF7}&lt;/ProjectID&gt;
+!     &lt;DefaultNamespace&gt;ShineOn.RTL&lt;/DefaultNamespace&gt;
+!     &lt;StartupClass&gt;
+!     &lt;/StartupClass&gt;
+      &lt;OutputType&gt;library&lt;/OutputType&gt;
+      &lt;AssemblyName&gt;ShineOn.RTL&lt;/AssemblyName&gt;
+      &lt;AllowGlobals&gt;True&lt;/AllowGlobals&gt;
+      &lt;AllowLegacyWith&gt;True&lt;/AllowLegacyWith&gt;
+      &lt;AllowLegacyOutParams&gt;True&lt;/AllowLegacyOutParams&gt;
+      &lt;AllowUnsafeCode&gt;False&lt;/AllowUnsafeCode&gt;
+!     &lt;AllowLegacyCreate&gt;True&lt;/AllowLegacyCreate&gt;
+!     &lt;ApplicationIcon&gt;
+!     &lt;/ApplicationIcon&gt;
+!   &lt;/ProjectOptions&gt;
+!   &lt;References&gt;
+!     &lt;Reference Assembly=&quot;$(Framework)\mscorlib.dll&quot; Display=&quot;mscorlib&quot; CopyLocal=&quot;False&quot; /&gt;
+!     &lt;Reference Assembly=&quot;$(Framework)\System.dll&quot; Display=&quot;System&quot; CopyLocal=&quot;False&quot; /&gt;
+!     &lt;Reference Assembly=&quot;$(Framework)\System.Drawing.dll&quot; Display=&quot;System.Drawing&quot; CopyLocal=&quot;False&quot; /&gt;
+!     &lt;Reference Assembly=&quot;$(Framework)\System.Windows.Forms.dll&quot; Display=&quot;System.Windows.Forms.dll&quot; CopyLocal=&quot;False&quot; /&gt;
+!   &lt;/References&gt;
+!   &lt;Configurations&gt;
+!     &lt;Configuration Name=&quot;Debug&quot;&gt;
+!       &lt;Conditionals&gt;DEBUG;TRACE;MSWINDOWS&lt;/Conditionals&gt;
+!       &lt;OutputPath&gt;..\bin&lt;/OutputPath&gt;
+!       &lt;GeneratePDB&gt;True&lt;/GeneratePDB&gt;
+!       &lt;GenerateMDB&gt;True&lt;/GenerateMDB&gt;
+!       &lt;EnableAsserts&gt;True&lt;/EnableAsserts&gt;
+!       &lt;TreatWarningsAsErrors&gt;False&lt;/TreatWarningsAsErrors&gt;
+!       &lt;CaptureConsoleOutput&gt;False&lt;/CaptureConsoleOutput&gt;
+!       &lt;StartMode&gt;Project&lt;/StartMode&gt;
+!       &lt;RegisterForComInterop&gt;False&lt;/RegisterForComInterop&gt;
+!       &lt;CpuType&gt;anycpu&lt;/CpuType&gt;
+!       &lt;RuntimeVersion&gt;v25&lt;/RuntimeVersion&gt;
+!       &lt;XmlDoc&gt;False&lt;/XmlDoc&gt;
+!       &lt;XmlDocWarningLevel&gt;WarningOnPublicMembers&lt;/XmlDocWarningLevel&gt;
+!       &lt;EnableUnmanagedDebugging&gt;False&lt;/EnableUnmanagedDebugging&gt;
+!     &lt;/Configuration&gt;
+!     &lt;Configuration Name=&quot;Release&quot;&gt;
+!       &lt;Conditionals&gt;MSWINDOWS&lt;/Conditionals&gt;
+!       &lt;OutputPath&gt;..\bin&lt;/OutputPath&gt;
+!       &lt;GeneratePDB&gt;False&lt;/GeneratePDB&gt;
+!       &lt;GenerateMDB&gt;False&lt;/GenerateMDB&gt;
+!       &lt;EnableAsserts&gt;False&lt;/EnableAsserts&gt;
+!       &lt;TreatWarningsAsErrors&gt;False&lt;/TreatWarningsAsErrors&gt;
+!       &lt;CaptureConsoleOutput&gt;False&lt;/CaptureConsoleOutput&gt;
+!       &lt;StartMode&gt;Project&lt;/StartMode&gt;
+!       &lt;RegisterForComInterop&gt;False&lt;/RegisterForComInterop&gt;
+!       &lt;CpuType&gt;anycpu&lt;/CpuType&gt;
+!       &lt;RuntimeVersion&gt;v25&lt;/RuntimeVersion&gt;
+!       &lt;XmlDoc&gt;False&lt;/XmlDoc&gt;
+!       &lt;XmlDocWarningLevel&gt;WarningOnPublicMembers&lt;/XmlDocWarningLevel&gt;
+!       &lt;EnableUnmanagedDebugging&gt;False&lt;/EnableUnmanagedDebugging&gt;
+!     &lt;/Configuration&gt;
+!   &lt;/Configurations&gt;
+!   &lt;Files&gt;
+!     &lt;File Filename=&quot;AssemblyInfo.pas&quot;&gt;
+!       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+!       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+!     &lt;/File&gt;
+!     &lt;File Filename=&quot;Classes.pas&quot;&gt;
+!       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+!       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+!     &lt;/File&gt;
+!     &lt;File Filename=&quot;Consts.pas&quot;&gt;
+!       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+!       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+!     &lt;/File&gt;
+!     &lt;File Filename=&quot;Contnrs.pas&quot;&gt;
+!       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+!       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+!     &lt;/File&gt;
+!     &lt;File Filename=&quot;Globals.pas&quot;&gt;
+!       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+!       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+!     &lt;/File&gt;
+!     &lt;File Filename=&quot;IniFiles.pas&quot;&gt;
+!       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+!       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+!     &lt;/File&gt;
+!     &lt;File Filename=&quot;Langs.pas&quot;&gt;
+!       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+!       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+!     &lt;/File&gt;
+!     &lt;File Filename=&quot;System.pas&quot;&gt;
+!       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+!       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+!     &lt;/File&gt;
+!     &lt;File Filename=&quot;SysUtils.pas&quot;&gt;
+!       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+!       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+!     &lt;/File&gt;
+!     &lt;File Filename=&quot;Types.pas&quot;&gt;
+!       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+!       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+!     &lt;/File&gt;
+!   &lt;/Files&gt;
+! &lt;/ChromeProject&gt;
+\ No newline at end of file
+--- 1,86 ----
+! &lt;Project DefaultTargets=&quot;Build&quot; xmlns=&quot;<A HREF="http://schemas.microsoft.com/developer/msbuild/2003">http://schemas.microsoft.com/developer/msbuild/2003</A>&quot;&gt;
+!   &lt;PropertyGroup&gt;
+!     &lt;ProjectGuid&gt;{EADE7853-FDBE-4770-B0B2-5FF5FDD2DBF7}&lt;/ProjectGuid&gt;
+!     &lt;ApplicationIcon /&gt;
+!     &lt;StartPage /&gt;
+!     &lt;DefaultUses /&gt;
+!     &lt;InternalAssemblyName /&gt;
+!     &lt;RootNamespace&gt;ShineOn.RTL&lt;/RootNamespace&gt;
+!     &lt;StartupClass /&gt;
+      &lt;OutputType&gt;library&lt;/OutputType&gt;
+      &lt;AssemblyName&gt;ShineOn.RTL&lt;/AssemblyName&gt;
+      &lt;AllowGlobals&gt;True&lt;/AllowGlobals&gt;
+      &lt;AllowLegacyWith&gt;True&lt;/AllowLegacyWith&gt;
++     &lt;AllowLegacyCreate&gt;True&lt;/AllowLegacyCreate&gt;
+      &lt;AllowLegacyOutParams&gt;True&lt;/AllowLegacyOutParams&gt;
+      &lt;AllowUnsafeCode&gt;False&lt;/AllowUnsafeCode&gt;
+!     &lt;SCCProjectName /&gt;
+!     &lt;SCCAuxPath /&gt;
+!     &lt;SCCLocalPath /&gt;
+!     &lt;SCCProvider /&gt;
+!     &lt;ServerPath /&gt;
+!     &lt;ProjectTypeGuids /&gt;
+!     &lt;Configuration Condition=&quot;'$(Configuration)' == ''&quot;&gt;Release&lt;/Configuration&gt;
+!   &lt;/PropertyGroup&gt;
+!   &lt;PropertyGroup Condition=&quot; '$(Configuration)' == 'Debug' &quot;&gt;
+!     &lt;DefineConstants&gt;DEBUG;TRACE;MSWINDOWS&lt;/DefineConstants&gt;
+!     &lt;OutputPath&gt;..\bin&lt;/OutputPath&gt;
+!     &lt;GeneratePDB&gt;True&lt;/GeneratePDB&gt;
+!     &lt;GenerateMDB&gt;True&lt;/GenerateMDB&gt;
+!     &lt;EnableAsserts&gt;True&lt;/EnableAsserts&gt;
+!     &lt;TreatWarningsAsErrors&gt;False&lt;/TreatWarningsAsErrors&gt;
+!     &lt;RegisterForComInterop&gt;False&lt;/RegisterForComInterop&gt;
+!     &lt;CaptureConsoleOutput&gt;False&lt;/CaptureConsoleOutput&gt;
+!     &lt;StartMode&gt;Project&lt;/StartMode&gt;
+!     &lt;CpuType&gt;anycpu&lt;/CpuType&gt;
+!     &lt;RuntimeVersion&gt;v25&lt;/RuntimeVersion&gt;
+!     &lt;EnableUnmanagedDebugging&gt;False&lt;/EnableUnmanagedDebugging&gt;
+!     &lt;WebDebugTarget&gt;Cassini&lt;/WebDebugTarget&gt;
+!     &lt;WebLaunchBrowser&gt;False&lt;/WebLaunchBrowser&gt;
+!     &lt;XmlDocAllMembers&gt;False&lt;/XmlDocAllMembers&gt;
+!     &lt;CodeFlowAnalysis&gt;True&lt;/CodeFlowAnalysis&gt;
+!     &lt;UseXmlDoc&gt;False&lt;/UseXmlDoc&gt;
+!     &lt;XmlDocWarning&gt;WarningOnPublicMembers&lt;/XmlDocWarning&gt;
+!   &lt;/PropertyGroup&gt;
+!   &lt;PropertyGroup Condition=&quot; '$(Configuration)' == 'Release' &quot;&gt;
+!     &lt;DefineConstants&gt;MSWINDOWS&lt;/DefineConstants&gt;
+!     &lt;OutputPath&gt;..\bin&lt;/OutputPath&gt;
+!     &lt;GeneratePDB&gt;False&lt;/GeneratePDB&gt;
+!     &lt;GenerateMDB&gt;False&lt;/GenerateMDB&gt;
+!     &lt;EnableAsserts&gt;False&lt;/EnableAsserts&gt;
+!     &lt;TreatWarningsAsErrors&gt;False&lt;/TreatWarningsAsErrors&gt;
+!     &lt;RegisterForComInterop&gt;False&lt;/RegisterForComInterop&gt;
+!     &lt;CaptureConsoleOutput&gt;False&lt;/CaptureConsoleOutput&gt;
+!     &lt;StartMode&gt;Project&lt;/StartMode&gt;
+!     &lt;CpuType&gt;anycpu&lt;/CpuType&gt;
+!     &lt;RuntimeVersion&gt;v25&lt;/RuntimeVersion&gt;
+!     &lt;EnableUnmanagedDebugging&gt;False&lt;/EnableUnmanagedDebugging&gt;
+!     &lt;WebDebugTarget&gt;Cassini&lt;/WebDebugTarget&gt;
+!     &lt;WebLaunchBrowser&gt;False&lt;/WebLaunchBrowser&gt;
+!     &lt;XmlDocAllMembers&gt;False&lt;/XmlDocAllMembers&gt;
+!     &lt;CodeFlowAnalysis&gt;True&lt;/CodeFlowAnalysis&gt;
+!     &lt;UseXmlDoc&gt;False&lt;/UseXmlDoc&gt;
+!     &lt;XmlDocWarning&gt;WarningOnPublicMembers&lt;/XmlDocWarning&gt;
+!   &lt;/PropertyGroup&gt;
+!   &lt;Import Project=&quot;$(MSBuildExtensionsPath)\RemObjects Software\Chrome\RemObjects.Chrome.targets&quot; /&gt;
+!   &lt;ItemGroup&gt;
+!     &lt;Reference Include=&quot;$(Framework)\mscorlib.dll&quot; /&gt;
+!     &lt;Reference Include=&quot;$(Framework)\System.dll&quot; /&gt;
+!     &lt;Reference Include=&quot;$(Framework)\System.Drawing.dll&quot; /&gt;
+!     &lt;Reference Include=&quot;$(Framework)\System.Windows.Forms.dll&quot;&gt;
+!       &lt;Name&gt;System.Windows.Forms.dll&lt;/Name&gt;
+!     &lt;/Reference&gt;
+!   &lt;/ItemGroup&gt;
+!   &lt;ItemGroup&gt;
+!     &lt;Compile Include=&quot;AssemblyInfo.pas&quot; /&gt;
+!     &lt;Compile Include=&quot;Classes.pas&quot; /&gt;
+!     &lt;Compile Include=&quot;Consts.pas&quot; /&gt;
+!     &lt;Compile Include=&quot;Contnrs.pas&quot; /&gt;
+!     &lt;Compile Include=&quot;Globals.pas&quot; /&gt;
+!     &lt;Compile Include=&quot;IniFiles.pas&quot; /&gt;
+!     &lt;Compile Include=&quot;Langs.pas&quot; /&gt;
+!     &lt;Compile Include=&quot;System.pas&quot; /&gt;
+!     &lt;Compile Include=&quot;SysUtils.pas&quot; /&gt;
+!     &lt;Compile Include=&quot;Types.pas&quot; /&gt;
+!   &lt;/ItemGroup&gt;
+! &lt;/Project&gt;
+\ No newline at end of file
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000054.html">[Shineon-checkins] ShineOn/NUnit TestSysUtils.pas,1.2,1.3
+</A></li>
+	<LI>Next message: <A HREF="000056.html">[Shineon-checkins] ShineOn/NUnit NUnit.ShineOn.RTL.chrome,1.3,1.4 TestFileStream.pas,1.1,1.2 TestIniFiles.pas,1.3,1.4 TestStringRead.pas,1.1,1.2 TestStringWrite.pas,1.1,1.2 TestSystem.pas,1.7,1.8
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#55">[ date ]</a>
+              <a href="thread.html#55">[ thread ]</a>
+              <a href="subject.html#55">[ subject ]</a>
+              <a href="author.html#55">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

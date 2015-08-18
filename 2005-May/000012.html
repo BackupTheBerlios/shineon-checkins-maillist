@@ -1,0 +1,1264 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.5,1.6 Contnrs.pas,1.2,1.3 SysUtils.pas,1.5,1.6 System.pas,1.2,1.3 Types.pas,1.3,1.4
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20Classes.pas%2C1.5%2C1.6%20Contnrs.pas%2C1.2%2C1.3%20SysUtils.pas%2C1.5%2C1.6%20System.pas%2C1.2%2C1.3%20Types.pas%2C1.3%2C1.4&In-Reply-To=%3C200505162205.j4GM5cm12773%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000011.html">
+   <LINK REL="Next"  HREF="000013.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.5,1.6 Contnrs.pas,1.2,1.3 SysUtils.pas,1.5,1.6 System.pas,1.2,1.3 Types.pas,1.3,1.4</H1>
+    <B>peter3</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20Classes.pas%2C1.5%2C1.6%20Contnrs.pas%2C1.2%2C1.3%20SysUtils.pas%2C1.5%2C1.6%20System.pas%2C1.2%2C1.3%20Types.pas%2C1.3%2C1.4&In-Reply-To=%3C200505162205.j4GM5cm12773%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.5,1.6 Contnrs.pas,1.2,1.3 SysUtils.pas,1.5,1.6 System.pas,1.2,1.3 Types.pas,1.3,1.4">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Tue May 17 00:05:38 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000011.html">[Shineon-checkins] ShineOn/ShineOn.RTL SysUtils.pas,1.4,1.5
+</A></li>
+        <LI>Next message: <A HREF="000013.html">[Shineon-checkins] ShineOn/ShineOn.RTL Globals.pas,NONE,1.1 Classes.pas,1.6,1.7 ShineOn.RTL.chrome,1.5,1.6 SysUtils.pas,1.6,1.7 System.pas,1.3,1.4 Types.pas,1.4,1.5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#12">[ date ]</a>
+              <a href="thread.html#12">[ thread ]</a>
+              <a href="subject.html#12">[ subject ]</a>
+              <a href="author.html#12">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv4051/ShineOn.RTL
+
+Modified Files:
+	Classes.pas Contnrs.pas SysUtils.pas System.pas Types.pas 
+Log Message:
+- All global procedures are now wrappers for public class methods
+- All enums replaced by enum/consts combo so Delphi porters don't have to qualify with the enum type
+- Added Pred, Succ and Odd
+
+Index: Classes.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Classes.pas,v
+retrieving revision 1.5
+retrieving revision 1.6
+diff -C2 -d -r1.5 -r1.6
+*** Classes.pas	11 May 2005 18:12:37 -0000	1.5
+--- Classes.pas	16 May 2005 22:05:36 -0000	1.6
+***************
+*** 37,43 ****
+    TListSortCompare = public function (Item1, Item2: Object): Integer;
+    
+!   TListNotification = public (lnAdded, lnExtracted, lnDeleted);
+!   TListAssignOp = public (laCopy, laAnd, laOr, laXor, laSrcUnique, laDestUnique);
+    
+    TListSortCompareWrapper = assembly class(TObject, IComparer)
+    private
+--- 37,57 ----
+    TListSortCompare = public function (Item1, Item2: Object): Integer;
+    
+!   TListNotification = public (Added, Extracted, Deleted);
+! const
+!   lnAdded = TListNotification.Added;
+!   lnExtracted = TListNotification.Extracted;
+!   lnDeleted  = TListNotification.Deleted;
+    
++ type   
++   TListAssignOp = public (Copy, &amp;And, &amp;Or, &amp;Xor, SrcUnique, DestUnique);
++ const  
++   laCopy = TListAssignOp.Copy;
++   laAnd = TListAssignOp.&And;
++   laOr = TListAssignOp.&Or;
++   laXor = TListAssignOp.&Xor;
++   laSrcUnique = TListAssignOp.SrcUnique;
++   laDestUnique = TListAssignOp.DestUnique;
++   
++ type  
+    TListSortCompareWrapper = assembly class(TObject, IComparer)
+    private
+***************
+*** 478,483 ****
+    TThreadMethod = public procedure of object;
+  
+!   TThreadPriority = public (tpIdle, tpLowest, tpLower, tpNormal, tpHigher, tpHighest, tpTimeCritical);
+! 
+    TThread = public class
+    private
+--- 492,507 ----
+    TThreadMethod = public procedure of object;
+  
+!   TThreadPriority = public (Idle, Lowest, Lower, Normal, Higher, Highest, TimeCritical);
+!   
+! const
+!   tpIdle = TThreadPriority.Idle;
+!   tpLowest = TThreadPriority.Lowest;
+!   tpLower = TThreadPriority.Lower;
+!   tpNormal = TThreadPriority.Normal;
+!   tpHigher = TThreadPriority.Higher;
+!   tpHighest = TThreadPriority.Highest;
+!   tpTimeCritical = TThreadPriority.TimeCritical;
+!   
+! type  
+    TThread = public class
+    private
+***************
+*** 657,663 ****
+      FList[Index] := Value;
+      if Temp &lt;&gt; nil then
+!       Notify(Temp, TListNotification.lnDeleted);
+      if Value &lt;&gt; nil then
+!       Notify(Value, TListNotification.lnAdded);
+    end;
+  end;
+--- 681,687 ----
+      FList[Index] := Value;
+      if Temp &lt;&gt; nil then
+!       Notify(Temp, TListNotification.Deleted);
+      if Value &lt;&gt; nil then
+!       Notify(Value, TListNotification.Added);
+    end;
+  end;
+***************
+*** 683,687 ****
+    Result := FList.Add(Item);
+    if Item &lt;&gt; nil then
+!     Notify(Item, TListNotification.lnAdded);
+  end;
+  
+--- 707,711 ----
+    Result := FList.Add(Item);
+    if Item &lt;&gt; nil then
+!     Notify(Item, TListNotification.Added);
+  end;
+  
+***************
+*** 699,703 ****
+    FList.RemoveAt(Index);
+    if Temp &lt;&gt; nil then
+!     Notify(Temp, TListNotification.lnDeleted);
+  end;
+  
+--- 723,727 ----
+    FList.RemoveAt(Index);
+    if Temp &lt;&gt; nil then
+!     Notify(Temp, TListNotification.Deleted);
+  end;
+  
+***************
+*** 732,736 ****
+      FList[I] := nil;
+      Delete(I);
+!     Notify(Result, TListNotification.lnExtracted);
+    end;
+  end;
+--- 756,760 ----
+      FList[I] := nil;
+      Delete(I);
+!     Notify(Result, TListNotification.Extracted);
+    end;
+  end;
+***************
+*** 752,756 ****
+    FList.Insert(Index, Item);
+    if Item &lt;&gt; nil then
+!     Notify(Item, TListNotification.lnAdded);
+  end;
+  
+--- 776,780 ----
+    FList.Insert(Index, Item);
+    if Item &lt;&gt; nil then
+!     Notify(Item, TListNotification.Added);
+  end;
+  
+***************
+*** 809,818 ****
+    clear;
+    case AOperator of
+!     TListAssignOp.LaCopy: //dest becomes a copy of the source, dest's original content is forgotten
+      begin
+        Clear;
+        FList.AddRange(ListA.List);
+      end;
+!     TListAssignOp.LaAnd: //intersection of the two lists
+      begin
+        for ThisListObject: Object in FList do
+--- 833,842 ----
+    clear;
+    case AOperator of
+!     TListAssignOp.Copy: //dest becomes a copy of the source, dest's original content is forgotten
+      begin
+        Clear;
+        FList.AddRange(ListA.List);
+      end;
+!     TListAssignOp.And: //intersection of the two lists
+      begin
+        for ThisListObject: Object in FList do
+***************
+*** 824,828 ****
+        end;       
+      end;
+!     TListAssignOp.LaOr: //union of the two lists
+      begin
+        for ListAObject: Object in ListA.List do
+--- 848,852 ----
+        end;       
+      end;
+!     TListAssignOp.Or: //union of the two lists
+      begin
+        for ListAObject: Object in ListA.List do
+***************
+*** 834,838 ****
+        end;    
+      end;
+!     TListAssignOp.LaXor:  //only those not in both lists
+      begin
+        for ListAObject: Object in ListA.List do
+--- 858,862 ----
+        end;    
+      end;
+!     TListAssignOp.Xor:  //only those not in both lists
+      begin
+        for ListAObject: Object in ListA.List do
+***************
+*** 848,852 ****
+        end;    
+      end;
+!     TListAssignOp.LaSrcUnique: //Replaces the destination list with those elements of the source list that do not appear in the destination list. 
+      begin
+        TempList := New ArrayList;
+--- 872,876 ----
+        end;    
+      end;
+!     TListAssignOp.SrcUnique: //Replaces the destination list with those elements of the source list that do not appear in the destination list. 
+      begin
+        TempList := New ArrayList;
+***************
+*** 860,864 ****
+        end;  
+      end; 
+!     TListAssignOp.LaDestUnique: //Removes all elements from the destination list that appear in the source list. The destination list ends up containing the elements unique to the original destination list
+      begin
+        for ThisListObject: Object in FList do
+--- 884,888 ----
+        end;  
+      end; 
+!     TListAssignOp.DestUnique: //Removes all elements from the destination list that appear in the source list. The destination list ends up containing the elements unique to the original destination list
+      begin
+        for ThisListObject: Object in FList do
+***************
+*** 875,884 ****
+  procedure TList.Assign(ListA: TList);
+  begin
+!   Assign(ListA, TListAssignOp.LaCopy);  
+  end;
+  
+  procedure TList.Assign(ListA: TList; AOperator: TListAssignOp; ListB: TList);
+  begin
+!   Assign(ListA, TListAssignOp.laCopy);
+    Assign(ListB, AOperator);  
+  end;
+--- 899,908 ----
+  procedure TList.Assign(ListA: TList);
+  begin
+!   Assign(ListA, TListAssignOp.Copy);  
+  end;
+  
+  procedure TList.Assign(ListA: TList; AOperator: TListAssignOp; ListB: TList);
+  begin
+!   Assign(ListA, TListAssignOp.Copy);
+    Assign(ListB, AOperator);  
+  end;
+***************
+*** 897,903 ****
+    LockList;
+    try
+!     if (Duplicates = TDuplicates.dupAccept) or (FList.IndexOf(Item) &lt; 0) then
+        FList.Add(Item)
+!     else if Duplicates = TDuplicates.dupError then
+        FList.Error(SDuplicateItem, Integer(Item));
+    finally
+--- 921,927 ----
+    LockList;
+    try
+!     if (Duplicates = TDuplicates.Accept) or (FList.IndexOf(Item) &lt; 0) then
+        FList.Add(Item)
+!     else if Duplicates = TDuplicates.Error then
+        FList.Error(SDuplicateItem, Integer(Item));
+    finally
+***************
+*** 2079,2083 ****
+  begin
+    Result := DataString.SubString(0, Count);
+!   Seek(Result.Length, TSeekOrigin.soCurrent);
+  end;
+  
+--- 2103,2107 ----
+  begin
+    Result := DataString.SubString(0, Count);
+!   Seek(Result.Length, TSeekOrigin.Current);
+  end;
+  
+***************
+*** 2085,2093 ****
+  begin
+    case Origin of
+!     TSeekOrigin.soBeginning: 
+        FPosition := Offset;
+!     TSeekOrigin.soCurrent: 
+        FPosition := FPosition + Offset;
+!     TSeekOrigin.soEnd: 
+        FPosition := DataString.Length - Offset;
+    end;
+--- 2109,2117 ----
+  begin
+    case Origin of
+!     TSeekOrigin.Beginning: 
+        FPosition := Offset;
+!     TSeekOrigin.Current: 
+        FPosition := FPosition + Offset;
+!     TSeekOrigin.End: 
+        FPosition := DataString.Length - Offset;
+    end;
+***************
+*** 2175,2187 ****
+    case FThread.Priority of
+      ThreadPriority.Lowest:
+!       Result := TThreadPriority.tpLowest;
+      ThreadPriority.BelowNormal:
+!       Result := TThreadPriority.tpLower;
+      ThreadPriority.Normal:
+!       Result := TThreadPriority.tpNormal;
+      ThreadPriority.AboveNormal:
+!       Result := TThreadPriority.tpHigher;
+      ThreadPriority.Highest:
+!       Result := TThreadPriority.tpHighest;
+    end; // case
+  end;
+--- 2199,2211 ----
+    case FThread.Priority of
+      ThreadPriority.Lowest:
+!       Result := TThreadPriority.Lowest;
+      ThreadPriority.BelowNormal:
+!       Result := TThreadPriority.Lower;
+      ThreadPriority.Normal:
+!       Result := TThreadPriority.Normal;
+      ThreadPriority.AboveNormal:
+!       Result := TThreadPriority.Higher;
+      ThreadPriority.Highest:
+!       Result := TThreadPriority.Highest;
+    end; // case
+  end;
+***************
+*** 2190,2202 ****
+  begin
+    case Value of
+!     TThreadPriority.tpIdle, TThreadPriority.tpLowest:
+        FThread.Priority := ThreadPriority.Lowest;
+!     TThreadPriority.tpLower:
+        FThread.Priority := ThreadPriority.BelowNormal;
+!     TThreadPriority.tpNormal:
+        FThread.Priority := ThreadPriority.Normal;
+!     TThreadPriority.tpHigher:
+        FThread.Priority := ThreadPriority.AboveNormal;
+!     TThreadPriority.tpHighest, TThreadPriority.tpTimeCritical:
+        FThread.Priority := ThreadPriority.Highest;
+    end; // case
+--- 2214,2226 ----
+  begin
+    case Value of
+!     TThreadPriority.Idle, TThreadPriority.Lowest:
+        FThread.Priority := ThreadPriority.Lowest;
+!     TThreadPriority.Lower:
+        FThread.Priority := ThreadPriority.BelowNormal;
+!     TThreadPriority.Normal:
+        FThread.Priority := ThreadPriority.Normal;
+!     TThreadPriority.Higher:
+        FThread.Priority := ThreadPriority.AboveNormal;
+!     TThreadPriority.Highest, TThreadPriority.TimeCritical:
+        FThread.Priority := ThreadPriority.Highest;
+    end; // case
+
+Index: Contnrs.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Contnrs.pas,v
+retrieving revision 1.2
+retrieving revision 1.3
+diff -C2 -d -r1.2 -r1.3
+*** Contnrs.pas	25 Apr 2005 17:51:44 -0000	1.2
+--- Contnrs.pas	16 May 2005 22:05:36 -0000	1.3
+***************
+*** 152,163 ****
+  { TBucketList }
+  
+!   TBucketListSizes = public (bl2, bl4, bl8, bl16, bl32, bl64, bl128, bl256);
+! 
+    TBucketList = public class(TCustomBucketList)
+    public
+!     constructor Create(ABuckets: TBucketListSizes := TBucketListSizes.bl16);
+    end;
+  
+- 
+  { TObjectBucketList }
+  
+--- 152,173 ----
+  { TBucketList }
+  
+!   TBucketListSizes = public (BucketSize2, BucketSize4, BucketSize8, BucketSize16, BucketSize32, BucketSize64, BucketSize128, BucketSize256);
+!   
+! const  
+!   bl2 = TBucketListSizes.BucketSize2;
+!   bl4 = TBucketListSizes.BucketSize4;
+!   bl8 = TBucketListSizes.BucketSize8;
+!   bl16 = TBucketListSizes.BucketSize16;
+!   bl32 = TBucketListSizes.BucketSize32;
+!   bl64 = TBucketListSizes.BucketSize64;
+!   bl128 = TBucketListSizes.BucketSize128;
+!   bl256 = TBucketListSizes.BucketSize256;
+!   
+! type
+    TBucketList = public class(TCustomBucketList)
+    public
+!     constructor Create(ABuckets: TBucketListSizes := TBucketListSizes.BucketSize16);
+    end;
+  
+  { TObjectBucketList }
+  
+***************
+*** 244,248 ****
+  begin
+    if OwnsObjects then
+!     if (Action = TListNotification.lnDeleted) and (Ptr is TObject) then
+        TObject(Ptr).Free;
+    inherited Notify(Ptr, Action);
+--- 254,258 ----
+  begin
+    if OwnsObjects then
+!     if (Action = TListNotification.Deleted) and (Ptr is TObject) then
+        TObject(Ptr).Free;
+    inherited Notify(Ptr, Action);
+
+Index: SysUtils.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/SysUtils.pas,v
+retrieving revision 1.5
+retrieving revision 1.6
+diff -C2 -d -r1.5 -r1.6
+*** SysUtils.pas	10 May 2005 23:04:43 -0000	1.5
+--- SysUtils.pas	16 May 2005 22:05:36 -0000	1.6
+***************
+*** 15,18 ****
+--- 15,113 ----
+  interface
+  
++ type
++   EShineOnError = public class(Exception);
++   TReplaceFlags = public set of (ReplaceAll, IgnoreCase);
++   
++ const
++   rfReplaceAll = TReplaceFlags.ReplaceAll;
++   rfIgnoreCase = TReplaceFlags.IgnoreCase;
+[...1557 lines suppressed...]
++   Result := ShineOn.RTL.SysUtils.AnsiStrRScan(Str, Chr);
++ end;
++   
++ function AnsiStrScan(Str: string; Chr: Char): string;
++ begin
++   Result := ShineOn.RTL.SysUtils.AnsiStrScan(Str, Chr);
++ end;
++   
++ function StringReplace(const S, OldPattern, NewPattern: string; Flags: TReplaceFlags): string;
++ begin
++   Result := ShineOn.RTL.SysUtils.StringReplace(S, OldPattern, NewPattern, Flags);
++ end;
++   
++ function GetEnvironmentVariable(const Name: string): string;   
++ begin
++   Result := ShineOn.RTL.SysUtils.GetEnvironmentVariable(Name);
++ end;
++   
+  
+    
+
+Index: System.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/System.pas,v
+retrieving revision 1.2
+retrieving revision 1.3
+diff -C2 -d -r1.2 -r1.3
+*** System.pas	25 Apr 2005 17:51:44 -0000	1.2
+--- System.pas	16 May 2005 22:05:36 -0000	1.3
+***************
+*** 15,19 ****
+--- 15,63 ----
+    System.Globalization;  
+    
++ type
++   System = public sealed class 
++   public
++     class function Pos(const SubStr, Str:string):integer;
++     class function Concat(const S1, S2:string):string;
++     class procedure Delete(var S: string; Index, Count:Integer);
++     class procedure Insert(const Source: string; var S: string; Index: Integer);
++     class function Copy(const Source:string; StartIndex, Length: Integer):string;
++ 
++     class procedure Str(X:Double; Width:integer;Decimals:integer;var S:string);
++     class procedure Val(const S:string; var V:Double; var Code: Integer);
++ 
++     class function Ord(Value:Char):integer;
++     class function Ord(Value:Boolean):integer;
++ 
++     class procedure Inc(var Value:integer);
++     class procedure Inc(var Value:integer; Amount:integer);
++     class procedure Dec(var Value:integer);
++     class procedure Dec(var Value:integer; Amount:integer);
++     class function Pred(Value:Integer):Integer;
++     class function Succ(Value:Integer):Integer;
+  
++     class function Round(Value:Double):Integer;
++     class function Round(Value:TDateTime):Integer;
++     class function Trunc(Value:Double):Integer;
++     class function Trunc(Value:TDateTime):Integer;
++     class function Int(X: Double): Double;
++     class function Int(X: TDateTime): Double;
++     class function Frac(Value:Double):Double;
++     class function Frac(Value:TDateTime):Double;
++     class function Odd(Value:Integer):boolean;
++ 
++     // TODO: add more overloads
++     class function Abs(X:Integer):Integer;
++     class function Abs(X:Double):Double;
++     class function Abs(X:TDateTime):TDateTime;
++     class function Exp(X: Double): Double;
++ 
++     class procedure SetLength(var S; Length: integer);
++     class procedure Write(const S:string);
++     class procedure WriteLn(const S:string);
++     class procedure Read(var P);
++     class procedure ReadLn(var P);
++   end;
++   
+  function Pos(const SubStr, Str:string):integer;
+  function Concat(const S1, S2:string):string;
+***************
+*** 21,37 ****
+  procedure Insert(const Source: string; var S: string; Index: Integer);
+  function Copy(const Source:string; StartIndex, Length: Integer):string;
+- 
+  procedure Str(X:Double; Width:integer;Decimals:integer;var S:string);
+  procedure Val(const S:string; var V:Double; var Code: Integer);
+- 
+- // these should be overloaded with other ordinal types
+  function Ord(Value:Char):integer;
+  function Ord(Value:Boolean):integer;
+- 
+  procedure Inc(var Value:integer);
+  procedure Inc(var Value:integer; Amount:integer);
+  procedure Dec(var Value:integer);
+  procedure Dec(var Value:integer; Amount:integer);
+! 
+  function Round(Value:Double):Integer;
+  function Round(Value:TDateTime):Integer;
+--- 65,78 ----
+  procedure Insert(const Source: string; var S: string; Index: Integer);
+  function Copy(const Source:string; StartIndex, Length: Integer):string;
+  procedure Str(X:Double; Width:integer;Decimals:integer;var S:string);
+  procedure Val(const S:string; var V:Double; var Code: Integer);
+  function Ord(Value:Char):integer;
+  function Ord(Value:Boolean):integer;
+  procedure Inc(var Value:integer);
+  procedure Inc(var Value:integer; Amount:integer);
+  procedure Dec(var Value:integer);
+  procedure Dec(var Value:integer; Amount:integer);
+! function Pred(Value:Integer):Integer;
+! function Succ(Value:Integer):Integer;
+  function Round(Value:Double):Integer;
+  function Round(Value:TDateTime):Integer;
+***************
+*** 42,52 ****
+  function Frac(Value:Double):Double;
+  function Frac(Value:TDateTime):Double;
+! 
+! // TODO: add more overloads
+  function Abs(X:Integer):Integer;
+  function Abs(X:Double):Double;
+  function Abs(X:TDateTime):TDateTime;
+  function Exp(X: Double): Double;
+- 
+  procedure SetLength(var S; Length: integer);
+  procedure Write(const S:string);
+--- 83,91 ----
+  function Frac(Value:Double):Double;
+  function Frac(Value:TDateTime):Double;
+! function Odd(Value:Integer):boolean;
+  function Abs(X:Integer):Integer;
+  function Abs(X:Double):Double;
+  function Abs(X:TDateTime):TDateTime;
+  function Exp(X: Double): Double;
+  procedure SetLength(var S; Length: integer);
+  procedure Write(const S:string);
+***************
+*** 59,63 ****
+  
+  
+! function Pos(const SubStr, Str:string):integer;
+  begin
+    //TODO: Should this function return 0 or -1 if substr not found?
+--- 98,102 ----
+  
+  
+! class function System.Pos(const SubStr, Str:string):integer;
+  begin
+    //TODO: Should this function return 0 or -1 if substr not found?
+***************
+*** 65,84 ****
+  end;
+  
+! function Concat(const S1, S2:string):string;
+  begin
+    Result := S1 + S2;
+  end;
+  
+! procedure Delete(var S: string; Index, Count:Integer);
+  begin
+    S := S.SubString(Index, Count);
+  end;
+  
+! procedure Insert(Source: string; var S: string; Index: Integer);
+  begin
+    S := Source.Substring(0, Index) + S + Source.Substring(Index + 1);
+  end;
+  
+! function Copy(const Source:string; StartIndex, Length: Integer):string;
+  begin
+    if Source = nil then
+--- 104,123 ----
+  end;
+  
+! class function System.Concat(const S1, S2:string):string;
+  begin
+    Result := S1 + S2;
+  end;
+  
+! class procedure System.Delete(var S: string; Index, Count:Integer);
+  begin
+    S := S.SubString(Index, Count);
+  end;
+  
+! class procedure System.Insert(Source: string; var S: string; Index: Integer);
+  begin
+    S := Source.Substring(0, Index) + S + Source.Substring(Index + 1);
+  end;
+  
+! class function System.Copy(const Source:string; StartIndex, Length: Integer):string;
+  begin
+    if Source = nil then
+***************
+*** 88,97 ****
+  end;
+  
+! procedure Str(X:Double; Width:integer;Decimals:integer;var S:string);
+  begin
+    X.ToString(Width.ToString + '.' + Decimals.ToString);
+  end;
+  
+! procedure Val(const S:string; var V:Double; var Code: Integer);
+  begin
+    // TODO: should we use NumberFormatInfo.CurrentInfo here?
+--- 127,136 ----
+  end;
+  
+! class procedure System.Str(X:Double; Width:integer;Decimals:integer;var S:string);
+  begin
+    X.ToString(Width.ToString + '.' + Decimals.ToString);
+  end;
+  
+! class procedure System.Val(const S:string; var V:Double; var Code: Integer);
+  begin
+    // TODO: should we use NumberFormatInfo.CurrentInfo here?
+***************
+*** 102,111 ****
+  end;
+  
+! function Ord(Value:Char):integer;
+  begin
+    Result := integer(Value);
+  end;
+  
+! function Ord(Value:Boolean):integer;
+  begin
+    if Value then
+--- 141,150 ----
+  end;
+  
+! class function System.Ord(Value:Char):integer;
+  begin
+    Result := integer(Value);
+  end;
+  
+! class function System.Ord(Value:Boolean):integer;
+  begin
+    if Value then
+***************
+*** 115,169 ****
+  end;
+  
+! procedure Inc(var Value:integer);
+  begin
+    Value := Value + 1;
+  end;
+  
+! procedure Inc(var Value:integer; Amount:integer);
+  begin
+    Value := Value + Amount;
+  end;
+  
+! procedure Dec(var Value:integer);
+  begin
+    Value := Value - 1;
+  end;
+  
+! procedure Dec(var Value:integer; Amount:integer);
+  begin
+    Value := Value - Amount;
+  end;
+  
+! function Round(Value:Double):Integer;
+  begin
+    Result := Convert.ToInt32(Value);
+  end;
+  
+! function Round(Value:TDateTime):Integer;
+  begin
+    Result := Round(Value.Value);
+  end;
+    
+! function Trunc(Value:Double):Integer;
+  begin
+    Result := Integer(Value);
+  end;
+  
+! function Trunc(Value:TDateTime):Integer;
+  begin
+    Result := Value.Date
+  end;
+  
+! function Int(X: Double): Double;
+  begin
+    Result := Integer(X);
+  end;  
+  
+! function Int(X: TDateTime): Double;
+  begin
+    Result := X.Date;
+  end;  
+  
+! function Frac(Value:Double):Double;
+  begin
+    Result := Abs(Value) - Integer(Abs(Value));
+--- 154,218 ----
+  end;
+  
+! class procedure System.Inc(var Value:integer);
+  begin
+    Value := Value + 1;
+  end;
+  
+! class procedure System.Inc(var Value:integer; Amount:integer);
+  begin
+    Value := Value + Amount;
+  end;
+  
+! class procedure System.Dec(var Value:integer);
+  begin
+    Value := Value - 1;
+  end;
+  
+! class procedure System.Dec(var Value:integer; Amount:integer);
+  begin
+    Value := Value - Amount;
+  end;
+  
+! class function System.Pred(Value:Integer):Integer;
+! begin
+!   Result := Value - 1;
+! end;
+! 
+! class function System.Succ(Value:Integer):Integer;
+! begin
+!   Result := Value + 1;
+! end;
+! 
+! class function System.Round(Value:Double):Integer;
+  begin
+    Result := Convert.ToInt32(Value);
+  end;
+  
+! class function System.Round(Value:TDateTime):Integer;
+  begin
+    Result := Round(Value.Value);
+  end;
+    
+! class function System.Trunc(Value:Double):Integer;
+  begin
+    Result := Integer(Value);
+  end;
+  
+! class function System.Trunc(Value:TDateTime):Integer;
+  begin
+    Result := Value.Date
+  end;
+  
+! class function System.Int(X: Double): Double;
+  begin
+    Result := Integer(X);
+  end;  
+  
+! class function System.Int(X: TDateTime): Double;
+  begin
+    Result := X.Date;
+  end;  
+  
+! class function System.Frac(Value:Double):Double;
+  begin
+    Result := Abs(Value) - Integer(Abs(Value));
+***************
+*** 172,201 ****
+  end;
+  
+! function Frac(Value:TDateTime):Double;
+  begin
+    Result := Value.Time;
+  end;
+  
+! function Abs(X:Integer):Integer;
+  begin
+    Result := Math.Abs(X);
+  end;
+  
+! function Abs(X:Double):Double;
+  begin
+    Result := Math.Abs(X);
+  end;
+  
+! function Abs(X:TDateTime):TDateTime;
+  begin
+    Result := new TDateTime(Abs(X.Value));
+  end;
+  
+! function Exp(X: Double): Double;
+  begin
+    Result := Math.Exp(X);
+  end;  
+  
+! procedure SetLength(var S; Length: integer);
+  require
+    Assigned(S);
+--- 221,255 ----
+  end;
+  
+! class function System.Frac(Value:TDateTime):Double;
+  begin
+    Result := Value.Time;
+  end;
+  
+! class function System.Odd(Value:Integer):boolean;
+! begin
+!   Result := Value and 1 &lt;&gt; 0;
+! end;
+! 
+! class function System.Abs(X:Integer):Integer;
+  begin
+    Result := Math.Abs(X);
+  end;
+  
+! class function System.Abs(X:Double):Double;
+  begin
+    Result := Math.Abs(X);
+  end;
+  
+! class function System.Abs(X:TDateTime):TDateTime;
+  begin
+    Result := new TDateTime(Abs(X.Value));
+  end;
+  
+! class function System.Exp(X: Double): Double;
+  begin
+    Result := Math.Exp(X);
+  end;  
+  
+! class procedure System.SetLength(var S; Length: integer);
+  require
+    Assigned(S);
+***************
+*** 224,238 ****
+  end;
+  
+! procedure WriteLn(const S:string);
+  begin
+    Console.WriteLine(S);
+  end;
+  
+! procedure Write(const S:string);
+  begin
+    Console.Write(S);
+  end;
+  
+! procedure Read(var P);
+  begin
+    var i:integer := Console.Read;
+--- 278,292 ----
+  end;
+  
+! class procedure System.WriteLn(const S:string);
+  begin
+    Console.WriteLine(S);
+  end;
+  
+! class procedure System.Write(const S:string);
+  begin
+    Console.Write(S);
+  end;
+  
+! class procedure System.Read(var P);
+  begin
+    var i:integer := Console.Read;
+***************
+*** 243,250 ****
+  end;
+  
+! procedure ReadLn(var P);
+  begin
+    P := Console.ReadLine;
+  end;
+  
+  end.
+--- 297,473 ----
+  end;
+  
+! class procedure System.ReadLn(var P);
+  begin
+    P := Console.ReadLine;
+  end;
++ 
++ // DELPHI COMPATIBLE GLOBAL METHODS
++ 
++ function Pos(const SubStr, Str:string):integer;
++ begin
++   Result := ShineOn.RTL.System.Pos(SubStr, Str);
++ end;
++   
++ function Concat(const S1, S2:string):string;
++ begin
++   Result := ShineOn.RTL.System.Concat(S1, S2);
++ end;
++   
++ procedure Delete(var S: string; Index, Count:Integer);
++ begin
++   ShineOn.RTL.System.Delete(S, Index, Count);
++ end;
++   
++ procedure Insert(const Source: string; var S: string; Index: Integer);
++ begin
++   ShineOn.RTL.System.Insert(Source, S, Index);
++ end;
++   
++ function Copy(const Source:string; StartIndex, Length: Integer):string;
++ begin
++   Result := ShineOn.RTL.System.Copy(Source, StartIndex, Length);
++ end;
++   
++ procedure Str(X:Double; Width:integer;Decimals:integer;var S:string);
++ begin
++   ShineOn.RTL.System.Str(X, Width, Decimals, S);
++ end;
++   
++ procedure Val(const S:string; var V:Double; var Code: Integer);
++ begin
++   ShineOn.RTL.System.Val(S, V, Code);
++ end;
++   
++ function Ord(Value:Char):integer;
++ begin
++   Result := ShineOn.RTL.System.Ord(Value);
++ end;
++   
++ function Ord(Value:Boolean):integer;
++ begin
++   Result := ShineOn.RTL.System.Ord(Value);
++ end;
++   
++ procedure Inc(var Value:integer);
++ begin
++   ShineOn.RTL.System.Inc(Value);
++ end;
++   
++ procedure Inc(var Value:integer; Amount:integer);
++ begin
++   ShineOn.RTL.System.Inc(Value, Amount);
++ end;
++   
++ procedure Dec(var Value:integer);
++ begin
++   ShineOn.RTL.System.Dec(Value);
++ end;
++   
++ procedure Dec(var Value:integer; Amount:integer);
++ begin
++   ShineOn.RTL.System.Dec(Value, Amount);
++ end;
++   
++ function Pred(Value:Integer):Integer;
++ begin
++   Result := ShineOn.RTL.System.Pred(Value);
++ end;
++   
++ function Succ(Value:Integer):Integer;
++ begin
++   Result := ShineOn.RTL.System.Succ(Value);
++ end;
++    
++ function Round(Value:Double):Integer;
++ begin
++   Result := ShineOn.RTL.System.Round(Value);
++ end;
++   
++ function Round(Value:TDateTime):Integer;
++ begin
++   Result := ShineOn.RTL.System.Round(Value);
++ end;
++   
++ function Trunc(Value:Double):Integer;
++ begin
++   Result := ShineOn.RTL.System.Trunc(Value);
++ end;
++   
++ function Trunc(Value:TDateTime):Integer;
++ begin
++   Result := ShineOn.RTL.System.Trunc(Value);
++ end;
++   
++ function Int(X: Double): Double;
++ begin
++   Result := ShineOn.RTL.System.Int(X);
++ end;
++   
++ function Int(X: TDateTime): Double;
++ begin
++   Result := ShineOn.RTL.System.Int(X);
++ end;
++   
++ function Frac(Value:Double):Double;
++ begin
++   Result := ShineOn.RTL.System.Frac(Value);
++ end;
++   
++ function Frac(Value:TDateTime):Double;
++ begin
++   Result := ShineOn.RTL.System.Frac(Value);
++ end;
++   
++ function Odd(Value:Integer):boolean;
++ begin
++   Result := ShineOn.RTL.System.Odd(Value);
++ end;
++   
++ function Abs(X:Integer):Integer;
++ begin
++   Result := ShineOn.RTL.System.Abs(X);
++ end;
++   
++ function Abs(X:Double):Double;
++ begin
++   Result := ShineOn.RTL.System.Abs(X);
++ end;
++   
++ function Abs(X:TDateTime):TDateTime;
++ begin
++   Result := ShineOn.RTL.System.Abs(X);
++ end;
++   
++ function Exp(X: Double): Double;
++ begin
++   Result := ShineOn.RTL.System.Exp(X);
++ end;
++   
++ procedure SetLength(var S; Length: integer);
++ begin
++   ShineOn.RTL.System.SetLength(S, Length);
++ end;
++   
++ procedure Write(const S:string);
++ begin
++   ShineOn.RTL.System.Write(S);
++ end;
++   
++ procedure WriteLn(const S:string);
++ begin
++   ShineOn.RTL.System.WriteLn(S);
++ end;
++   
++ procedure Read(var P);
++ begin
++   ShineOn.RTL.System.Read(P);
++ end;
++   
++ procedure ReadLn(var P);
++ begin
++   ShineOn.RTL.System.ReadLn(P);
++ end;
++   
++ 
+  
+  end.
+
+Index: Types.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Types.pas,v
+retrieving revision 1.3
+retrieving revision 1.4
+diff -C2 -d -r1.3 -r1.4
+*** Types.pas	25 Apr 2005 17:51:44 -0000	1.3
+--- Types.pas	16 May 2005 22:05:36 -0000	1.4
+***************
+*** 27,31 ****
+  type
+  { TStream seek origins }
+!   TSeekOrigin = public (soBeginning, soCurrent, soEnd);
+    HRESULT = Longint;
+  
+--- 27,37 ----
+  type
+  { TStream seek origins }
+!   TSeekOrigin = public (Beginning, Current, &amp;End);
+! const
+!   soBeginning = TSeekOrigin.Beginning;
+!   soCurrent = TSeekOrigin.Current;
+!   soEnd = TSeekOrigin.End;
+! 
+! type  
+    HRESULT = Longint;
+  
+***************
+*** 212,226 ****
+  { Text alignment types }
+  
+!   TAlignment = public (taLeftJustify, taRightJustify, taCenter);
+  //!!!  TLeftRight = taLeftJustify..taRightJustify; // not supported by Chrome
+!   TBiDiMode = public (bdLeftToRight, bdRightToLeft, bdRightToLeftNoAlign, bdRightToLeftReadingOnly);
+  
+  { Types used by standard events }
+! 
+!   TShiftState = public set of (ssShift, ssAlt, ssCtrl,
+!     ssLeft, ssRight, ssMiddle, ssDouble);
+  
+  //!!!  THelpContext = -MaxLongint..MaxLongint; // not supported by Chrome
+-   THelpType = public (htKeyword, htContext);
+  
+  //!!!  TShortCut = Low(Word)..High(Word); // not supported by Chrome
+--- 218,252 ----
+  { Text alignment types }
+  
+!   TAlignment = public (LeftJustify, RightJustify, Center);
+  //!!!  TLeftRight = taLeftJustify..taRightJustify; // not supported by Chrome
+!   TBiDiMode = public (LeftToRight, RightToLeft, RightToLeftNoAlign, RightToLeftReadingOnly);
+!   TShiftState = public set of (Shift, Alt, Ctrl, Left, Right, Middle, Double);
+!   THelpType = public (Keyword, Context);
+!   
+! const
+!   taLeftJustify = TAlignment.LeftJustify;
+!   taRightJustify = TAlignment.RightJustify;
+!   taCenter = TAlignment.Center;
+  
++   bdLeftToRight = TBiDiMode.LeftToRight;
++   bdRightToLeft = TBiDiMode.RightToLeft;
++   bdRightToLeftNoAlign = TBiDiMode.RightToLeftNoAlign;
++   bdRightToLeftReadingOnly = TBiDiMode.RightToLeftReadingOnly;
++   
++   ssShift = TShiftState.Shift;
++   ssAlt = TShiftState.Alt;
++   ssCtrl = TShiftState.Ctrl;
++   ssLeft = TShiftState.Left;
++   ssRight = TShiftState.Right;
++   ssMiddle = TShiftState.Middle;
++   ssDouble = TShiftState.Double;
++   
++   htKeyword = THelpType.Keyword;
++   htContext = THelpType.Context;
++   
+  { Types used by standard events }
+! type
+  
+  //!!!  THelpContext = -MaxLongint..MaxLongint; // not supported by Chrome
+  
+  //!!!  TShortCut = Low(Word)..High(Word); // not supported by Chrome
+***************
+*** 253,264 ****
+  { Duplicate management }
+  
+!   TDuplicates = public (dupIgnore, dupAccept, dupError);
+  
+  { TList class }
+  
+    //PPointerList = public ^TPointerList;
+    //TPointerList = public array[0..MaxListSize - 1] of IntPtr;
+!   //TTextLineBreakStyle = public (tlbsLF, tlbsCRLF);
+    
+    THandle = public IntPtr;
+    Currency = public Double;     // TODO: is this correct?
+--- 279,301 ----
+  { Duplicate management }
+  
+!   TDuplicates = public (Ignore, Accept, Error);
+!   
+! const  
+!   dupIgnore = TDuplicates.Ignore;
+!   dupAccept = TDuplicates.Accept;
+!   dupError = TDuplicates.Error;
+  
++ type
+  { TList class }
+  
+    //PPointerList = public ^TPointerList;
+    //TPointerList = public array[0..MaxListSize - 1] of IntPtr;
+!   TTextLineBreakStyle = public (LF, CRLF);
+!   
+! const  
+!   tlbsLF = TTextLineBreakStyle.LF;
+!   tlbsCRLF = TTextLineBreakStyle.CRLF;
+    
++ type  
+    THandle = public IntPtr;
+    Currency = public Double;     // TODO: is this correct?
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000011.html">[Shineon-checkins] ShineOn/ShineOn.RTL SysUtils.pas,1.4,1.5
+</A></li>
+	<LI>Next message: <A HREF="000013.html">[Shineon-checkins] ShineOn/ShineOn.RTL Globals.pas,NONE,1.1 Classes.pas,1.6,1.7 ShineOn.RTL.chrome,1.5,1.6 SysUtils.pas,1.6,1.7 System.pas,1.3,1.4 Types.pas,1.4,1.5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#12">[ date ]</a>
+              <a href="thread.html#12">[ thread ]</a>
+              <a href="subject.html#12">[ subject ]</a>
+              <a href="author.html#12">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

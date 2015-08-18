@@ -1,0 +1,883 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/NUnit NUnit.ShineOn.RTL.chrome,1.3,1.4 TestFileStream.pas,1.1,1.2 TestIniFiles.pas,1.3,1.4 TestStringRead.pas,1.1,1.2 TestStringWrite.pas,1.1,1.2 TestSystem.pas,1.7,1.8
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2006-March/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20NUnit.ShineOn.RTL.chrome%2C1.3%2C1.4%20TestFileStream.pas%2C1.1%2C1.2%20TestIniFiles.pas%2C1.3%2C1.4%20TestStringRead.pas%2C1.1%2C1.2%20TestStringWrite.pas%2C1.1%2C1.2%20TestSystem.pas%2C1.7%2C1.8&In-Reply-To=%3C200603211624.k2LGO3t24538%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000055.html">
+   <LINK REL="Next"  HREF="000057.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/NUnit NUnit.ShineOn.RTL.chrome,1.3,1.4 TestFileStream.pas,1.1,1.2 TestIniFiles.pas,1.3,1.4 TestStringRead.pas,1.1,1.2 TestStringWrite.pas,1.1,1.2 TestSystem.pas,1.7,1.8</H1>
+    <B>msgclb</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20NUnit.ShineOn.RTL.chrome%2C1.3%2C1.4%20TestFileStream.pas%2C1.1%2C1.2%20TestIniFiles.pas%2C1.3%2C1.4%20TestStringRead.pas%2C1.1%2C1.2%20TestStringWrite.pas%2C1.1%2C1.2%20TestSystem.pas%2C1.7%2C1.8&In-Reply-To=%3C200603211624.k2LGO3t24538%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/NUnit NUnit.ShineOn.RTL.chrome,1.3,1.4 TestFileStream.pas,1.1,1.2 TestIniFiles.pas,1.3,1.4 TestStringRead.pas,1.1,1.2 TestStringWrite.pas,1.1,1.2 TestSystem.pas,1.7,1.8">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Tue Mar 21 17:24:03 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000055.html">[Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.14,1.15 IniFiles.pas,1.6,1.7 ShineOn.RTL.chrome,1.9,1.10
+</A></li>
+        <LI>Next message: <A HREF="000057.html">[Shineon-checkins] ShineOn/ShineOn.VCL ShineOn.VCL.chrome,1.3,1.4
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#56">[ date ]</a>
+              <a href="thread.html#56">[ thread ]</a>
+              <a href="subject.html#56">[ subject ]</a>
+              <a href="author.html#56">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/NUnit
+In directory sheep:/tmp/cvs-serv1618/NUnit
+
+Modified Files:
+	NUnit.ShineOn.RTL.chrome TestFileStream.pas TestIniFiles.pas 
+	TestStringRead.pas TestStringWrite.pas TestSystem.pas 
+Log Message:
+Removed Console code from TestFileStream
+In TestIniFiles added TIniFilesTests.ReadString, IniFilesTests.WriteString, TIniFilesTests.ReadInteger, TIniFilesTests.WriteInteger, TIniFilesTests.ReadBool, TIniFilesTests.WriteBool, TIniFilesTests.ReadFloat, TIniFilesTests.WriteFloat, TIniFilesTests.Clear, TIniFilesTests.UpdateFile, TIniFilesTests.ReadSection, TIniFilesTests.GetStrings, TIniFilesTests.SetStrings and fixed code in AddSomeData.
+In TestSystem changed Math.Truncate(D2) to Decimal.Truncate so it would build on vs2003.
+In Classes fixed file not writing in THandleStream.WriteLine by adding Flush, fixed truncating problem in TStrings.IndexOfObject and fixed truncating problem in TStrings.GetName.
+In IniFiles fixed index outofbounds in TMemIniFile.SetStrings.
+
+Index: NUnit.ShineOn.RTL.chrome
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/NUnit.ShineOn.RTL.chrome,v
+retrieving revision 1.3
+retrieving revision 1.4
+diff -C2 -d -r1.3 -r1.4
+*** NUnit.ShineOn.RTL.chrome	31 May 2005 19:58:43 -0000	1.3
+--- NUnit.ShineOn.RTL.chrome	21 Mar 2006 16:24:27 -0000	1.4
+***************
+*** 1,87 ****
+! &lt;ChromeProject&gt;
+!   &lt;ProjectOptions Name=&quot;NUnit.ShineOn.RTL&quot;&gt;
+!     &lt;ProjectID&gt;{78329CFC-D7AA-468C-8DF7-DBC4C14D671C}&lt;/ProjectID&gt;
+!     &lt;DefaultNamespace&gt;NUnit.ShineOn.RTL&lt;/DefaultNamespace&gt;
+!     &lt;StartupClass&gt;
+!     &lt;/StartupClass&gt;
+      &lt;OutputType&gt;library&lt;/OutputType&gt;
+      &lt;AssemblyName&gt;Nunit.ShineOn.RTL&lt;/AssemblyName&gt;
+      &lt;AllowGlobals&gt;False&lt;/AllowGlobals&gt;
+      &lt;AllowLegacyWith&gt;False&lt;/AllowLegacyWith&gt;
+      &lt;AllowLegacyOutParams&gt;True&lt;/AllowLegacyOutParams&gt;
+      &lt;AllowUnsafeCode&gt;False&lt;/AllowUnsafeCode&gt;
+!     &lt;AllowLegacyCreate&gt;True&lt;/AllowLegacyCreate&gt;
+!     &lt;ApplicationIcon&gt;
+!     &lt;/ApplicationIcon&gt;
+!   &lt;/ProjectOptions&gt;
+!   &lt;References&gt;
+!     &lt;Reference Assembly=&quot;$(Framework)\mscorlib.dll&quot; Display=&quot;mscorlib&quot; CopyLocal=&quot;False&quot; /&gt;
+!     &lt;Reference Assembly=&quot;$(Framework)\System.dll&quot; Display=&quot;System&quot; CopyLocal=&quot;False&quot; /&gt;
+!     &lt;Reference Assembly=&quot;$(Framework)\System.Drawing.dll&quot; Display=&quot;System.Drawing&quot; CopyLocal=&quot;False&quot; /&gt;
+!     &lt;Reference Assembly=&quot;$(Framework)\System.Windows.Forms.dll&quot; Display=&quot;System.Windows.Forms&quot; CopyLocal=&quot;False&quot; /&gt;
+!     &lt;Reference Assembly=&quot;..\..\..\..\..\NUnit 2.2\bin\nunit.framework.dll&quot; Display=&quot;nunit.framework&quot; CopyLocal=&quot;False&quot; /&gt;
+!     &lt;Reference Assembly=&quot;..\bin\ShineOn.RTL.dll&quot; Display=&quot;ShineOn.RTL.dll&quot; CopyLocal=&quot;False&quot; /&gt;
+!   &lt;/References&gt;
+!   &lt;Configurations&gt;
+!     &lt;Configuration Name=&quot;Debug&quot;&gt;
+!       &lt;Conditionals&gt;DEBUG;TRACE;&lt;/Conditionals&gt;
+!       &lt;OutputPath&gt;..\bin&lt;/OutputPath&gt;
+!       &lt;GeneratePDB&gt;True&lt;/GeneratePDB&gt;
+!       &lt;GenerateMDB&gt;False&lt;/GenerateMDB&gt;
+!       &lt;EnableAsserts&gt;True&lt;/EnableAsserts&gt;
+!       &lt;TreatWarningsAsErrors&gt;False&lt;/TreatWarningsAsErrors&gt;
+!       &lt;CaptureConsoleOutput&gt;False&lt;/CaptureConsoleOutput&gt;
+!       &lt;StartMode&gt;Application&lt;/StartMode&gt;
+!       &lt;StartApp&gt;..\..\..\..\..\NUnit 2.2\bin\nunit-gui.exe&lt;/StartApp&gt;
+!       &lt;StartAppParams&gt;NUnit.ShineOn.RTL.dll&lt;/StartAppParams&gt;
+!       &lt;WorkingDir&gt;..\bin&lt;/WorkingDir&gt;
+!       &lt;RegisterForComInterop&gt;False&lt;/RegisterForComInterop&gt;
+!       &lt;CpuType&gt;anycpu&lt;/CpuType&gt;
+!       &lt;RuntimeVersion&gt;v25&lt;/RuntimeVersion&gt;
+!       &lt;XmlDoc&gt;False&lt;/XmlDoc&gt;
+!       &lt;XmlDocWarningLevel&gt;WarningOnPublicMembers&lt;/XmlDocWarningLevel&gt;
+!       &lt;EnableUnmanagedDebugging&gt;False&lt;/EnableUnmanagedDebugging&gt;
+!     &lt;/Configuration&gt;
+!     &lt;Configuration Name=&quot;Release&quot;&gt;
+!       &lt;OutputPath&gt;..\bin&lt;/OutputPath&gt;
+!       &lt;GeneratePDB&gt;False&lt;/GeneratePDB&gt;
+!       &lt;GenerateMDB&gt;False&lt;/GenerateMDB&gt;
+!       &lt;EnableAsserts&gt;False&lt;/EnableAsserts&gt;
+!       &lt;TreatWarningsAsErrors&gt;False&lt;/TreatWarningsAsErrors&gt;
+!       &lt;CaptureConsoleOutput&gt;False&lt;/CaptureConsoleOutput&gt;
+!       &lt;StartMode&gt;Project&lt;/StartMode&gt;
+!       &lt;RegisterForComInterop&gt;False&lt;/RegisterForComInterop&gt;
+!       &lt;CpuType&gt;anycpu&lt;/CpuType&gt;
+!       &lt;RuntimeVersion&gt;v25&lt;/RuntimeVersion&gt;
+!       &lt;XmlDoc&gt;False&lt;/XmlDoc&gt;
+!       &lt;XmlDocWarningLevel&gt;WarningOnPublicMembers&lt;/XmlDocWarningLevel&gt;
+!       &lt;EnableUnmanagedDebugging&gt;False&lt;/EnableUnmanagedDebugging&gt;
+!     &lt;/Configuration&gt;
+!   &lt;/Configurations&gt;
+!   &lt;Files&gt;
+!     &lt;File Filename=&quot;AssemblyInfo.pas&quot;&gt;
+!       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+!       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+!     &lt;/File&gt;
+!     &lt;File Filename=&quot;TestClasses.pas&quot;&gt;
+!       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+!       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+!     &lt;/File&gt;
+!     &lt;File Filename=&quot;TestContnrs.pas&quot;&gt;
+!       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+!       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+!     &lt;/File&gt;
+!     &lt;File Filename=&quot;TestIniFiles.pas&quot;&gt;
+!       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+!       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+!     &lt;/File&gt;
+!     &lt;File Filename=&quot;TestSystem.pas&quot;&gt;
+!       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+!       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+!     &lt;/File&gt;
+!     &lt;File Filename=&quot;TestSysUtils.pas&quot;&gt;
+!       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+!       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+!     &lt;/File&gt;
+!   &lt;/Files&gt;
+! &lt;/ChromeProject&gt;
+\ No newline at end of file
+--- 1,90 ----
+! &lt;Project DefaultTargets=&quot;Build&quot; xmlns=&quot;<A HREF="http://schemas.microsoft.com/developer/msbuild/2003">http://schemas.microsoft.com/developer/msbuild/2003</A>&quot;&gt;
+!   &lt;PropertyGroup&gt;
+!     &lt;ProjectGuid&gt;{78329CFC-D7AA-468C-8DF7-DBC4C14D671C}&lt;/ProjectGuid&gt;
+!     &lt;ApplicationIcon /&gt;
+!     &lt;StartPage /&gt;
+!     &lt;DefaultUses /&gt;
+!     &lt;InternalAssemblyName /&gt;
+!     &lt;RootNamespace&gt;NUnit.ShineOn.RTL&lt;/RootNamespace&gt;
+!     &lt;StartupClass /&gt;
+      &lt;OutputType&gt;library&lt;/OutputType&gt;
+      &lt;AssemblyName&gt;Nunit.ShineOn.RTL&lt;/AssemblyName&gt;
+      &lt;AllowGlobals&gt;False&lt;/AllowGlobals&gt;
+      &lt;AllowLegacyWith&gt;False&lt;/AllowLegacyWith&gt;
++     &lt;AllowLegacyCreate&gt;True&lt;/AllowLegacyCreate&gt;
+      &lt;AllowLegacyOutParams&gt;True&lt;/AllowLegacyOutParams&gt;
+      &lt;AllowUnsafeCode&gt;False&lt;/AllowUnsafeCode&gt;
+!     &lt;SCCProjectName /&gt;
+!     &lt;SCCAuxPath /&gt;
+!     &lt;SCCLocalPath /&gt;
+!     &lt;SCCProvider /&gt;
+!     &lt;ServerPath /&gt;
+!     &lt;ProjectTypeGuids /&gt;
+!     &lt;Configuration Condition=&quot;'$(Configuration)' == ''&quot;&gt;Release&lt;/Configuration&gt;
+!   &lt;/PropertyGroup&gt;
+!   &lt;PropertyGroup Condition=&quot; '$(Configuration)' == 'Debug' &quot;&gt;
+!     &lt;DefineConstants&gt;DEBUG;TRACE;&lt;/DefineConstants&gt;
+!     &lt;OutputPath&gt;..\bin&lt;/OutputPath&gt;
+!     &lt;GeneratePDB&gt;True&lt;/GeneratePDB&gt;
+!     &lt;GenerateMDB&gt;False&lt;/GenerateMDB&gt;
+!     &lt;EnableAsserts&gt;True&lt;/EnableAsserts&gt;
+!     &lt;TreatWarningsAsErrors&gt;False&lt;/TreatWarningsAsErrors&gt;
+!     &lt;RegisterForComInterop&gt;False&lt;/RegisterForComInterop&gt;
+!     &lt;CaptureConsoleOutput&gt;False&lt;/CaptureConsoleOutput&gt;
+!     &lt;StartApp&gt;C:\Program Files\NUnit 2.2.7\bin\nunit-gui.exe&lt;/StartApp&gt;
+!     &lt;StartAppParams&gt;NUnit.ShineOn.RTL.dll&lt;/StartAppParams&gt;
+!     &lt;WorkingDir&gt;..\bin&lt;/WorkingDir&gt;
+!     &lt;StartMode&gt;Application&lt;/StartMode&gt;
+!     &lt;CpuType&gt;anycpu&lt;/CpuType&gt;
+!     &lt;RuntimeVersion&gt;v25&lt;/RuntimeVersion&gt;
+!     &lt;EnableUnmanagedDebugging&gt;False&lt;/EnableUnmanagedDebugging&gt;
+!     &lt;WebDebugTarget&gt;Cassini&lt;/WebDebugTarget&gt;
+!     &lt;WebLaunchBrowser&gt;False&lt;/WebLaunchBrowser&gt;
+!     &lt;XmlDocAllMembers&gt;False&lt;/XmlDocAllMembers&gt;
+!     &lt;CodeFlowAnalysis&gt;True&lt;/CodeFlowAnalysis&gt;
+!     &lt;UseXmlDoc&gt;False&lt;/UseXmlDoc&gt;
+!     &lt;XmlDocWarning&gt;WarningOnPublicMembers&lt;/XmlDocWarning&gt;
+!   &lt;/PropertyGroup&gt;
+!   &lt;PropertyGroup Condition=&quot; '$(Configuration)' == 'Release' &quot;&gt;
+!     &lt;OutputPath&gt;..\bin&lt;/OutputPath&gt;
+!     &lt;GeneratePDB&gt;False&lt;/GeneratePDB&gt;
+!     &lt;GenerateMDB&gt;False&lt;/GenerateMDB&gt;
+!     &lt;EnableAsserts&gt;False&lt;/EnableAsserts&gt;
+!     &lt;TreatWarningsAsErrors&gt;False&lt;/TreatWarningsAsErrors&gt;
+!     &lt;RegisterForComInterop&gt;False&lt;/RegisterForComInterop&gt;
+!     &lt;CaptureConsoleOutput&gt;False&lt;/CaptureConsoleOutput&gt;
+!     &lt;StartMode&gt;Project&lt;/StartMode&gt;
+!     &lt;CpuType&gt;anycpu&lt;/CpuType&gt;
+!     &lt;RuntimeVersion&gt;v25&lt;/RuntimeVersion&gt;
+!     &lt;EnableUnmanagedDebugging&gt;False&lt;/EnableUnmanagedDebugging&gt;
+!     &lt;WebDebugTarget&gt;Cassini&lt;/WebDebugTarget&gt;
+!     &lt;WebLaunchBrowser&gt;False&lt;/WebLaunchBrowser&gt;
+!     &lt;XmlDocAllMembers&gt;False&lt;/XmlDocAllMembers&gt;
+!     &lt;CodeFlowAnalysis&gt;True&lt;/CodeFlowAnalysis&gt;
+!     &lt;UseXmlDoc&gt;False&lt;/UseXmlDoc&gt;
+!     &lt;XmlDocWarning&gt;WarningOnPublicMembers&lt;/XmlDocWarning&gt;
+!   &lt;/PropertyGroup&gt;
+!   &lt;Import Project=&quot;$(MSBuildExtensionsPath)\RemObjects Software\Chrome\RemObjects.Chrome.targets&quot; /&gt;
+!   &lt;ItemGroup&gt;
+!     &lt;Reference Include=&quot;$(Framework)\mscorlib.dll&quot; /&gt;
+!     &lt;Reference Include=&quot;C:\Program Files\NUnit 2.2.7\bin\nunit.framework.dll&quot; /&gt;
+!     &lt;Reference Include=&quot;..\bin\ShineOn.RTL.dll&quot;&gt;
+!       &lt;Name&gt;ShineOn.RTL.dll&lt;/Name&gt;
+!     &lt;/Reference&gt;
+!     &lt;Reference Include=&quot;$(Framework)\System.dll&quot; /&gt;
+!     &lt;Reference Include=&quot;$(Framework)\System.Drawing.dll&quot; /&gt;
+!     &lt;Reference Include=&quot;$(Framework)\System.Windows.Forms.dll&quot; /&gt;
+!   &lt;/ItemGroup&gt;
+!   &lt;ItemGroup&gt;
+!     &lt;Compile Include=&quot;AssemblyInfo.pas&quot; /&gt;
+!     &lt;Compile Include=&quot;TestClasses.pas&quot; /&gt;
+!     &lt;Compile Include=&quot;TestContnrs.pas&quot; /&gt;
+!     &lt;Compile Include=&quot;TestFileStream.pas&quot; /&gt;
+!     &lt;Compile Include=&quot;TestIniFiles.pas&quot; /&gt;
+!     &lt;Compile Include=&quot;TestStringRead.pas&quot; /&gt;
+!     &lt;Compile Include=&quot;TestStringWrite.pas&quot; /&gt;
+!     &lt;Compile Include=&quot;TestSystem.pas&quot; /&gt;
+!     &lt;Compile Include=&quot;TestSysUtils.pas&quot; /&gt;
+!     &lt;Compile Include=&quot;TestTDateTime.pas&quot; /&gt;
+!   &lt;/ItemGroup&gt;
+! &lt;/Project&gt;
+\ No newline at end of file
+
+Index: TestFileStream.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/TestFileStream.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** TestFileStream.pas	17 Mar 2006 14:26:18 -0000	1.1
+--- TestFileStream.pas	21 Mar 2006 16:24:27 -0000	1.2
+***************
+*** 184,190 ****
+  		    bazFileStream.Close;
+      end;
+- // NUnit.ShineOn.RTL.TestFileStream.TestWriteVerifyAccessMode : 
+- // System.NotSupportedException : 
+- // Stream does not support writing.
+  end;
+  
+--- 184,187 ----
+***************
+*** 200,206 ****
+  		    bazFileStream.Close;
+      end;
+- // NUnit.ShineOn.RTL.TestFileStream.TestWriteByteVerifyAccessMode :
+- // System.NotSupportedException : 
+- // Stream does not support writing.
+  end;
+  
+--- 197,200 ----
+***************
+*** 381,387 ****
+              // Invalid handle
+              NUnit.Framework.Assert.AreEqual(typeof (AssertionException), E.GetType, 'test#05');
+-             // NUnit.ShineOn.RTL.TestFileStream.TestCtorExceptions2 : test#05
+- 	        // expected: &lt;System.IO.IOException&gt;
+- 	        // but was: &lt;NUnit.Framework.AssertionException&gt;                        
+          end;
+      end;
+--- 375,378 ----
+***************
+*** 608,618 ****
+  begin
+      var SFilename:String := System.IO.Path.GetTempPath + 'SaveToFile.txt'; 
+-     Console.Out.WriteLine('SFilename: {0}', SFilename);
+-     //var strFolderPath:String := System.IO.Path.GetTempPath;
+-     //strFolderPath := strFolderPath.Replace(System.IO.Path.DirectorySeparatorChar,System.IO.Path.AltDirectorySeparatorChar);
+-     //Console.Out.WriteLine('strFolderPath: {0}', strFolderPath);
+-         
+-     //SFilename := strFolderPath + 'SaveToFile.txt'; 
+-     //Console.Out.WriteLine('SFilename: {0}', SFilename);
+          
+      if (System.IO.File.Exists (SFilename)) then
+--- 599,602 ----
+***************
+*** 627,636 ****
+          SL.Add('Int1=1');    
+                  
+-         // test of SL
+-         for i:Integer := 0 to SL.Count-1do
+-         begin    
+-             Console.Out.WriteLine('SL[{0}] {1}', i, SL[i]);
+-         end;     // end of test   
+- 
+          SL.SaveToFile(SFilename);
+  
+--- 611,614 ----
+
+Index: TestIniFiles.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/TestIniFiles.pas,v
+retrieving revision 1.3
+retrieving revision 1.4
+diff -C2 -d -r1.3 -r1.4
+*** TestIniFiles.pas	17 Mar 2006 14:40:10 -0000	1.3
+--- TestIniFiles.pas	21 Mar 2006 16:24:27 -0000	1.4
+***************
+*** 7,10 ****
+--- 7,27 ----
+  // limitations under the License.
+  
++ // History:
++ //
++ // 2006-03-21   :   Corwin Burgess  : Added TIniFilesTests.ReadString test.
++ // 2006-03-21   :   Corwin Burgess  : Added IniFiles.UpdateFile to AddSomeData.
++ // 2006-03-21   :   Corwin Burgess  : Added TIniFilesTests.WriteString.
++ // 2006-03-21   :   Corwin Burgess  : Added TIniFilesTests.ReadInteger.
++ // 2006-03-21   :   Corwin Burgess  : Added TIniFilesTests.WriteInteger.
++ // 2006-03-21   :   Corwin Burgess  : Added TIniFilesTests.ReadBool.
++ // 2006-03-21   :   Corwin Burgess  : Added TIniFilesTests.WriteBool.
++ // 2006-03-21   :   Corwin Burgess  : Added TIniFilesTests.ReadFloat.
++ // 2006-03-21   :   Corwin Burgess  : Added TIniFilesTests.WriteFloat.
++ // 2006-03-21   :   Corwin Burgess  : Added TIniFilesTests.Clear.
++ // 2006-03-21   :   Corwin Burgess  : Added TIniFilesTests.UpdateFile.
++ // 2006-03-21   :   Corwin Burgess  : Added TIniFilesTests.ReadSection.
++ // 2006-03-21   :   Corwin Burgess  : Added TIniFilesTests.GetStrings.
++ // 2006-03-21   :   Corwin Burgess  : Added TIniFilesTests.SetStrings.
++ 
+  // $Id$
+  namespace NUnit.ShineOn.RTL;
+***************
+*** 28,36 ****
+      [TearDown]
+      method TearDown;override;
+!     [Test, Ignore('Test not implemented')] 
+      method Clear;
+!     [Test, Ignore('Test not implemented')] 
+      method GetStrings;
+!     [Test, Ignore('Test not implemented')] 
+      method SetStrings;
+      [Test, Ignore('Test not implemented')] 
+--- 45,53 ----
+      [TearDown]
+      method TearDown;override;
+!     [Test] 
+      method Clear;
+!     [Test] 
+      method GetStrings;
+!     [Test] 
+      method SetStrings;
+      [Test, Ignore('Test not implemented')] 
+***************
+*** 38,52 ****
+      [Test, Ignore('Test not implemented')] 
+      method SectionExists;
+!     [Test, Ignore('Test not implemented')] 
+      method ReadString;
+!     [Test, Ignore('Test not implemented')] 
+      method WriteString;
+!     [Test, Ignore('Test not implemented')] 
+      method ReadInteger;
+!     [Test, Ignore('Test not implemented')] 
+      method WriteInteger;
+!     [Test, Ignore('Test not implemented')] 
+      method ReadBool;
+!     [Test, Ignore('Test not implemented')] 
+      method WriteBool;
+      [Test, Ignore('Test not implemented')] 
+--- 55,69 ----
+      [Test, Ignore('Test not implemented')] 
+      method SectionExists;
+!     [Test] 
+      method ReadString;
+!     [Test] 
+      method WriteString;
+!     [Test] 
+      method ReadInteger;
+!     [Test] 
+      method WriteInteger;
+!     [Test] 
+      method ReadBool;
+!     [Test] 
+      method WriteBool;
+      [Test, Ignore('Test not implemented')] 
+***************
+*** 56,60 ****
+      [Test, Ignore('Test not implemented')] 
+      method ReadDateTime;
+!     [Test, Ignore('Test not implemented')] 
+      method ReadFloat;
+      [Test, Ignore('Test not implemented')] 
+--- 73,77 ----
+      [Test, Ignore('Test not implemented')] 
+      method ReadDateTime;
+!     [Test] 
+      method ReadFloat;
+      [Test, Ignore('Test not implemented')] 
+***************
+*** 66,74 ****
+      [Test, Ignore('Test not implemented')] 
+      method WriteDateTime;
+!     [Test, Ignore('Test not implemented')] 
+      method WriteFloat;
+      [Test, Ignore('Test not implemented')] 
+      method WriteTime;
+!     [Test, Ignore('Test not implemented')] 
+      method ReadSection;
+      [Test, Ignore('Test not implemented')] 
+--- 83,91 ----
+      [Test, Ignore('Test not implemented')] 
+      method WriteDateTime;
+!     [Test] 
+      method WriteFloat;
+      [Test, Ignore('Test not implemented')] 
+      method WriteTime;
+!     [Test] 
+      method ReadSection;
+      [Test, Ignore('Test not implemented')] 
+***************
+*** 80,84 ****
+      [Test, Ignore('Test not implemented')] 
+      method DeleteKey;
+!     [Test, Ignore('Test not implemented')] 
+      method UpdateFile;
+      [Test, Ignore('Test not implemented')] 
+--- 97,101 ----
+      [Test, Ignore('Test not implemented')] 
+      method DeleteKey;
+!     [Test] 
+      method UpdateFile;
+      [Test, Ignore('Test not implemented')] 
+***************
+*** 115,124 ****
+  method TIniFilesTests.GetStrings; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method TIniFilesTests.SetStrings; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 132,159 ----
+  method TIniFilesTests.GetStrings; 
+  begin
+!   var SL:TStringList;
+!   var S:String;
+!   SL := new TStringList;
+!   IniFile.GetStrings(SL);
+!   S := IniFile.ReadString('Test','String', 'error');
+!   NUnit.Framework.Assert.AreEqual('TextData', S);
+!   SL.free;
+  end;
+  
+  method TIniFilesTests.SetStrings; 
+  begin
+!   var S:String;
+!   var SL:TStringList;
+!   SL := new TStringList;
+!   IniFile.GetStrings(SL);
+!   S := IniFile.ReadString('Test','String', 'error');
+!   NUnit.Framework.Assert.AreEqual('TextData', S);
+!   IniFile.Clear;
+!   S := IniFile.ReadString('Test','String', 'error');
+!   NUnit.Framework.Assert.AreEqual('error', S);
+!   IniFile.SetStrings(SL);
+!   S := IniFile.ReadString('Test','String', 'error');
+!   NUnit.Framework.Assert.AreEqual('TextData', S);
+!   SL.free;
+  end;
+  
+***************
+*** 135,164 ****
+  method TIniFilesTests.ReadString; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method TIniFilesTests.WriteString; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method TIniFilesTests.ReadInteger; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method TIniFilesTests.WriteInteger; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method TIniFilesTests.ReadBool; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method TIniFilesTests.WriteBool; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 170,245 ----
+  method TIniFilesTests.ReadString; 
+  begin
+!   var S:String;
+!   S := IniFile.ReadString('Test','String','');
+!   NUnit.Framework.Assert.AreEqual('TextData', S);
+  end;
+  
+  method TIniFilesTests.WriteString; 
+  begin
+!   var S:String;
+!   IniFile.WriteString('NewTest','NewString','NewTextData');
+!   IniFile.UpdateFile;
+!   S := IniFile.ReadString('NewTest','NewString','');
+!   NUnit.Framework.Assert.AreEqual('NewTextData', S);
+  end;
+  
+  method TIniFilesTests.ReadInteger; 
+  begin
+!   var I1:Integer;
+!   var I2:Integer;
+!   var I3:Integer;
+!   var I4:Integer;
+!   I1 := IniFile.ReadInteger('Test','Int0',99);
+!   I2 := IniFile.ReadInteger('Test','Int1',99);
+!   I3 := IniFile.ReadInteger('Test','Int2',99);
+!   I4 := IniFile.ReadInteger('Test','Int3',99);
+!   NUnit.Framework.Assert.AreEqual(0, I1);
+!   NUnit.Framework.Assert.AreEqual(1, I2);
+!   NUnit.Framework.Assert.AreEqual(-1, I3);
+!   NUnit.Framework.Assert.AreEqual(2, I4);
+  end;
+  
+  method TIniFilesTests.WriteInteger; 
+  begin
+!   var I1:Integer;
+!   var I2:Integer;
+!   var I3:Integer;
+!   var I4:Integer;
+!   IniFile.WriteInteger('NewTest','NewInt0',0);
+!   IniFile.WriteInteger('NewTest','NewInt1',1);
+!   IniFile.WriteInteger('NewTest','NewInt2',-1);
+!   IniFile.WriteInteger('NewTest','NewInt3',2);
+!   IniFile.UpdateFile;
+!   I1 := IniFile.ReadInteger('NewTest','NewInt0',99);
+!   I2 := IniFile.ReadInteger('NewTest','NewInt1',99);
+!   I3 := IniFile.ReadInteger('NewTest','NewInt2',99);
+!   I4 := IniFile.ReadInteger('NewTest','NewInt3',99);
+!   NUnit.Framework.Assert.AreEqual(0, I1);
+!   NUnit.Framework.Assert.AreEqual(1, I2);
+!   NUnit.Framework.Assert.AreEqual(-1, I3);
+!   NUnit.Framework.Assert.AreEqual(2, I4);
+  end;
+  
+  method TIniFilesTests.ReadBool; 
+  begin
+!   var BT:Boolean;
+!   var BF:Boolean;
+!   BT := IniFile.ReadBool('Test','BoolTrue',False);
+!   BF := IniFile.ReadBool('Test','BoolFalse',True);
+!   NUnit.Framework.Assert.AreEqual(True, BT);
+!   NUnit.Framework.Assert.AreEqual(False, BF);
+  end;
+  
+  method TIniFilesTests.WriteBool; 
+  begin
+!   var BT:Boolean;
+!   var BF:Boolean;
+!   IniFile.WriteBool('NewTest','BoolTrue',True);
+!   IniFile.WriteBool('NewTest','BoolFalse',False);
+!   IniFile.UpdateFile;
+!   BT := IniFile.ReadBool('Test','BoolTrue',False);
+!   BF := IniFile.ReadBool('Test','BoolFalse',True);
+!   NUnit.Framework.Assert.AreEqual(True, BT);
+!   NUnit.Framework.Assert.AreEqual(False, BF);
+  end;
+  
+***************
+*** 180,184 ****
+  method TIniFilesTests.ReadFloat; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 261,279 ----
+  method TIniFilesTests.ReadFloat; 
+  begin
+!   var F1:Double;
+!   var F2:Double;
+!   var F3:Double;
+!   var F4:Double;
+!   var F5:Double;
+!   F1 := IniFile.ReadFloat('Test','Float1',9.9);
+!   F2 := IniFile.ReadFloat('Test','Float2',9.9);
+!   F3 := IniFile.ReadFloat('Test','Float3',9.9);
+!   F4 := IniFile.ReadFloat('Test','Float4',9.9);
+!   F5 := IniFile.ReadFloat('Test','Float5',9.9);
+!   NUnit.Framework.Assert.AreEqual(0.0, F1);
+!   NUnit.Framework.Assert.AreEqual(1.5, F2);
+!   NUnit.Framework.Assert.AreEqual(3.141592, F3);
+!   NUnit.Framework.Assert.AreEqual(-1.0, F4);
+!   NUnit.Framework.Assert.AreEqual(-0.0, F5);
+  end;
+  
+***************
+*** 205,209 ****
+  method TIniFilesTests.WriteFloat; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 300,324 ----
+  method TIniFilesTests.WriteFloat; 
+  begin
+!   var F1:Double;
+!   var F2:Double;
+!   var F3:Double;
+!   var F4:Double;
+!   var F5:Double;
+!   IniFile.WriteFloat('NewTest','Float1',0.0);
+!   IniFile.WriteFloat('NewTest','Float2',1.5);
+!   IniFile.WriteFloat('NewTest','Float3',3.141592);
+!   IniFile.WriteFloat('NewTest','Float4',-1.0);
+!   IniFile.WriteFloat('NewTest','Float5',-0.0);
+!   IniFile.UpdateFile;
+!   F1 := IniFile.ReadFloat('NewTest','Float1',0.0);
+!   F2 := IniFile.ReadFloat('NewTest','Float2',1.5);
+!   F3 := IniFile.ReadFloat('NewTest','Float3',3.141592);
+!   F4 := IniFile.ReadFloat('NewTest','Float4',-1.0);
+!   F5 := IniFile.ReadFloat('NewTest','Float5',-0.0);
+!   NUnit.Framework.Assert.AreEqual(0.0, F1);
+!   NUnit.Framework.Assert.AreEqual(1.5, F2);
+!   NUnit.Framework.Assert.AreEqual(3.141592, F3);
+!   NUnit.Framework.Assert.AreEqual(-1.0, F4);
+!   NUnit.Framework.Assert.AreEqual(-0.0, F5);
+  end;
+  
+***************
+*** 215,219 ****
+  method TIniFilesTests.ReadSection; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 330,342 ----
+  method TIniFilesTests.ReadSection; 
+  begin
+!   var S:TStringList;
+!   S := new TStringlist;
+!   { Read the specified section }
+!   IniFile.ReadSection('Test', S);
+!   { Output the section to the screen }
+!   NUnit.Framework.Assert.AreEqual('String', S.Strings[0].ToString);
+!   NUnit.Framework.Assert.AreEqual('Int0', S.Strings[1].ToString);
+!   NUnit.Framework.Assert.AreEqual('Int1', S.Strings[2].ToString);
+!   S.free;
+  end;
+  
+***************
+*** 240,244 ****
+  method TIniFilesTests.UpdateFile; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 363,371 ----
+  method TIniFilesTests.UpdateFile; 
+  begin
+!   var S:String;
+!   IniFile.WriteString('Update','String','TextData');
+!   IniFile.UpdateFile;
+!   S := IniFile.ReadString('Update','String','');
+!   NUnit.Framework.Assert.AreEqual('TextData', S);
+  end;
+  
+***************
+*** 260,272 ****
+    IniFile.WriteBool('Test','BoolFalse',False);
+  
+-   //IniFile.WriteDate('Test', 'Date', TDateTime.Date);
+-   //IniFile.WriteDateTime('Test', 'Now', TDateTime.Now);
+-   //IniFile.WriteTime('Test', 'Time', TDateTime.Time);
+- 
+    IniFile.WriteFloat('Test','Float1',0.0);
+    IniFile.WriteFloat('Test','Float2',1.5);
+    IniFile.WriteFloat('Test','Float3',3.141592);
+    IniFile.WriteFloat('Test','Float4',-1.0);
+!   IniFile.WriteFloat('Test','Float4',-0.0);
+  end;
+  
+--- 387,402 ----
+    IniFile.WriteBool('Test','BoolFalse',False);
+  
+    IniFile.WriteFloat('Test','Float1',0.0);
+    IniFile.WriteFloat('Test','Float2',1.5);
+    IniFile.WriteFloat('Test','Float3',3.141592);
+    IniFile.WriteFloat('Test','Float4',-1.0);
+!   IniFile.WriteFloat('Test','Float5',-0.0);
+!   
+!   //IniFile.WriteDate('Test', 'Date', TDateTime.Date);
+!   //IniFile.WriteDateTime('Test', 'Now', TDateTime.Now);
+!   //IniFile.WriteTime('Test', 'Time', TDateTime.Time);
+! 
+!   IniFile.UpdateFile;  
+!           
+  end;
+  
+
+Index: TestStringRead.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/TestStringRead.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** TestStringRead.pas	17 Mar 2006 14:39:07 -0000	1.1
+--- TestStringRead.pas	21 Mar 2006 16:24:27 -0000	1.2
+***************
+*** 52,56 ****
+   	
+      inputLine := S.ReadLine; 	
+-     //while ((inputLine := sr.ReadLine) &lt;&gt; nil) do
+      while (inputLine &lt;&gt; nil) do
+      begin	
+--- 52,55 ----
+***************
+*** 126,131 ****
+  
+  	(* Read to end of string *)
+- 	//reader = new StringReader( &quot;Test String&quot; );
+- 
+  	test := new char[6];
+  	charsRead := R.Read( test, 0, 6 );
+--- 125,128 ----
+***************
+*** 134,143 ****
+  
+  	(* Read past end of string *)
+- 
+  	test := new char[6];
+  	R := new System.IO.StringReader( 'Foo' );
+  	charsRead := R.Read( test, 0, 6 );
+  	NUnit.Framework.Assert.AreEqual( 3, charsRead );
+- 	// AssertEquals(  &quot;Foo\0\0\0&quot;, new String( test ) );
+      var snil := char(0);
+  	NUnit.Framework.Assert.AreEqual(  'Foo'+snil+snil+snil, new String( test ) );
+--- 131,138 ----
+***************
+*** 155,171 ****
+  
+      var test:String := R.ReadLine;
+- 
+      NUnit.Framework.Assert.AreEqual( 'Line1', test );
+- 
+      test := R.ReadLine;
+- 
+      NUnit.Framework.Assert.AreEqual( 'Line2', test );
+- 
+      test := R.ReadLine;
+- 
+      NUnit.Framework.Assert.AreEqual( 'Line3', test );
+- 
+      test := R.ReadLine;
+- 
+      NUnit.Framework.Assert.AreEqual( 'Line4', test );
+  end;
+--- 150,159 ----
+
+Index: TestStringWrite.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/TestStringWrite.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** TestStringWrite.pas	17 Mar 2006 14:39:22 -0000	1.1
+--- TestStringWrite.pas	21 Mar 2006 16:24:27 -0000	1.2
+***************
+*** 154,160 ****
+  begin
+      try
+-         // StringWriter writer = new StringWriter (null as StringBuilder);
+-         //var writer : StringWriter := new StringWriter(nil as StringBuilder);        
+-         // error (CE16) Operator 'as' cannot be applied to operands of type &lt;nil&gt; and &lt;type&gt;
+          var W:System.IO.StringWriter;
+          W := new System.IO.StringWriter;
+--- 154,157 ----
+***************
+*** 162,186 ****
+      except
+          on E: Exception do begin
+-             //NUnit.Framework.Assert.AreEqual(typeof(ArgumentNullException), E.GetType, 'Exceptions 1');
+-             // expected 'AssertionException' 
+              NUnit.Framework.Assert.AreEqual(typeof(AssertionException), E.GetType, 'Exceptions 1');
+          end;
+      end;
+          
+-     // StringWriter writer = new StringWriter (null as IFormatProvider);
+-     //var writer : StringWriter := new StringWriter (nil as IFormatProvider);
+-     // error (CE16) Operator 'as' cannot be applied to operands of type &lt;nil&gt; and &lt;type&gt;
+      var W:System.IO.StringWriter;
+      W := new System.IO.StringWriter;
+      try
+- 	    //StringWriter writer = new StringWriter (null as StringBuilder, null as IFormatProvider);
+- 	    //var writer : StringWriter := new StringWriter (nil as StringBuilder, nil as IFormatProvider);
+-         // error (CE16) Operator 'as' cannot be applied to operands of type &lt;nil&gt; and &lt;type&gt;
+  	    W := new System.IO.StringWriter;
+          Fail;
+      except
+          on E: Exception do begin
+-             //NUnit.Framework.Assert.AreEqual(typeof(ArgumentNullException), E.GetType, 'Exceptions 2');
+-             // expected 'AssertionException' 
+              NUnit.Framework.Assert.AreEqual(typeof(AssertionException), E.GetType, 'Exceptions 2');
+          end;
+--- 159,173 ----
+
+Index: TestSystem.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/TestSystem.pas,v
+retrieving revision 1.7
+retrieving revision 1.8
+diff -C2 -d -r1.7 -r1.8
+*** TestSystem.pas	17 Mar 2006 14:42:58 -0000	1.7
+--- TestSystem.pas	21 Mar 2006 16:24:27 -0000	1.8
+***************
+*** 13,16 ****
+--- 13,17 ----
+  // 2006-02-17   :   Jeroen Vandezande   : Fixed the StringOfChar Test method.
+  // 2006-02-17   :   Jeroen Vandezande   : Fixed SystemTests.TruncTDateTime.  
++ // 2006-03-21   :   Corwin Burgess         : Fixed SystemTests.TruncTDateTime. 
+  
+  namespace NUnit.ShineOn.RTL;
+***************
+*** 361,365 ****
+    var D:TDateTime := new TDateTime(2005, 01, 01, 23, 0, 0, 0);  
+    var D2: Double := D;
+!   NUnit.Framework.Assert.AreEqual(Math.Truncate(D2), ShineOn.RTL.System.Trunc(D));
+  end;
+  
+--- 362,368 ----
+    var D:TDateTime := new TDateTime(2005, 01, 01, 23, 0, 0, 0);  
+    var D2: Double := D;
+!   // Changed Math.Truncate to Decimal.Truncate to be vs2003 compatible
+!   //NUnit.Framework.Assert.AreEqual(Math.Truncate(D2), ShineOn.RTL.System.Trunc(D));
+!   NUnit.Framework.Assert.AreEqual((Decimal.Truncate(Decimal(D2))),  ShineOn.RTL.System.Trunc(D)); 
+  end;
+  
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000055.html">[Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.14,1.15 IniFiles.pas,1.6,1.7 ShineOn.RTL.chrome,1.9,1.10
+</A></li>
+	<LI>Next message: <A HREF="000057.html">[Shineon-checkins] ShineOn/ShineOn.VCL ShineOn.VCL.chrome,1.3,1.4
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#56">[ date ]</a>
+              <a href="thread.html#56">[ thread ]</a>
+              <a href="subject.html#56">[ subject ]</a>
+              <a href="author.html#56">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,209 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.3,1.4
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20Classes.pas%2C1.3%2C1.4&In-Reply-To=%3C200505081530.j48FUmm15156%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000009.html">
+   <LINK REL="Next"  HREF="000011.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.3,1.4</H1>
+    <B>loonquawl</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20Classes.pas%2C1.3%2C1.4&In-Reply-To=%3C200505081530.j48FUmm15156%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.3,1.4">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Sun May  8 17:30:48 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000009.html">[Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.2,1.3
+</A></li>
+        <LI>Next message: <A HREF="000011.html">[Shineon-checkins] ShineOn/ShineOn.RTL SysUtils.pas,1.4,1.5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#10">[ date ]</a>
+              <a href="thread.html#10">[ thread ]</a>
+              <a href="subject.html#10">[ subject ]</a>
+              <a href="author.html#10">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv1833/ShineOn.RTL
+
+Modified Files:
+	Classes.pas 
+Log Message:
+Finished the TList.Assign implementation.
+Added LaSrcUnique and LaDestUnique.
+TList.Assign is complete.
+
+Index: Classes.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Classes.pas,v
+retrieving revision 1.3
+retrieving revision 1.4
+diff -C2 -d -r1.3 -r1.4
+*** Classes.pas	8 May 2005 10:54:47 -0000	1.3
+--- Classes.pas	8 May 2005 15:30:46 -0000	1.4
+***************
+*** 13,17 ****
+  // * implement all NotImplemented
+  // * implement sorting and binary search in TStringlist
+! // * implement laSrcUnique and laDestUnique in the TList.Assign method | Jeroen Vandezande
+  
+  interface
+--- 13,19 ----
+  // * implement all NotImplemented
+  // * implement sorting and binary search in TStringlist
+! 
+! // HISTORY:
+! // May 8 2005   :   Jeroen Vandezande   : Implemented TList.Assign
+  
+  interface
+***************
+*** 796,799 ****
+--- 798,803 ----
+  
+  procedure TList.Assign(ListA: TList; AOperator: TListAssignOp);
++ Var
++   TempList: ArrayList;
+  begin
+    clear;
+***************
+*** 802,814 ****
+      begin
+        Clear;
+!       List.AddRange(ListA.List);
+      end;
+      TListAssignOp.LaAnd: //intersection of the two lists
+      begin
+!       for ThisListObject: Object in List do
+        begin
+          If not ListA.List.Contains(ThisListObject) then
+          begin
+!           List.Remove(ThisListObject);  
+          end;
+        end;       
+--- 806,818 ----
+      begin
+        Clear;
+!       FList.AddRange(ListA.List);
+      end;
+      TListAssignOp.LaAnd: //intersection of the two lists
+      begin
+!       for ThisListObject: Object in FList do
+        begin
+          If not ListA.List.Contains(ThisListObject) then
+          begin
+!           FList.Remove(ThisListObject);  
+          end;
+        end;       
+***************
+*** 818,824 ****
+        for ListAObject: Object in ListA.List do
+        begin
+!         If not List.Contains(ListAObject) then
+          begin
+!           List.Add(ListAObject);  
+          end;
+        end;    
+--- 822,828 ----
+        for ListAObject: Object in ListA.List do
+        begin
+!         If not FList.Contains(ListAObject) then
+          begin
+!           FList.Add(ListAObject);  
+          end;
+        end;    
+***************
+*** 828,848 ****
+        for ListAObject: Object in ListA.List do
+        begin
+!         If List.Contains(ListAObject) then
+          begin
+!           List.Remove(ListAObject);  
+          end
+          else
+          begin
+!           List.Add(ListAObject);
+          end;
+        end;    
+      end;
+!     TListAssignOp.LaSrcUnique: //only those unique to source (same as laAnd followed by laXor, but faster)
+      begin
+!       NotImplemented;  
+      end; 
+!     TListAssignOp.LaDestUnique: //only those unique to dest (same as laOr followed by laXor, but faster)
+      begin
+!       NotImplemented;  
+      end;    
+    End;  
+--- 832,866 ----
+        for ListAObject: Object in ListA.List do
+        begin
+!         If FList.Contains(ListAObject) then
+          begin
+!           FList.Remove(ListAObject);  
+          end
+          else
+          begin
+!           FList.Add(ListAObject);
+          end;
+        end;    
+      end;
+!     TListAssignOp.LaSrcUnique: //Replaces the destination list with those elements of the source list that do not appear in the destination list. 
+      begin
+!       TempList := New ArrayList;
+!       for ListAObject: Object in ListA.List do
+!       begin
+!         If not FList.Contains(ListAObject) then
+!         begin
+!           TempList.Add(ListAObject);  
+!         end;
+!         FList := TempList;
+!       end;  
+      end; 
+!     TListAssignOp.LaDestUnique: //Removes all elements from the destination list that appear in the source list. The destination list ends up containing the elements unique to the original destination list
+      begin
+!       for ThisListObject: Object in FList do
+!       begin
+!         If ListA.List.Contains(ThisListObject) then
+!         begin
+!           FList.Remove(ThisListObject);  
+!         end;
+!       end;  
+      end;    
+    End;  
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000009.html">[Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.2,1.3
+</A></li>
+	<LI>Next message: <A HREF="000011.html">[Shineon-checkins] ShineOn/ShineOn.RTL SysUtils.pas,1.4,1.5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#10">[ date ]</a>
+              <a href="thread.html#10">[ thread ]</a>
+              <a href="subject.html#10">[ subject ]</a>
+              <a href="author.html#10">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

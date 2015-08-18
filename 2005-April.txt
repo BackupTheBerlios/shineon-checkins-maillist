@@ -1,0 +1,570 @@
+From nobody at sheep.berlios.de  Sat Apr 23 22:52:37 2005
+From: nobody at sheep.berlios.de (peter3)
+Date: Sat, 23 Apr 2005 22:52:37 +0200
+Subject: [Shineon-checkins] htdocs index.html,1.1,1.2
+Message-ID: <200504232052.j3NKqbm04916@bat.berlios.de>
+
+Update of /cvsroot/shineon/htdocs
+In directory sheep:/tmp/cvs-serv18943
+
+Modified Files:
+	index.html 
+Log Message:
+
+
+Index: index.html
+===================================================================
+RCS file: /cvsroot/shineon/htdocs/index.html,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** index.html	23 Apr 2005 14:18:13 -0000	1.1
+--- index.html	23 Apr 2005 20:52:35 -0000	1.2
+***************
+*** 7,11 ****
+  	<META content="English, en" name="language">
+  	<META content="MSHTML 6.00.2800.1498" name="GENERATOR">
+! 	<STYLE type="text/css"> BODY { PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px; FONT-FAMILY: Verdana, Tahoma, sans-serif; BACKGROUND-COLOR: #f7f7f7 } TD { } .top-menu { FONT-WEIGHT: bold; FONT-SIZE: 10pt } .chrome-menu { FONT-WEIGHT: bold; FONT-SIZE: 10pt } .footer { BORDER-TOP: #808080 1px solid; PADDING-LEFT: 18px; FONT-SIZE: 8pt; PADDING-BOTTOM: 5px } .content { PADDING-RIGHT: 40px; PADDING-LEFT: 40px; FONT-SIZE: 0.8em } .home-content { PADDING-RIGHT: 40px; PADDING-LEFT: 0px; FONT-SIZE: 0.75em } .content TR { FONT-SIZE: 0.8em } .home-content TR { FONT-SIZE: 0.8em } .form { BACKGROUND-COLOR: #d0d0d0 } .print-content { MARGIN: 10px } A { COLOR: #0000c0 } A:visited { COLOR: #606060 } A.noline { TEXT-DECORATION: none } A.filter-noline { TEXT-DECORATION: none } A.filter-noline:visited { COLOR: #0000c0 } A.nodecoration { COLOR: black; TEXT-DECORATION: none } A.nodecoration:visited { COLOR: black; TEXT-DECORATION: none } .menu A:visited { COLOR: black; TEXT-DECORATION: none } TD.top-menu { PADDING-LEFT: 20px } TD.top-menu A { COLOR: #a00000; TEXT-DECORATION: none } TD.top-menu A:visited { COLOR: #a00000; TEXT-DECORATION: none } TD.chrome-menu A { COLOR: #800000; TEXT-DECORATION: none } TD.chrome-menu A:visited { COLOR: #800000; TEXT-DECORATION: none } TD.menu { BORDER-RIGHT: #606060 1px solid; BORDER-TOP: #606060 1px solid; BORDER-LEFT: #606060 1px solid; BORDER-BOTTOM: #606060 1px solid; BACKGROUND-COLOR: #f0f0f0 } TABLE.popupmenu { BORDER-RIGHT: #606060 1px solid; BORDER-TOP: #606060 1px solid; PADDING-BOTTOM: 3px; BORDER-LEFT: #606060 4px solid; BORDER-BOTTOM: #606060 1px solid; POSITION: absolute; BACKGROUND-COLOR: #e0e0e0 } TABLE.menu A { COLOR: black; TEXT-DECORATION: none } .menu .menu-header-1 { PADDING-LEFT: 5px; FONT-WEIGHT: bold; FONT-SIZE: 10pt; PADDING-TOP: 5px } TD.menu-data-1 { BORDER-TOP: #c0c0c0 1px solid; PADDING-BOTTOM: 0.5em } TD.menu-data-2 { PADDING-BOTTOM: 0.25em } .menu .menu-header-2 { PADDING-LEFT: 10px; FONT-SIZE: 9pt; PADDING-TOP: 2px } .menu .
+menu-header-2-hover { PADDING-LEFT: 10px; FONT-SIZE: 9pt; PADDING-TOP: 2px } .menu .menu-header-2-hover { BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid } .menu .menu-header-3 { PADDING-LEFT: 20px; FONT-SIZE: 8pt; PADDING-TOP: 2px } P { MARGIN-TOP: 0px; MARGIN-BOTTOM: 0.5em } P.h1 { MARGIN-TOP: 0.75em; FONT-WEIGHT: bold; MARGIN-BOTTOM: 0px } P.h2 { MARGIN-TOP: 0.75em; FONT-WEIGHT: bold; MARGIN-BOTTOM: 0px } P.h3 { MARGIN-TOP: 0.75em; FONT-WEIGHT: bold; MARGIN-BOTTOM: 0px } P.h4 { MARGIN-TOP: 0.75em; FONT-WEIGHT: bold; MARGIN-BOTTOM: 0px } P.h1-nogap { MARGIN-TOP: 0.75em; FONT-WEIGHT: bold; MARGIN-BOTTOM: 0px } P.h1-nogap { MARGIN-TOP: 0px; FONT-WEIGHT: bold; MARGIN-BOTTOM: 0px } P.h1 { FONT-SIZE: 1.3em } P.h1-nogap { FONT-SIZE: 1.3em } P.h2 { FONT-SIZE: 1.1em } P.h3 { FONT-SIZE: 1em } P.h4 { FONT-SIZE: 1em } UL { MARGIN-TOP: 0px; MARGIN-BOTTOM: 0.5em } UL LI { MARGIN-BOTTOM: 0px } OL LI { MARGIN-BOTTOM: 0.25em } .highlight1 { BACKGROUND-COLOR: #ffff00 } .highlight2 { BACKGROUND-COLOR: #c0c0ff } .highlight3 { BACKGROUND-COLOR: #c0ffc0 } .highlight4 { BACKGROUND-COLOR: #ffc0c0 } .partner-header { FONT-WEIGHT: bold; FONT-SIZE: 0.9em; LETTER-SPACING: 2px } .hint { BORDER-RIGHT: #808080 1px dashed; PADDING-RIGHT: 5px; BORDER-TOP: #808080 1px dashed; PADDING-LEFT: 80px; BACKGROUND-IMAGE: url(./images/hint-background.gif); MARGIN-BOTTOM: 0.5em; PADDING-BOTTOM: 5px; BORDER-LEFT: #808080 1px dashed; PADDING-TOP: 5px; BORDER-BOTTOM: #808080 1px dashed; BACKGROUND-REPEAT: no-repeat; BACKGROUND-COLOR: #ffffe0 } .small { FONT-SIZE: 0.8em } IMG.image-left { MARGIN-TOP: 5px; MARGIN-BOTTOM: 5px; MARGIN-RIGHT: 5px } IMG.image-right { MARGIN-TOP: 5px; MARGIN-BOTTOM: 5px; MARGIN-LEFT: 5px } .white-table { BORDER-RIGHT: #808080 1px dashed; BORDER-TOP: #808080 1px dashed; BORDER-LEFT: #808080 1px dashed; BORDER-BOTTOM: #808080 1px dashed; BACKGROUND-COLOR: white } P.white { BORDER-RIGHT: #808080 1px dashed; PADDING-RIGHT: 5px; BORDER-TOP: #808080 1px d
+ashed; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; BORDER-LEFT: #808080 1px dashed; PADDING-TOP: 5px; BORDER-BOTTOM: #808080 1px dashed; BACKGROUND-COLOR: white } TD.gray { BACKGROUND-COLOR: #e0e0e0 } DIV.gray { BACKGROUND-COLOR: #e0e0e0 } P.gray { BACKGROUND-COLOR: #e0e0e0 } DIV.gray { PADDING-RIGHT: 10px; MARGIN-TOP: 1em; PADDING-LEFT: 10px; MARGIN-BOTTOM: 1em; PADDING-BOTTOM: 10px; PADDING-TOP: 10px } TD.level1 { BACKGROUND-COLOR: #d0d0d0 } TD.level2 { BACKGROUND-COLOR: #e0e0e0 } TD.level3 { BACKGROUND-COLOR: #f0f0f0 } .important { BORDER-RIGHT: #808080 1px dashed; PADDING-RIGHT: 5px; BORDER-TOP: #808080 1px dashed; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; MARGIN: 0px; BORDER-LEFT: #808080 1px dashed; PADDING-TOP: 5px; BORDER-BOTTOM: #808080 1px dashed; BACKGROUND-COLOR: #e0e0e0 } .blue { COLOR: blue } .sourcecode { BORDER-RIGHT: gray 1px dashed; PADDING-RIGHT: 5px; BORDER-TOP: gray 1px dashed; PADDING-LEFT: 5px; FONT-SIZE: 1.1em; PADDING-BOTTOM: 5px; BORDER-LEFT: gray 1px dashed; PADDING-TOP: 5px; BORDER-BOTTOM: gray 1px dashed } PRE { MARGIN: 0px } P.white { BORDER-RIGHT: #808080 1px dashed; PADDING-RIGHT: 5px; BORDER-TOP: #808080 1px dashed; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; BORDER-LEFT: #808080 1px dashed; PADDING-TOP: 5px; BORDER-BOTTOM: #808080 1px dashed; BACKGROUND-COLOR: white } DIV.white { BORDER-RIGHT: #808080 1px dashed; PADDING-RIGHT: 5px; BORDER-TOP: #808080 1px dashed; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; BORDER-LEFT: #808080 1px dashed; PADDING-TOP: 5px; BORDER-BOTTOM: #808080 1px dashed; BACKGROUND-COLOR: white } .small { FONT-SIZE: 0.8em } .article-header { BORDER-RIGHT: #b0b0b0 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: #b0b0b0 1px solid; PADDING-LEFT: 10px; MARGIN-BOTTOM: 1em; PADDING-BOTTOM: 10px; BORDER-LEFT: #b0b0b0 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: #b0b0b0 1px solid; BACKGROUND-COLOR: #e0e0e0 } .article-footer { BORDER-RIGHT: #b0b0b0 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: #b0b0b0 1px solid; PADDING-LEFT: 10px; MARGIN-BOTTOM: 1em; PADDING-BOTTOM: 10px; BORDER-LEFT: 
+#b0b0b0 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: #b0b0b0 1px solid; BACKGROUND-COLOR: #e0e0e0 } .article-footer { MARGIN-TOP: 1.5em } .article-header { BACKGROUND-IMAGE: url(./images/article-header-background.png); BACKGROUND-REPEAT: no-repeat } .video-header { PADDING-BOTTOM: 1em } .article-platforms { BORDER-RIGHT: #c0c0c0 1px solid; PADDING-RIGHT: 3px; BORDER-TOP: #c0c0c0 1px solid; PADDING-LEFT: 3px; MARGIN-BOTTOM: 1em; PADDING-BOTTOM: 3px; BORDER-LEFT: #c0c0c0 1px solid; PADDING-TOP: 3px; BORDER-BOTTOM: #c0c0c0 1px solid; BACKGROUND-COLOR: #f0f0f0 } .new-articles { BORDER-RIGHT: #c0c0c0 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: #c0c0c0 1px solid; MARGIN-TOP: 1em; PADDING-LEFT: 70px; BACKGROUND-IMAGE: url(./images/newarticles-background.png); MARGIN-BOTTOM: 1em; PADDING-BOTTOM: 10px; BORDER-LEFT: #c0c0c0 1px solid; WIDTH: 100%; PADDING-TOP: 10px; BORDER-BOTTOM: #c0c0c0 1px solid; BACKGROUND-REPEAT: no-repeat; BACKGROUND-COLOR: #f0f0f0 } .new-articles UL { PADDING-LEFT: 17px; MARGIN-LEFT: 0px } .bugdb-missing { FONT-WEIGHT: bold; COLOR: white; BACKGROUND-COLOR: red } .bugdb-box { PADDING-RIGHT: 10px; MARGIN-TOP: 1em; PADDING-LEFT: 10px; MARGIN-BOTTOM: 1em; PADDING-BOTTOM: 10px; PADDING-TOP: 10px; BACKGROUND-COLOR: #e0e0e0 } .bugdb-box .h1 { MARGIN-TOP: 0px } .bugdb-box .h2 { MARGIN-TOP: 0px } A.bugdb-noline { TEXT-DECORATION: none } A.bugdb-noline:hover { TEXT-DECORATION: none } A.bugdb-noline:visited { TEXT-DECORATION: none } .bugdb-spaced { COLOR: #000000; LETTER-SPACING: 1px } .bugdb-productname { COLOR: #000000; LETTER-SPACING: 1px } P.bugdb-bold-spaced { FONT-WEIGHT: bold; MARGIN-BOTTOM: 0.15em; COLOR: #000000; LETTER-SPACING: 1px } .bugdb-invalid-link { COLOR: gray } .bugdb-small { FONT-SIZE: 0.9em } .bugdb-tabledata { BACKGROUND-COLOR: #e0e0e0 } .bugdb-tableheader { BACKGROUND-COLOR: #c0c0c0 } .bugdb-tablelight { BACKGROUND-COLOR: #e0e0e0 } .bugdb-tabledata A { TEXT-DECORATION: none } .bugdb-tabledata A:visited { TEXT-DECORATION: none } .tabledata { BACKGROUND-COLOR: #e0e0e0 } .tableheader { BACK
+GROUND-COLOR: #c0c0c0 } .tablelight { BACKGROUND-COLOR: #e0e0e0 } .tabledata A { TEXT-DECORATION: none } .tabledata A:visited { TEXT-DECORATION: none } .bugdb-small-list { FONT-SIZE: 0.8em } .bugdb-small-list A { TEXT-DECORATION: none } .bugdb-small-description { PADDING-LEFT: 20px; FONT-SIZE: 0.8em } .bugdb-list-header { FONT-WEIGHT: bold; FONT-SIZE: 1.2em; PADDING-TOP: 20px } .bugdb-error { PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; PADDING-TOP: 10px; BACKGROUND-COLOR: #ffc0c0; align: center } </STYLE>
+  </HEAD>
+  <BODY>
+--- 7,120 ----
+  	<META content="English, en" name="language">
+  	<META content="MSHTML 6.00.2800.1498" name="GENERATOR">
+! 	<STYLE type="text/css"> BODY { PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px; FONT-FAMILY: Verdana, Tahoma, sans-serif; BACKGROUND-COLOR: #f7f7f7 }
+! 	TD { }
+! 	.top-menu { FONT-WEIGHT: bold; FONT-SIZE: 10pt }
+! 	.chrome-menu { FONT-WEIGHT: bold; FONT-SIZE: 10pt }
+! 	.footer { BORDER-TOP: #808080 1px solid; PADDING-LEFT: 18px; FONT-SIZE: 8pt; PADDING-BOTTOM: 5px }
+! 	.content { PADDING-RIGHT: 40px; PADDING-LEFT: 40px; FONT-SIZE: 0.8em }
+! 	.home-content { PADDING-RIGHT: 40px; PADDING-LEFT: 0px; FONT-SIZE: 0.75em }
+! 	.content TR { FONT-SIZE: 0.8em }
+! 	.home-content TR { FONT-SIZE: 0.8em }
+! 	.form { BACKGROUND-COLOR: #d0d0d0 }
+! 	.print-content { MARGIN: 10px }
+! 	A { COLOR: #0000c0 }
+! 	A:visited { COLOR: #606060 }
+! 	A.noline { TEXT-DECORATION: none }
+! 	A.filter-noline { TEXT-DECORATION: none }
+! 	A.filter-noline:visited { COLOR: #0000c0 }
+! 	A.nodecoration { COLOR: black; TEXT-DECORATION: none }
+! 	A.nodecoration:visited { COLOR: black; TEXT-DECORATION: none }
+! 	.menu A:visited { COLOR: black; TEXT-DECORATION: none }
+! 	TD.top-menu { PADDING-LEFT: 20px }
+! 	TD.top-menu A { COLOR: #a00000; TEXT-DECORATION: none }
+! 	TD.top-menu A:visited { COLOR: #a00000; TEXT-DECORATION: none }
+! 	TD.chrome-menu A { COLOR: #800000; TEXT-DECORATION: none }
+! 	TD.chrome-menu A:visited { COLOR: #800000; TEXT-DECORATION: none }
+! 	TD.menu { BORDER-RIGHT: #606060 1px solid; BORDER-TOP: #606060 1px solid; BORDER-LEFT: #606060 1px solid; BORDER-BOTTOM: #606060 1px solid; BACKGROUND-COLOR: #f0f0f0 }
+! 	TABLE.popupmenu { BORDER-RIGHT: #606060 1px solid; BORDER-TOP: #606060 1px solid; PADDING-BOTTOM: 3px; BORDER-LEFT: #606060 4px solid; BORDER-BOTTOM: #606060 1px solid; POSITION: absolute; BACKGROUND-COLOR: #e0e0e0 }
+! 	TABLE.menu A { COLOR: black; TEXT-DECORATION: none }
+! 	.menu .menu-header-1 { PADDING-LEFT: 5px; FONT-WEIGHT: bold; FONT-SIZE: 10pt; PADDING-TOP: 5px }
+! 	TD.menu-data-1 { BORDER-TOP: #c0c0c0 1px solid; PADDING-BOTTOM: 0.5em }
+! 	TD.menu-data-2 { PADDING-BOTTOM: 0.25em }
+! 	.menu .menu-header-2 { PADDING-LEFT: 10px; FONT-SIZE: 9pt; PADDING-TOP: 2px }
+! 	.menu .menu-header-2-hover { PADDING-LEFT: 10px; FONT-SIZE: 9pt; PADDING-TOP: 2px }
+! 	.menu .menu-header-2-hover { BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid }
+! 	.menu .menu-header-3 { PADDING-LEFT: 20px; FONT-SIZE: 8pt; PADDING-TOP: 2px }
+! 	P { MARGIN-TOP: 0px; MARGIN-BOTTOM: 0.5em }
+! 	P.h1 { MARGIN-TOP: 0.75em; FONT-WEIGHT: bold; MARGIN-BOTTOM: 0px }
+! 	P.h2 { MARGIN-TOP: 0.75em; FONT-WEIGHT: bold; MARGIN-BOTTOM: 0px }
+! 	P.h3 { MARGIN-TOP: 0.75em; FONT-WEIGHT: bold; MARGIN-BOTTOM: 0px }
+! 	P.h4 { MARGIN-TOP: 0.75em; FONT-WEIGHT: bold; MARGIN-BOTTOM: 0px }
+! 	P.h1-nogap { MARGIN-TOP: 0.75em; FONT-WEIGHT: bold; MARGIN-BOTTOM: 0px }
+! 	P.h1-nogap { MARGIN-TOP: 0px; FONT-WEIGHT: bold; MARGIN-BOTTOM: 0px }
+! 	P.h1 { FONT-SIZE: 1.3em }
+! 	P.h1-nogap { FONT-SIZE: 1.3em }
+! 	P.h2 { FONT-SIZE: 1.1em }
+! 	P.h3 { FONT-SIZE: 1em }
+! 	P.h4 { FONT-SIZE: 1em }
+! 	UL { MARGIN-TOP: 0px; MARGIN-BOTTOM: 0.5em }
+! 	UL LI { MARGIN-BOTTOM: 0px }
+! 	OL LI { MARGIN-BOTTOM: 0.25em }
+! 	.highlight1 { BACKGROUND-COLOR: #ffff00 }
+! 	.highlight2 { BACKGROUND-COLOR: #c0c0ff }
+! 	.highlight3 { BACKGROUND-COLOR: #c0ffc0 }
+! 	.highlight4 { BACKGROUND-COLOR: #ffc0c0 }
+! 	.partner-header { FONT-WEIGHT: bold; FONT-SIZE: 0.9em; LETTER-SPACING: 2px }
+! 	.hint { BORDER-RIGHT: #808080 1px dashed; PADDING-RIGHT: 5px; BORDER-TOP: #808080 1px dashed; PADDING-LEFT: 80px; BACKGROUND-IMAGE: url(./images/hint-background.gif); MARGIN-BOTTOM: 0.5em; PADDING-BOTTOM: 5px; BORDER-LEFT: #808080 1px dashed; PADDING-TOP: 5px; BORDER-BOTTOM: #808080 1px dashed; BACKGROUND-REPEAT: no-repeat; BACKGROUND-COLOR: #ffffe0 }
+! 	.small { FONT-SIZE: 0.8em }
+! 	IMG.image-left { MARGIN-TOP: 5px; MARGIN-BOTTOM: 5px; MARGIN-RIGHT: 5px }
+! 	IMG.image-right { MARGIN-TOP: 5px; MARGIN-BOTTOM: 5px; MARGIN-LEFT: 5px }
+! 	.white-table { BORDER-RIGHT: #808080 1px dashed; BORDER-TOP: #808080 1px dashed; BORDER-LEFT: #808080 1px dashed; BORDER-BOTTOM: #808080 1px dashed; BACKGROUND-COLOR: white }
+! 	P.white { BORDER-RIGHT: #808080 1px dashed; PADDING-RIGHT: 5px; BORDER-TOP: #808080 1px dashed; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; BORDER-LEFT: #808080 1px dashed; PADDING-TOP: 5px; BORDER-BOTTOM: #808080 1px dashed; BACKGROUND-COLOR: white }
+! 	TD.gray { BACKGROUND-COLOR: #e0e0e0 }
+! 	DIV.gray { BACKGROUND-COLOR: #e0e0e0 }
+! 	P.gray { BACKGROUND-COLOR: #e0e0e0 }
+! 	DIV.gray { PADDING-RIGHT: 10px; MARGIN-TOP: 1em; PADDING-LEFT: 10px; MARGIN-BOTTOM: 1em; PADDING-BOTTOM: 10px; PADDING-TOP: 10px }
+! 	TD.level1 { BACKGROUND-COLOR: #d0d0d0 }
+! 	TD.level2 { BACKGROUND-COLOR: #e0e0e0 }
+! 	TD.level3 { BACKGROUND-COLOR: #f0f0f0 }
+! 	.important { BORDER-RIGHT: #808080 1px dashed; PADDING-RIGHT: 5px; BORDER-TOP: #808080 1px dashed; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; MARGIN: 0px; BORDER-LEFT: #808080 1px dashed; PADDING-TOP: 5px; BORDER-BOTTOM: #808080 1px dashed; BACKGROUND-COLOR: #e0e0e0 }
+! 	.blue { COLOR: blue }
+! 	.sourcecode { BORDER-RIGHT: gray 1px dashed; PADDING-RIGHT: 5px; BORDER-TOP: gray 1px dashed; PADDING-LEFT: 5px; FONT-SIZE: 1.1em; PADDING-BOTTOM: 5px; BORDER-LEFT: gray 1px dashed; PADDING-TOP: 5px; BORDER-BOTTOM: gray 1px dashed }
+! 	PRE { MARGIN: 0px }
+! 	P.white { BORDER-RIGHT: #808080 1px dashed; PADDING-RIGHT: 5px; BORDER-TOP: #808080 1px dashed; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; BORDER-LEFT: #808080 1px dashed; PADDING-TOP: 5px; BORDER-BOTTOM: #808080 1px dashed; BACKGROUND-COLOR: white }
+! 	DIV.white { BORDER-RIGHT: #808080 1px dashed; PADDING-RIGHT: 5px; BORDER-TOP: #808080 1px dashed; PADDING-LEFT: 5px; PADDING-BOTTOM: 5px; BORDER-LEFT: #808080 1px dashed; PADDING-TOP: 5px; BORDER-BOTTOM: #808080 1px dashed; BACKGROUND-COLOR: white }
+! 	.small { FONT-SIZE: 0.8em }
+! 	.article-header { BORDER-RIGHT: #b0b0b0 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: #b0b0b0 1px solid; PADDING-LEFT: 10px; MARGIN-BOTTOM: 1em; PADDING-BOTTOM: 10px; BORDER-LEFT: #b0b0b0 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: #b0b0b0 1px solid; BACKGROUND-COLOR: #e0e0e0 }
+! 	.article-footer { BORDER-RIGHT: #b0b0b0 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: #b0b0b0 1px solid; PADDING-LEFT: 10px; MARGIN-BOTTOM: 1em; PADDING-BOTTOM: 10px; BORDER-LEFT: #b0b0b0 1px solid; PADDING-TOP: 10px; BORDER-BOTTOM: #b0b0b0 1px solid; BACKGROUND-COLOR: #e0e0e0 }
+! 	.article-footer { MARGIN-TOP: 1.5em }
+! 	.article-header { BACKGROUND-IMAGE: url(./images/article-header-background.png); BACKGROUND-REPEAT: no-repeat }
+! 	.video-header { PADDING-BOTTOM: 1em }
+! 	.article-platforms { BORDER-RIGHT: #c0c0c0 1px solid; PADDING-RIGHT: 3px; BORDER-TOP: #c0c0c0 1px solid; PADDING-LEFT: 3px; MARGIN-BOTTOM: 1em; PADDING-BOTTOM: 3px; BORDER-LEFT: #c0c0c0 1px solid; PADDING-TOP: 3px; BORDER-BOTTOM: #c0c0c0 1px solid; BACKGROUND-COLOR: #f0f0f0 }
+! 	.new-articles { BORDER-RIGHT: #c0c0c0 1px solid; PADDING-RIGHT: 10px; BORDER-TOP: #c0c0c0 1px solid; MARGIN-TOP: 1em; PADDING-LEFT: 70px; BACKGROUND-IMAGE: url(./images/newarticles-background.png); MARGIN-BOTTOM: 1em; PADDING-BOTTOM: 10px; BORDER-LEFT: #c0c0c0 1px solid; WIDTH: 100%; PADDING-TOP: 10px; BORDER-BOTTOM: #c0c0c0 1px solid; BACKGROUND-REPEAT: no-repeat; BACKGROUND-COLOR: #f0f0f0 }
+! 	.new-articles UL { PADDING-LEFT: 17px; MARGIN-LEFT: 0px }
+! 	.bugdb-missing { FONT-WEIGHT: bold; COLOR: white; BACKGROUND-COLOR: red }
+! 	.bugdb-box { PADDING-RIGHT: 10px; MARGIN-TOP: 1em; PADDING-LEFT: 10px; MARGIN-BOTTOM: 1em; PADDING-BOTTOM: 10px; PADDING-TOP: 10px; BACKGROUND-COLOR: #e0e0e0 }
+! 	.bugdb-box .h1 { MARGIN-TOP: 0px }
+! 	.bugdb-box .h2 { MARGIN-TOP: 0px }
+! 	A.bugdb-noline { TEXT-DECORATION: none }
+! 	A.bugdb-noline:hover { TEXT-DECORATION: none }
+! 	A.bugdb-noline:visited { TEXT-DECORATION: none }
+! 	.bugdb-spaced { COLOR: #000000; LETTER-SPACING: 1px }
+! 	.bugdb-productname { COLOR: #000000; LETTER-SPACING: 1px }
+! 	P.bugdb-bold-spaced { FONT-WEIGHT: bold; MARGIN-BOTTOM: 0.15em; COLOR: #000000; LETTER-SPACING: 1px }
+! 	.bugdb-invalid-link { COLOR: gray }
+! 	.bugdb-small { FONT-SIZE: 0.9em }
+! 	.bugdb-tabledata { BACKGROUND-COLOR: #e0e0e0 }
+! 	.bugdb-tableheader { BACKGROUND-COLOR: #c0c0c0 }
+! 	.bugdb-tablelight { BACKGROUND-COLOR: #e0e0e0 }
+! 	.bugdb-tabledata A { TEXT-DECORATION: none }
+! 	.bugdb-tabledata A:visited { TEXT-DECORATION: none }
+! 	.tabledata { BACKGROUND-COLOR: #e0e0e0 }
+! 	.tableheader { BACKGROUND-COLOR: #c0c0c0 }
+! 	.tablelight { BACKGROUND-COLOR: #e0e0e0 }
+! 	.tabledata A { TEXT-DECORATION: none }
+! 	.tabledata A:visited { TEXT-DECORATION: none }
+! 	.bugdb-small-list { FONT-SIZE: 0.8em }
+! 	.bugdb-small-list A { TEXT-DECORATION: none }
+! 	.bugdb-small-description { PADDING-LEFT: 20px; FONT-SIZE: 0.8em }
+! 	.bugdb-list-header { FONT-WEIGHT: bold; FONT-SIZE: 1.2em; PADDING-TOP: 20px }
+! 	.bugdb-error { PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; PADDING-TOP: 10px; BACKGROUND-COLOR: #ffc0c0; align: center }
+! 	</STYLE>
+  </HEAD>
+  <BODY>
+***************
+*** 174,182 ****
+  								else make changes to the repository. Not subscribing makes it very hard to keep 
+  								track of changes, so this is highly recommended. To minimize traffic, you can 
+! 								opt to recieve daily digests instead of individual mails. You can also turn off 
+! 								notifications for your own checkins.</DIV>
+  						</LI>
+  					</UL>
+- 					<DIV class="content">&nbsp;</DIV>
+  				</TD>
+  			</TR>
+--- 283,289 ----
+  								else make changes to the repository. Not subscribing makes it very hard to keep 
+  								track of changes, so this is highly recommended. To minimize traffic, you can 
+! 								opt to recieve daily digests instead of individual mails.</DIV>
+  						</LI>
+  					</UL>
+  				</TD>
+  			</TR>
+
+
+
+From nobody at sheep.berlios.de  Mon Apr 25 19:51:46 2005
+From: nobody at sheep.berlios.de (peter3)
+Date: Mon, 25 Apr 2005 19:51:46 +0200
+Subject: [Shineon-checkins] ShineOn ShineOn.2003.sln,1.1,1.2 ShineOn.2005.sln,1.1,1.2
+Message-ID: <200504251751.j3PHpkm05336@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn
+In directory sheep:/tmp/cvs-serv27348
+
+Modified Files:
+	ShineOn.2003.sln ShineOn.2005.sln 
+Log Message:
+- Added MPL header
+- Specified dependencies
+
+Index: ShineOn.2003.sln
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.2003.sln,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** ShineOn.2003.sln	23 Apr 2005 12:21:38 -0000	1.1
+--- ShineOn.2003.sln	25 Apr 2005 17:51:43 -0000	1.2
+***************
+*** 6,13 ****
+--- 6,15 ----
+  Project("{656346D9-4656-40DA-A068-22D5425D4639}") = "ShineOn.RTL.Win32", "ShineOn.RTL.Win32\ShineOn.RTL.Win32.chrome", "{574E35A9-E590-48A6-B154-35824FCF8856}"
+  	ProjectSection(ProjectDependencies) = postProject
++ 		{EADE7853-FDBE-4770-B0B2-5FF5FDD2DBF7} = {EADE7853-FDBE-4770-B0B2-5FF5FDD2DBF7}
+  	EndProjectSection
+  EndProject
+  Project("{656346D9-4656-40DA-A068-22D5425D4639}") = "ShineOn.VCL", "ShineOn.VCL\ShineOn.VCL.chrome", "{0D12830E-FF40-428B-A22D-B44134F3C472}"
+  	ProjectSection(ProjectDependencies) = postProject
++ 		{EADE7853-FDBE-4770-B0B2-5FF5FDD2DBF7} = {EADE7853-FDBE-4770-B0B2-5FF5FDD2DBF7}
+  	EndProjectSection
+  EndProject
+
+Index: ShineOn.2005.sln
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.2005.sln,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** ShineOn.2005.sln	23 Apr 2005 12:21:38 -0000	1.1
+--- ShineOn.2005.sln	25 Apr 2005 17:51:43 -0000	1.2
+***************
+*** 4,9 ****
+--- 4,15 ----
+  EndProject
+  Project("{656346D9-4656-40DA-A068-22D5425D4639}") = "ShineOn.RTL.Win32", "ShineOn.RTL.Win32\ShineOn.RTL.Win32.chrome", "{574E35A9-E590-48A6-B154-35824FCF8856}"
++ 	ProjectSection(ProjectDependencies) = postProject
++ 		{EADE7853-FDBE-4770-B0B2-5FF5FDD2DBF7} = {EADE7853-FDBE-4770-B0B2-5FF5FDD2DBF7}
++ 	EndProjectSection
+  EndProject
+  Project("{656346D9-4656-40DA-A068-22D5425D4639}") = "ShineOn.VCL", "ShineOn.VCL\ShineOn.VCL.chrome", "{0D12830E-FF40-428B-A22D-B44134F3C472}"
++ 	ProjectSection(ProjectDependencies) = postProject
++ 		{EADE7853-FDBE-4770-B0B2-5FF5FDD2DBF7} = {EADE7853-FDBE-4770-B0B2-5FF5FDD2DBF7}
++ 	EndProjectSection
+  EndProject
+  Global
+
+
+
+From nobody at sheep.berlios.de  Mon Apr 25 19:51:46 2005
+From: nobody at sheep.berlios.de (peter3)
+Date: Mon, 25 Apr 2005 19:51:46 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.RTL AssemblyInfo.pas,1.1,1.2 Classes.pas,1.1,1.2 Consts.pas,1.1,1.2 Contnrs.pas,1.1,1.2 IniFiles.pas,1.1,1.2 SysUtils.pas,1.1,1.2 System.pas,1.1,1.2 Types.pas,1.2,1.3
+Message-ID: <200504251751.j3PHpkm05344@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv27348/ShineOn.RTL
+
+Modified Files:
+	AssemblyInfo.pas Classes.pas Consts.pas Contnrs.pas 
+	IniFiles.pas SysUtils.pas System.pas Types.pas 
+Log Message:
+- Added MPL header
+- Specified dependencies
+
+Index: AssemblyInfo.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/AssemblyInfo.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** AssemblyInfo.pas	23 Apr 2005 10:32:42 -0000	1.1
+--- AssemblyInfo.pas	25 Apr 2005 17:51:44 -0000	1.2
+***************
+*** 1,2 ****
+--- 1,12 ----
++ // The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License"); 
++ // you may not use this file except in compliance with the License. You may obtain a copy of the 
++ // License at http://www.mozilla.org/MPL/ 
++ // 
++ // Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF 
++ // ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
++ // limitations under the License.
++ 
++ // $Id$
++ 
+  namespace ShineOn.RTL;
+  
+
+Index: Classes.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Classes.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** Classes.pas	23 Apr 2005 10:32:42 -0000	1.1
+--- Classes.pas	25 Apr 2005 17:51:44 -0000	1.2
+***************
+*** 1,2 ****
+--- 1,12 ----
++ // The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License"); 
++ // you may not use this file except in compliance with the License. You may obtain a copy of the 
++ // License at http://www.mozilla.org/MPL/ 
++ // 
++ // Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF 
++ // ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
++ // limitations under the License.
++ 
++ // $Id$
++ 
+  namespace ShineOn.RTL;
+  // TODO:
+
+Index: Consts.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Consts.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** Consts.pas	23 Apr 2005 10:32:42 -0000	1.1
+--- Consts.pas	25 Apr 2005 17:51:44 -0000	1.2
+***************
+*** 1,2 ****
+--- 1,12 ----
++ // The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License"); 
++ // you may not use this file except in compliance with the License. You may obtain a copy of the 
++ // License at http://www.mozilla.org/MPL/ 
++ // 
++ // Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF 
++ // ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
++ // limitations under the License.
++ 
++ // $Id$
++ 
+  namespace ShineOn.RTL;
+  
+
+Index: Contnrs.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Contnrs.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** Contnrs.pas	23 Apr 2005 10:32:42 -0000	1.1
+--- Contnrs.pas	25 Apr 2005 17:51:44 -0000	1.2
+***************
+*** 1,2 ****
+--- 1,12 ----
++ // The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License"); 
++ // you may not use this file except in compliance with the License. You may obtain a copy of the 
++ // License at http://www.mozilla.org/MPL/ 
++ // 
++ // Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF 
++ // ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
++ // limitations under the License.
++ 
++ // $Id$
++ 
+  namespace ShineOn.RTL;
+  
+
+Index: IniFiles.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/IniFiles.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** IniFiles.pas	23 Apr 2005 10:32:42 -0000	1.1
+--- IniFiles.pas	25 Apr 2005 17:51:44 -0000	1.2
+***************
+*** 1,2 ****
+--- 1,12 ----
++ // The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License"); 
++ // you may not use this file except in compliance with the License. You may obtain a copy of the 
++ // License at http://www.mozilla.org/MPL/ 
++ // 
++ // Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF 
++ // ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
++ // limitations under the License.
++ 
++ // $Id$
++ 
+  namespace ShineOn.RTL;
+  // TODO: 
+
+Index: SysUtils.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/SysUtils.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** SysUtils.pas	23 Apr 2005 10:32:42 -0000	1.1
+--- SysUtils.pas	25 Apr 2005 17:51:44 -0000	1.2
+***************
+*** 8,16 ****
+  
+  // $Id$
+- // other possible SubVersion keywords (with aliases):
+- // LastChangedDate, Date
+- // LastChangedRevision, Revision, Rev
+- // LastChangedBy, Author
+- // HeadURL, URL
+  
+  namespace ShineOn.RTL;
+--- 8,11 ----
+
+Index: System.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/System.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** System.pas	23 Apr 2005 10:32:42 -0000	1.1
+--- System.pas	25 Apr 2005 17:51:44 -0000	1.2
+***************
+*** 1,2 ****
+--- 1,12 ----
++ // The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License"); 
++ // you may not use this file except in compliance with the License. You may obtain a copy of the 
++ // License at http://www.mozilla.org/MPL/ 
++ // 
++ // Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF 
++ // ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
++ // limitations under the License.
++ 
++ // $Id$
++ 
+  namespace ShineOn.RTL;
+  
+
+Index: Types.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Types.pas,v
+retrieving revision 1.2
+retrieving revision 1.3
+diff -C2 -d -r1.2 -r1.3
+*** Types.pas	23 Apr 2005 10:51:58 -0000	1.2
+--- Types.pas	25 Apr 2005 17:51:44 -0000	1.3
+***************
+*** 1,2 ****
+--- 1,12 ----
++ // The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License"); 
++ // you may not use this file except in compliance with the License. You may obtain a copy of the 
++ // License at http://www.mozilla.org/MPL/ 
++ // 
++ // Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF 
++ // ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
++ // limitations under the License.
++ 
++ // $Id$
++ 
+  namespace ShineOn.RTL;
+  
+
+
+
+From nobody at sheep.berlios.de  Mon Apr 25 19:51:46 2005
+From: nobody at sheep.berlios.de (peter3)
+Date: Mon, 25 Apr 2005 19:51:46 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.RTL.Win32 AssemblyInfo.pas,1.1,1.2 Registry.pas,1.1,1.2
+Message-ID: <200504251751.j3PHpkm05340@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.RTL.Win32
+In directory sheep:/tmp/cvs-serv27348/ShineOn.RTL.Win32
+
+Modified Files:
+	AssemblyInfo.pas Registry.pas 
+Log Message:
+- Added MPL header
+- Specified dependencies
+
+Index: AssemblyInfo.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL.Win32/AssemblyInfo.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** AssemblyInfo.pas	23 Apr 2005 10:32:42 -0000	1.1
+--- AssemblyInfo.pas	25 Apr 2005 17:51:43 -0000	1.2
+***************
+*** 1,2 ****
+--- 1,12 ----
++ // The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License"); 
++ // you may not use this file except in compliance with the License. You may obtain a copy of the 
++ // License at http://www.mozilla.org/MPL/ 
++ // 
++ // Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF 
++ // ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
++ // limitations under the License.
++ 
++ // $Id$
++ 
+  namespace ShineOn.RTL.Win32;
+  
+
+Index: Registry.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL.Win32/Registry.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** Registry.pas	23 Apr 2005 10:32:42 -0000	1.1
+--- Registry.pas	25 Apr 2005 17:51:43 -0000	1.2
+***************
+*** 1,2 ****
+--- 1,12 ----
++ // The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License"); 
++ // you may not use this file except in compliance with the License. You may obtain a copy of the 
++ // License at http://www.mozilla.org/MPL/ 
++ // 
++ // Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF 
++ // ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
++ // limitations under the License.
++ 
++ // $Id$
++ 
+  namespace ShineOn.RTL.Win32;
+  // TODO: 
+
+
+
+From nobody at sheep.berlios.de  Mon Apr 25 19:51:47 2005
+From: nobody at sheep.berlios.de (peter3)
+Date: Mon, 25 Apr 2005 19:51:47 +0200
+Subject: [Shineon-checkins] ShineOn/ShineOn.VCL AssemblyInfo.pas,1.1,1.2 Controls.pas,1.1,1.2
+Message-ID: <200504251751.j3PHplm05348@bat.berlios.de>
+
+Update of /cvsroot/shineon/ShineOn/ShineOn.VCL
+In directory sheep:/tmp/cvs-serv27348/ShineOn.VCL
+
+Modified Files:
+	AssemblyInfo.pas Controls.pas 
+Log Message:
+- Added MPL header
+- Specified dependencies
+
+Index: AssemblyInfo.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.VCL/AssemblyInfo.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** AssemblyInfo.pas	23 Apr 2005 10:32:42 -0000	1.1
+--- AssemblyInfo.pas	25 Apr 2005 17:51:44 -0000	1.2
+***************
+*** 1,2 ****
+--- 1,12 ----
++ // The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License"); 
++ // you may not use this file except in compliance with the License. You may obtain a copy of the 
++ // License at http://www.mozilla.org/MPL/ 
++ // 
++ // Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF 
++ // ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
++ // limitations under the License.
++ 
++ // $Id$
++ 
+  namespace ShineOn.VCL;
+  
+
+Index: Controls.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.VCL/Controls.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** Controls.pas	23 Apr 2005 10:32:42 -0000	1.1
+--- Controls.pas	25 Apr 2005 17:51:44 -0000	1.2
+***************
+*** 1,2 ****
+--- 1,12 ----
++ // The contents of this file are subject to the Mozilla Public License Version 1.1 (the "License"); 
++ // you may not use this file except in compliance with the License. You may obtain a copy of the 
++ // License at http://www.mozilla.org/MPL/ 
++ // 
++ // Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF 
++ // ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
++ // limitations under the License.
++ 
++ // $Id$
++ 
+  namespace ShineOn.VCL;
+  
+
+
+

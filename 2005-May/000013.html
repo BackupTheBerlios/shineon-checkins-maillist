@@ -1,0 +1,762 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/ShineOn.RTL Globals.pas,NONE,1.1 Classes.pas,1.6,1.7 ShineOn.RTL.chrome,1.5,1.6 SysUtils.pas,1.6,1.7 System.pas,1.3,1.4 Types.pas,1.4,1.5
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2005-May/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20Globals.pas%2CNONE%2C1.1%20Classes.pas%2C1.6%2C1.7%20ShineOn.RTL.chrome%2C1.5%2C1.6%20SysUtils.pas%2C1.6%2C1.7%20System.pas%2C1.3%2C1.4%20Types.pas%2C1.4%2C1.5&In-Reply-To=%3C200505261430.j4QEUIm04945%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000012.html">
+   <LINK REL="Next"  HREF="000014.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/ShineOn.RTL Globals.pas,NONE,1.1 Classes.pas,1.6,1.7 ShineOn.RTL.chrome,1.5,1.6 SysUtils.pas,1.6,1.7 System.pas,1.3,1.4 Types.pas,1.4,1.5</H1>
+    <B>peter3</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20Globals.pas%2CNONE%2C1.1%20Classes.pas%2C1.6%2C1.7%20ShineOn.RTL.chrome%2C1.5%2C1.6%20SysUtils.pas%2C1.6%2C1.7%20System.pas%2C1.3%2C1.4%20Types.pas%2C1.4%2C1.5&In-Reply-To=%3C200505261430.j4QEUIm04945%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/ShineOn.RTL Globals.pas,NONE,1.1 Classes.pas,1.6,1.7 ShineOn.RTL.chrome,1.5,1.6 SysUtils.pas,1.6,1.7 System.pas,1.3,1.4 Types.pas,1.4,1.5">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Thu May 26 16:30:18 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000012.html">[Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.5,1.6 Contnrs.pas,1.2,1.3 SysUtils.pas,1.5,1.6 System.pas,1.2,1.3 Types.pas,1.3,1.4
+</A></li>
+        <LI>Next message: <A HREF="000014.html">[Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.4,1.5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#13">[ date ]</a>
+              <a href="thread.html#13">[ thread ]</a>
+              <a href="subject.html#13">[ subject ]</a>
+              <a href="author.html#13">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv26539/ShineOn.RTL
+
+Modified Files:
+	Classes.pas ShineOn.RTL.chrome SysUtils.pas System.pas 
+	Types.pas 
+Added Files:
+	Globals.pas 
+Log Message:
+- global consts and variables are now only aliases for class vars and consts in the Globals class
+- new unit: Globals.pas
+
+--- NEW FILE: Globals.pas ---
+// The contents of this file are subject to the Mozilla Public License Version 1.1 (the &quot;License&quot;); 
+// you may not use this file except in compliance with the License. You may obtain a copy of the 
+// License at <A HREF="http://www.mozilla.org/MPL/">http://www.mozilla.org/MPL/</A> 
+// 
+// Software distributed under the License is distributed on an &quot;AS IS&quot; basis, WITHOUT WARRANTY OF 
+// ANY KIND, either express or implied. See the License for the specificlanguage governing rights and 
+// limitations under the License.
+
+// $Id: Globals.pas,v 1.1 2005/05/26 14:30:08 peter3 Exp $
+namespace ShineOn.RTL;
+// NOTES FOR THIS UNIT:
+// This unit should only contain global variables and constants (except string constants used in messages which
+// should be placed in Consts.pas).
+
+// To add a new variable, add it as a class variable to the Globals class and then add a global variable
+// pointing to the global class var. This makes the definitions useable from other languages besides Chrome.
+
+// To add a new constant, add it as a class constant to the Globals class and then add a global constant
+// pointing to the class constant. This makes the definitions useable from other languages besides Chrome.
+
+interface
+uses
+  System.Windows.Forms;
+
+type
+  Globals = public class
+  public
+    class var ApplicationMainForm:Form := nil; // used by TThread.Synchronize();
+  public
+    class const MaxInt:integer = 2147483647;
+    class const MaxLongint:Longint = 2147483647;
+    class const MaxListSize = MaxInt div 16;
+    class const soFromBeginning = 0;
+    class const soFromCurrent = 1;
+    class const soFromEnd = 2;
+    class const soBeginning = TSeekOrigin.Beginning;
+    class const soCurrent = TSeekOrigin.Current;
+    class const soEnd = TSeekOrigin.End;
+    class const fmCreate     = $FFFF;
+    class const fmOpenRead    = $0000;
+    class const fmOpenWrite   = $0001;
+    class const fmOpenReadWrite = $0002;
+    class const fmShareCompat  = $0000; 
+    class const fmShareExclusive = $0010;
+    class const fmShareDenyWrite = $0020;
+    class const fmShareDenyRead = $0030; 
+    class const fmShareDenyNone = $0040;
+    class const toEOF   = Char(0);
+    class const toSymbol = Char(1);
+    class const toString = Char(2);
+    class const toInteger = Char(3);
+    class const toFloat  = Char(4);
+    class const toWString = Char(5);
+    class const scShift = $2000;
+    class const scCtrl = $4000;
+    class const scAlt = $8000;
+    class const scNone = 0;
+    class const taLeftJustify = TAlignment.LeftJustify;
+    class const taRightJustify = TAlignment.RightJustify;
+    class const taCenter = TAlignment.Center;
+    class const bdLeftToRight = TBiDiMode.LeftToRight;
+    class const bdRightToLeft = TBiDiMode.RightToLeft;
+    class const bdRightToLeftNoAlign = TBiDiMode.RightToLeftNoAlign;
+    class const bdRightToLeftReadingOnly = TBiDiMode.RightToLeftReadingOnly;
+    class const ssShift = TShiftState.Shift;
+    class const ssAlt = TShiftState.Alt;
+    class const ssCtrl = TShiftState.Ctrl;
+    class const ssLeft = TShiftState.Left;
+    class const ssRight = TShiftState.Right;
+    class const ssMiddle = TShiftState.Middle;
+    class const ssDouble = TShiftState.Double;
+    class const htKeyword = THelpType.Keyword;
+    class const htContext = THelpType.Context;
+    class const dupIgnore = TDuplicates.Ignore;
+    class const dupAccept = TDuplicates.Accept;
+    class const dupError = TDuplicates.Error;
+    class const tlbsLF = TTextLineBreakStyle.LF;
+    class const tlbsCRLF = TTextLineBreakStyle.CRLF;
+    class const rfReplaceAll = TReplaceFlags.ReplaceAll;
+    class const rfIgnoreCase = TReplaceFlags.IgnoreCase;
+    class const lnAdded = TListNotification.Added;
+    class const lnExtracted = TListNotification.Extracted;
+    class const lnDeleted = TListNotification.Deleted;
+    class const laCopy = TListAssignOp.Copy;
+    class const laAnd = TListAssignOp.&And;
+    class const laOr = TListAssignOp.&Or;
+    class const laXor = TListAssignOp.&Xor;
+    class const laSrcUnique = TListAssignOp.SrcUnique;
+    class const laDestUnique = TListAssignOp.DestUnique;
+    class const tpIdle = TThreadPriority.Idle;
+    class const tpLowest = TThreadPriority.Lowest;
+    class const tpLower = TThreadPriority.Lower;
+    class const tpNormal = TThreadPriority.Normal;
+    class const tpHigher = TThreadPriority.Higher;
+    class const tpHighest = TThreadPriority.Highest;
+    class const tpTimeCritical = TThreadPriority.TimeCritical;
+  end;
+
+const 
+  MaxInt = Globals.MaxInt;
+  MaxLongint = Globals.MaxLongint;
+  MaxListSize = Globals.MaxListSize;
+
+  soFromBeginning = Globals.soFromBeginning;
+  soFromCurrent = Globals.soFromCurrent;
+  soFromEnd = Globals.soFromEnd;
+
+  soBeginning = Globals.soBeginning;
+  soCurrent = Globals.soCurrent;
+  soEnd = Globals.soEnd;
+
+  { TFileStream create mode }
+
+  fmCreate     = Globals.fmCreate;
+  fmOpenRead    = Globals.fmOpenRead;
+  fmOpenWrite   = Globals.fmOpenWrite;
+  fmOpenReadWrite = Globals.fmOpenReadWrite;
+
+  fmShareCompat  = Globals.fmShareCompat;
+  fmShareExclusive = Globals.fmShareExclusive;
+  fmShareDenyWrite = Globals.fmShareDenyWrite;
+  fmShareDenyRead = Globals.fmShareDenyRead;
+  fmShareDenyNone = Globals.fmShareDenyNone;
+
+
+  { TParser special tokens }
+
+  toEOF   = Globals.toEOF;
+  toSymbol = Globals.toSymbol;
+  toString = Globals.toString;
+  toInteger = Globals.toInteger;
+  toFloat  = Globals.toFloat;
+  toWString = Globals.toWString;
+
+  { TShortCut special values }
+
+  scShift = Globals.scShift;
+  scCtrl = Globals.scCtrl;
+  scAlt = Globals.scAlt;
+  scNone = Globals.scNone;
+
+  taLeftJustify = Globals.taLeftJustify;
+  taRightJustify = Globals.taRightJustify;
+  taCenter = Globals.taCenter;
+
+  bdLeftToRight = Globals.bdLeftToRight;
+  bdRightToLeft = Globals.bdRightToLeft;
+  bdRightToLeftNoAlign = Globals.bdRightToLeftNoAlign;
+  bdRightToLeftReadingOnly = Globals.bdRightToLeftReadingOnly 
+
+  ssShift = Globals.ssShift;
+  ssAlt = Globals.ssAlt;
+  ssCtrl = Globals.ssCtrl;
+  ssLeft = Globals.ssLeft;
+  ssRight = Globals.ssRight;
+  ssMiddle = Globals.ssMiddle;
+  ssDouble = Globals.ssDouble;
+
+  htKeyword = Globals.htKeyword;
+  htContext = Globals.htContext;
+
+  dupIgnore = Globals.dupIgnore;
+  dupAccept = Globals.dupAccept;
+  dupError = Globals.dupError;
+
+  tlbsLF = Globals.tlbsLF;
+  tlbsCRLF = Globals.tlbsCRLF;
+
+  rfReplaceAll = Globals.rfReplaceAll;
+  rfIgnoreCase = Globals.rfIgnoreCase;
+
+  lnAdded = Globals.lnAdded;
+  lnExtracted = Globals.lnExtracted;
+  lnDeleted = Globals.lnDeleted;
+
+  laCopy = Globals.laCopy;
+  laAnd = Globals.laAnd;
+  laOr = Globals.laOr;
+  laXor = Globals.laXor;
+  laSrcUnique = Globals.laSrcUnique;
+  laDestUnique = Globals.laDestUnique;
+
+  tpIdle = Globals.tpIdle;
+  tpLowest = Globals.tpLowest;
+  tpLower = Globals.tpLower;
+  tpNormal = Globals.tpNormal;
+  tpHigher = Globals.tpHigher;
+  tpHighest = Globals.tpHighest;
+  tpTimeCritical = Globals.tpTimeCritical;
+ 
+var
+ ApplicationMainForm:Form := Globals.ApplicationMainForm;
+  
+
+implementation
+
+end.
+
+Index: Classes.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Classes.pas,v
+retrieving revision 1.6
+retrieving revision 1.7
+diff -C2 -d -r1.6 -r1.7
+*** Classes.pas	16 May 2005 22:05:36 -0000	1.6
+--- Classes.pas	26 May 2005 14:30:08 -0000	1.7
+***************
+*** 22,32 ****
+  uses
+    System.Runtime.InteropServices, // for guid attribute
+    System.Threading,
+!   System.Collections;
+    
+  type
+    TObject = public class(System.Object)
+    public
+!     procedure Free; { virtual? }
+    end;
+    
+--- 22,35 ----
+  uses
+    System.Runtime.InteropServices, // for guid attribute
++   System.Runtime.CompilerServices,
+    System.Threading,
+!   System.Collections,
+!   System.Windows.Forms;
+    
+  type
+    TObject = public class(System.Object)
+    public
+!     procedure Free; 
+!     procedure Destroy;virtual;
+    end;
+    
+***************
+*** 38,55 ****
+    
+    TListNotification = public (Added, Extracted, Deleted);
+- const
+-   lnAdded = TListNotification.Added;
+-   lnExtracted = TListNotification.Extracted;
+-   lnDeleted  = TListNotification.Deleted;
+    
+  type   
+    TListAssignOp = public (Copy, &amp;And, &amp;Or, &amp;Xor, SrcUnique, DestUnique);
+! const  
+!   laCopy = TListAssignOp.Copy;
+!   laAnd = TListAssignOp.&And;
+!   laOr = TListAssignOp.&Or;
+!   laXor = TListAssignOp.&Xor;
+!   laSrcUnique = TListAssignOp.SrcUnique;
+!   laDestUnique = TListAssignOp.DestUnique;
+    
+  type  
+--- 41,49 ----
+    
+    TListNotification = public (Added, Extracted, Deleted);
+    
++  
+  type   
+    TListAssignOp = public (Copy, &amp;And, &amp;Or, &amp;Xor, SrcUnique, DestUnique);
+!   
+    
+  type  
+***************
+*** 280,285 ****
+    end;
+    
+- //  TStringList = class;
+- 
+    TStringListSortCompare = public function(List: TStringList; Index1, Index2: Integer): Integer;
+  
+--- 274,277 ----
+***************
+*** 373,377 ****
+      function Write(const Buffer:array of byte; Count: Longint): Longint; override;
+      function Seek(const Offset: Int64; Origin: TSeekOrigin): Int64; override;
+!     procedure Free;reintroduce;
+      property Handle: Integer read GetHandle;
+    end;
+--- 365,369 ----
+      function Write(const Buffer:array of byte; Count: Longint): Longint; override;
+      function Seek(const Offset: Int64; Origin: TSeekOrigin): Int64; override;
+!     procedure Destroy;override;
+      property Handle: Integer read GetHandle;
+    end;
+***************
+*** 397,401 ****
+      procedure SaveToStream(Stream: TStream);
+      procedure SaveToFile(const FileName: string);
+!     procedure Free;reintroduce;
+      property Memory: array of byte read GetMemory;
+    end;
+--- 389,393 ----
+      procedure SaveToStream(Stream: TStream);
+      procedure SaveToFile(const FileName: string);
+!     procedure Destroy;override;
+      property Memory: array of byte read GetMemory;
+    end;
+***************
+*** 494,506 ****
+    TThreadPriority = public (Idle, Lowest, Lower, Normal, Higher, Highest, TimeCritical);
+    
+- const
+-   tpIdle = TThreadPriority.Idle;
+-   tpLowest = TThreadPriority.Lowest;
+-   tpLower = TThreadPriority.Lower;
+-   tpNormal = TThreadPriority.Normal;
+-   tpHigher = TThreadPriority.Higher;
+-   tpHighest = TThreadPriority.Highest;
+-   tpTimeCritical = TThreadPriority.TimeCritical;
+-   
+  type  
+    TThread = public class
+--- 486,489 ----
+***************
+*** 521,526 ****
+      procedure DoTerminate; virtual;
+      procedure Execute; virtual; abstract;
+      procedure Synchronize(AMethod: TThreadMethod);
+!     property ReturnValue: Integer read FReturnValue write FReturnValue;
+      property Terminated: Boolean read GetTerminated;
+    public
+--- 504,510 ----
+      procedure DoTerminate; virtual;
+      procedure Execute; virtual; abstract;
++     
+      procedure Synchronize(AMethod: TThreadMethod);
+!     property ReturnValue: Integer read FReturnValue write FReturnValue; // TODO: this is always 0 for now
+      property Terminated: Boolean read GetTerminated;
+    public
+***************
+*** 545,549 ****
+  
+  function RTLStreamToDotNetStream(AStream:TStream):System.IO.Stream;
+! var buf:array [0..1023] of byte;ACount:integer;
+  begin
+    Result := new System.IO.MemoryStream;
+--- 529,535 ----
+  
+  function RTLStreamToDotNetStream(AStream:TStream):System.IO.Stream;
+! var 
+!   buf:array of byte := new byte[1024]; // need to be dynamic
+!   ACount:integer;
+  begin
+    Result := new System.IO.MemoryStream;
+***************
+*** 558,562 ****
+  
+  function DotNetStreamToRTLStream(AStream:System.IO.Stream):TStream;
+! var buf:array [0..1023] of byte;ACount:integer;
+  begin
+    Result := new TMemoryStream;
+--- 544,550 ----
+  
+  function DotNetStreamToRTLStream(AStream:System.IO.Stream):TStream;
+! var 
+!   buf:array of byte := new byte [1024];
+!   ACount:integer;
+  begin
+    Result := new TMemoryStream;
+***************
+*** 570,579 ****
+  end;
+  
+! 
+! 
+! procedure TObject.Free;
+  begin
+    if Self is IDisposable then
+      IDisposable(Self).Dispose;
+  end;    
+  
+--- 558,570 ----
+  end;
+  
+! procedure TObject.Destroy;
+  begin
+    if Self is IDisposable then
+      IDisposable(Self).Dispose;
++ end;
++ 
++ procedure TObject.Free;
++ begin
++   if Self &lt;&gt; nil then Destroy;
+  end;    
+  
+***************
+*** 1885,1889 ****
+  end;
+  
+! procedure THandleStream.Free;
+  begin
+    if FStream &lt;&gt; nil then
+--- 1876,1880 ----
+  end;
+  
+! procedure THandleStream.Destroy;
+  begin
+    if FStream &lt;&gt; nil then
+***************
+*** 1894,1898 ****
+      FStream := nil;
+    end;
+!   inherited Free;
+  end;
+  
+--- 1885,1889 ----
+      FStream := nil;
+    end;
+!   inherited Destroy;
+  end;
+  
+***************
+*** 2011,2018 ****
+  end;
+  
+! procedure TCustomMemoryStream.Free;
+  begin
+    FStream.Close;
+!   inherited Free;
+  end;
+  
+--- 2002,2009 ----
+  end;
+  
+! procedure TCustomMemoryStream.Destroy;
+  begin
+    FStream.Close;
+!   inherited Destroy;
+  end;
+  
+***************
+*** 2252,2260 ****
+  begin
+    FThread.Abort;
+  end;
+  
+  procedure TThread.Synchronize(AMethod: TThreadMethod);
+  begin
+!   NotImplemented;
+  end;
+  
+--- 2243,2260 ----
+  begin
+    FThread.Abort;
++   if Assigned(FOnTerminate) then
++     FOnTerminate(Self);
+  end;
+  
+  procedure TThread.Synchronize(AMethod: TThreadMethod);
+  begin
+!   with Form:Form := ApplicationMainForm do
+!   begin
+!     if Form = nil then
+!       Form := Form.ActiveForm; // user hasn't set the global ApplicationMainForm variable, so check if there is another active form
+!     if Form = nil then
+!       raise EThread.Create('Cannot call TThread.Synchronize without an active form');
+!     Form.Invoke(AMethod);  
+!   end;
+  end;
+  
+***************
+*** 2282,2287 ****
+  procedure TThread.Terminate;
+  begin
+!   //Synchronize(DoTerminate); // Chrome doesn't support this type of method call
+!   NotImplemented;
+  end;
+  
+--- 2282,2287 ----
+  procedure TThread.Terminate;
+  begin
+!   FThread.Abort;
+!   Synchronize(new TThreadMethod(DoTerminate));
+  end;
+  
+
+Index: ShineOn.RTL.chrome
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/ShineOn.RTL.chrome,v
+retrieving revision 1.5
+retrieving revision 1.6
+diff -C2 -d -r1.5 -r1.6
+*** ShineOn.RTL.chrome	7 May 2005 10:03:31 -0000	1.5
+--- ShineOn.RTL.chrome	26 May 2005 14:30:08 -0000	1.6
+***************
+*** 11,21 ****
+      &lt;AllowLegacyOutParams&gt;True&lt;/AllowLegacyOutParams&gt;
+      &lt;AllowUnsafeCode&gt;False&lt;/AllowUnsafeCode&gt;
+      &lt;ApplicationIcon&gt;
+      &lt;/ApplicationIcon&gt;
+    &lt;/ProjectOptions&gt;
+    &lt;References&gt;
+!     &lt;Reference Assembly=&quot;$(Framework)\mscorlib.dll&quot; Display=&quot;mscorlib&quot; CopyLocal=&quot;False&quot; IgnoreStrongName=&quot;False&quot; IgnoreVersion=&quot;False&quot; /&gt;
+!     &lt;Reference Assembly=&quot;$(Framework)\System.dll&quot; Display=&quot;System&quot; CopyLocal=&quot;False&quot; IgnoreStrongName=&quot;False&quot; IgnoreVersion=&quot;False&quot; /&gt;
+!     &lt;Reference Assembly=&quot;$(Framework)\System.Drawing.dll&quot; Display=&quot;System.Drawing&quot; CopyLocal=&quot;False&quot; IgnoreStrongName=&quot;False&quot; IgnoreVersion=&quot;False&quot; /&gt;
+    &lt;/References&gt;
+    &lt;Configurations&gt;
+--- 11,23 ----
+      &lt;AllowLegacyOutParams&gt;True&lt;/AllowLegacyOutParams&gt;
+      &lt;AllowUnsafeCode&gt;False&lt;/AllowUnsafeCode&gt;
++     &lt;AllowLegacyCreate&gt;True&lt;/AllowLegacyCreate&gt;
+      &lt;ApplicationIcon&gt;
+      &lt;/ApplicationIcon&gt;
+    &lt;/ProjectOptions&gt;
+    &lt;References&gt;
+!     &lt;Reference Assembly=&quot;$(Framework)\mscorlib.dll&quot; Display=&quot;mscorlib&quot; CopyLocal=&quot;False&quot; /&gt;
+!     &lt;Reference Assembly=&quot;$(Framework)\System.dll&quot; Display=&quot;System&quot; CopyLocal=&quot;False&quot; /&gt;
+!     &lt;Reference Assembly=&quot;$(Framework)\System.Drawing.dll&quot; Display=&quot;System.Drawing&quot; CopyLocal=&quot;False&quot; /&gt;
+!     &lt;Reference Assembly=&quot;..\..\..\..\..\..\WINNT\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll&quot; Display=&quot;System.Windows.Forms.dll&quot; CopyLocal=&quot;False&quot; /&gt;
+    &lt;/References&gt;
+    &lt;Configurations&gt;
+***************
+*** 83,86 ****
+--- 85,92 ----
+      &lt;/File&gt;
+      &lt;File Filename=&quot;Types.pas&quot;&gt;
++       &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
++       &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
++     &lt;/File&gt;
++     &lt;File Filename=&quot;Globals.pas&quot;&gt;
+        &lt;ExcludeFromBuild&gt;False&lt;/ExcludeFromBuild&gt;
+        &lt;BuildAction&gt;Compile&lt;/BuildAction&gt;
+
+Index: SysUtils.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/SysUtils.pas,v
+retrieving revision 1.6
+retrieving revision 1.7
+diff -C2 -d -r1.6 -r1.7
+*** SysUtils.pas	16 May 2005 22:05:36 -0000	1.6
+--- SysUtils.pas	26 May 2005 14:30:08 -0000	1.7
+***************
+*** 19,26 ****
+    TReplaceFlags = public set of (ReplaceAll, IgnoreCase);
+    
+- const
+-   rfReplaceAll = TReplaceFlags.ReplaceAll;
+-   rfIgnoreCase = TReplaceFlags.IgnoreCase;
+-   
+  type
+    SysUtils = public sealed class
+--- 19,22 ----
+
+Index: System.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/System.pas,v
+retrieving revision 1.3
+retrieving revision 1.4
+diff -C2 -d -r1.3 -r1.4
+*** System.pas	16 May 2005 22:05:36 -0000	1.3
+--- System.pas	26 May 2005 14:30:08 -0000	1.4
+***************
+*** 378,382 ****
+    Result := ShineOn.RTL.System.Succ(Value);
+  end;
+!    
+  function Round(Value:Double):Integer;
+  begin
+--- 378,383 ----
+    Result := ShineOn.RTL.System.Succ(Value);
+  end;
+!    
+! 
+  function Round(Value:Double):Integer;
+  begin
+
+Index: Types.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Types.pas,v
+retrieving revision 1.4
+retrieving revision 1.5
+diff -C2 -d -r1.4 -r1.5
+*** Types.pas	16 May 2005 22:05:36 -0000	1.4
+--- Types.pas	26 May 2005 14:30:08 -0000	1.5
+***************
+*** 16,35 ****
+    System.Runtime.InteropServices; // for guid attribute
+    
+- const
+-   MaxInt:integer = 2147483647;
+-   MaxLongint:Longint = 2147483647;
+-   MaxListSize = MaxInt div 16;
+- 
+-   soFromBeginning = 0;
+-   soFromCurrent = 1;
+-   soFromEnd = 2;
+  
+  type
+  { TStream seek origins }
+    TSeekOrigin = public (Beginning, Current, &amp;End);
+- const
+-   soBeginning = TSeekOrigin.Beginning;
+-   soCurrent = TSeekOrigin.Current;
+-   soEnd = TSeekOrigin.End;
+  
+  type  
+--- 16,23 ----
+***************
+*** 182,217 ****
+  
+  
+- 
+- const
+- { TFileStream create mode }
+- 
+-   fmCreate         = $FFFF;
+-   fmOpenRead       = $0000;
+-   fmOpenWrite      = $0001;
+-   fmOpenReadWrite  = $0002;
+- 
+-   fmShareCompat    = $0000; 
+-   fmShareExclusive = $0010;
+-   fmShareDenyWrite = $0020;
+-   fmShareDenyRead  = $0030; 
+-   fmShareDenyNone  = $0040;
+-   
+- 
+- { TParser special tokens }
+- 
+-   toEOF     = Char(0);
+-   toSymbol  = Char(1);
+-   toString  = Char(2);
+-   toInteger = Char(3);
+-   toFloat   = Char(4);
+-   toWString = Char(5);
+- 
+-   { TShortCut special values }
+- 
+-   scShift = $2000;
+-   scCtrl = $4000;
+-   scAlt = $8000;
+-   scNone = 0;
+- 
+  type
+  
+--- 170,173 ----
+***************
+*** 224,247 ****
+    THelpType = public (Keyword, Context);
+    
+- const
+-   taLeftJustify = TAlignment.LeftJustify;
+-   taRightJustify = TAlignment.RightJustify;
+-   taCenter = TAlignment.Center;
+- 
+-   bdLeftToRight = TBiDiMode.LeftToRight;
+-   bdRightToLeft = TBiDiMode.RightToLeft;
+-   bdRightToLeftNoAlign = TBiDiMode.RightToLeftNoAlign;
+-   bdRightToLeftReadingOnly = TBiDiMode.RightToLeftReadingOnly;
+-   
+-   ssShift = TShiftState.Shift;
+-   ssAlt = TShiftState.Alt;
+-   ssCtrl = TShiftState.Ctrl;
+-   ssLeft = TShiftState.Left;
+-   ssRight = TShiftState.Right;
+-   ssMiddle = TShiftState.Middle;
+-   ssDouble = TShiftState.Double;
+-   
+-   htKeyword = THelpType.Keyword;
+-   htContext = THelpType.Context;
+    
+  { Types used by standard events }
+--- 180,183 ----
+***************
+*** 281,288 ****
+    TDuplicates = public (Ignore, Accept, Error);
+    
+- const  
+-   dupIgnore = TDuplicates.Ignore;
+-   dupAccept = TDuplicates.Accept;
+-   dupError = TDuplicates.Error;
+  
+  type
+--- 217,220 ----
+***************
+*** 292,299 ****
+    //TPointerList = public array[0..MaxListSize - 1] of IntPtr;
+    TTextLineBreakStyle = public (LF, CRLF);
+-   
+- const  
+-   tlbsLF = TTextLineBreakStyle.LF;
+-   tlbsCRLF = TTextLineBreakStyle.CRLF;
+    
+  type  
+--- 224,227 ----
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000012.html">[Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.5,1.6 Contnrs.pas,1.2,1.3 SysUtils.pas,1.5,1.6 System.pas,1.2,1.3 Types.pas,1.3,1.4
+</A></li>
+	<LI>Next message: <A HREF="000014.html">[Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.4,1.5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#13">[ date ]</a>
+              <a href="thread.html#13">[ thread ]</a>
+              <a href="subject.html#13">[ subject ]</a>
+              <a href="author.html#13">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

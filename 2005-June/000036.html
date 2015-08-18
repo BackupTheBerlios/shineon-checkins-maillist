@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/ShineOn.RTL Types.pas,1.11,1.12
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20Types.pas%2C1.11%2C1.12&In-Reply-To=%3C200506281454.j5SEscI14444%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000035.html">
+   <LINK REL="Next"  HREF="000037.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/ShineOn.RTL Types.pas,1.11,1.12</H1>
+    <B>peter3</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20Types.pas%2C1.11%2C1.12&In-Reply-To=%3C200506281454.j5SEscI14444%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/ShineOn.RTL Types.pas,1.11,1.12">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Tue Jun 28 16:54:38 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000035.html">[Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.10,1.11 Contnrs.pas,1.4,1.5 ShineOn.RTL.chrome,1.8,1.9 SysUtils.pas,1.12,1.13 System.pas,1.13,1.14 Types.pas,1.10,1.11
+</A></li>
+        <LI>Next message: <A HREF="000037.html">[Shineon-checkins] ShineOn ShineOn.2003.sln,1.2,1.3
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#36">[ date ]</a>
+              <a href="thread.html#36">[ thread ]</a>
+              <a href="subject.html#36">[ subject ]</a>
+              <a href="author.html#36">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv10180/ShineOn.RTL
+
+Modified Files:
+	Types.pas 
+Log Message:
+- FILETIME is already available from System.InteropServices, so use it as the base for TFileTime
+- type alias declarations must be marked as &quot;public&quot; to be visible at all (Reflector)
+
+Index: Types.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Types.pas,v
+retrieving revision 1.11
+retrieving revision 1.12
+diff -C2 -d -r1.11 -r1.12
+*** Types.pas	28 Jun 2005 13:29:37 -0000	1.11
+--- Types.pas	28 Jun 2005 14:54:35 -0000	1.12
+***************
+*** 20,24 ****
+    System,
+    System.Globalization,
+!   System.Runtime.InteropServices; // for guid attribute
+    
+  type
+--- 20,24 ----
+    System,
+    System.Globalization,
+!   System.Runtime.InteropServices; // for guid attribute and FILETIME
+    
+  type
+***************
+*** 27,82 ****
+  
+  type  
+!   HRESULT = Longint;
+  
+!   TGUID = System.GUID;
+!   PGUID = ^TGUID;
+  
+!   PLongint = ^Longint;
+!   PInteger = ^Integer;
+!   PSmallInt = ^SmallInt;
+!   PDouble = ^Double;
+!   PByte = ^Byte;
+!   DWORD = LongWord;
+  
+!   TIntegerDynArray      = array of Integer;
+!   TCardinalDynArray     = array of Cardinal;
+!   TWordDynArray         = array of Word;
+!   TSmallIntDynArray     = array of SmallInt;
+!   TByteDynArray         = array of Byte;
+!   TShortIntDynArray     = array of ShortInt;
+!   TInt64DynArray        = array of Int64;
+!   TLongWordDynArray     = array of LongWord;
+!   TSingleDynArray       = array of Single;
+!   TDoubleDynArray       = array of Double;
+!   TBooleanDynArray      = array of Boolean;
+!   TStringDynArray       = array of string;
+!   TWideStringDynArray   = array of WideString;
+  
+!   TPoint = System.Drawing.Point;
+!   TRect = System.Drawing.Rectangle; 
+!   TSize = System.Drawing.Size;
+!   TSmallPoint = System.Drawing.Point;
+  
+!   TOleChar = WideChar;
+!   POleStr = ^WideChar;
+!   PPOleStr = ^POleStr;
+  
+!   PCLSID = ^TGUID;
+!   TCLSID = TGUID;
+  
+!   Largeint = Int64;
+!   PDWORD = ^DWORD;
+    
+!   LCID = Word;
+!   LANGID = Word;
+  
+!   PFileTime = ^TFileTime;
+!   TFileTime = public record
+!   public 
+!     dwLowDateTime: DWORD;
+!     dwHighDateTime: DWORD;
+!   end;
+!   _FILETIME = TFileTime;
+!   FILETIME = TFileTime;
+  
+    [Guid('00000000-0000-0000-C000-000000000046')]
+--- 27,76 ----
+  
+  type  
+!   HRESULT = public Longint;
+  
+!   TGUID = public System.GUID;
+!   PGUID = public ^TGUID;
+  
+!   PLongint = public ^Longint;
+!   PInteger = public ^Integer;
+!   PSmallInt = public ^SmallInt;
+!   PDouble = public ^Double;
+!   PByte = public ^Byte;
+!   DWORD = public LongWord;
+  
+!   TIntegerDynArray      = public array of Integer;
+!   TCardinalDynArray     = public array of Cardinal;
+!   TWordDynArray         = public array of Word;
+!   TSmallIntDynArray     = public array of SmallInt;
+!   TByteDynArray         = public array of Byte;
+!   TShortIntDynArray     = public array of ShortInt;
+!   TInt64DynArray        = public array of Int64;
+!   TLongWordDynArray     = public array of LongWord;
+!   TSingleDynArray       = public array of Single;
+!   TDoubleDynArray       = public array of Double;
+!   TBooleanDynArray      = public array of Boolean;
+!   TStringDynArray       = public array of string;
+!   TWideStringDynArray   = public array of WideString;
+  
+!   TPoint = public System.Drawing.Point;
+!   TRect = public System.Drawing.Rectangle; 
+!   TSize = public System.Drawing.Size;
+!   TSmallPoint = public System.Drawing.Point;
+  
+!   TOleChar = public WideChar;
+!   POleStr = public ^WideChar;
+!   PPOleStr = public ^POleStr;
+  
+!   PCLSID = public ^TGUID;
+!   TCLSID = public TGUID;
+  
+!   Largeint = public Int64;
+!   PDWORD = public ^DWORD;
+    
+!   LCID = public Word;
+!   LANGID = public Word;
+  
+!   PFileTime = public ^TFileTime;
+!   TFileTime = public FILETIME;
+  
+    [Guid('00000000-0000-0000-C000-000000000046')]
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000035.html">[Shineon-checkins] ShineOn/ShineOn.RTL Classes.pas,1.10,1.11 Contnrs.pas,1.4,1.5 ShineOn.RTL.chrome,1.8,1.9 SysUtils.pas,1.12,1.13 System.pas,1.13,1.14 Types.pas,1.10,1.11
+</A></li>
+	<LI>Next message: <A HREF="000037.html">[Shineon-checkins] ShineOn ShineOn.2003.sln,1.2,1.3
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#36">[ date ]</a>
+              <a href="thread.html#36">[ thread ]</a>
+              <a href="subject.html#36">[ subject ]</a>
+              <a href="author.html#36">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

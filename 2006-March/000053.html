@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.6,1.7
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2006-March/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20TestSystem.pas%2C1.6%2C1.7&In-Reply-To=%3C200603171541.k2HFfcb17117%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000052.html">
+   <LINK REL="Next"  HREF="000054.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.6,1.7</H1>
+    <B>loonquawl</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20TestSystem.pas%2C1.6%2C1.7&In-Reply-To=%3C200603171541.k2HFfcb17117%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.6,1.7">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Fri Mar 17 16:41:38 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000052.html">[Shineon-checkins] ShineOn/NUnit TestIniFiles.pas,1.2,1.3
+</A></li>
+        <LI>Next message: <A HREF="000054.html">[Shineon-checkins] ShineOn/NUnit TestSysUtils.pas,1.2,1.3
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#53">[ date ]</a>
+              <a href="thread.html#53">[ thread ]</a>
+              <a href="subject.html#53">[ subject ]</a>
+              <a href="author.html#53">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/NUnit
+In directory sheep:/tmp/cvs-serv29623/NUnit
+
+Modified Files:
+	TestSystem.pas 
+Log Message:
+Fixed the StringOfChar Test method.
+Fixed SystemTests.TruncTDateTime.
+
+Index: TestSystem.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/TestSystem.pas,v
+retrieving revision 1.6
+retrieving revision 1.7
+diff -C2 -d -r1.6 -r1.7
+*** TestSystem.pas	16 Mar 2006 19:18:37 -0000	1.6
+--- TestSystem.pas	17 Mar 2006 14:42:58 -0000	1.7
+***************
+*** 11,16 ****
+  // History:
+  //
+! // 2006-03-16   :   Jeroen Vandezande    :  Implemented the [Test, Ignore('Test not implemented')] attribute.
+! //                                          Fixed the SystemTests.StringOfChar method.
+  
+  namespace NUnit.ShineOn.RTL;
+--- 11,16 ----
+  // History:
+  //
+! // 2006-02-17   :   Jeroen Vandezande   : Fixed the StringOfChar Test method.
+! // 2006-02-17   :   Jeroen Vandezande   : Fixed SystemTests.TruncTDateTime.  
+  
+  namespace NUnit.ShineOn.RTL;
+***************
+*** 18,21 ****
+--- 18,22 ----
+  interface
+  uses
++   System,
+    Nunit.Framework,
+    ShineOn.RTL;
+***************
+*** 53,57 ****
+      [Test]
+      method Copy;
+!     [Test, Ignore('Test not implemented')]
+      method Str;
+      [Test]
+--- 54,58 ----
+      [Test]
+      method Copy;
+!     [Test, Ignore('Test not implemented')] 
+      method Str;
+      [Test]
+***************
+*** 75,79 ****
+      [Test]
+      method RoundDouble;
+!     [Test]
+      method RoundTDateTime;
+      [Test]
+--- 76,80 ----
+      [Test]
+      method RoundDouble;
+!     [ExpectedException(typeof(InvalidCastException))]    
+      method RoundTDateTime;
+      [Test]
+***************
+*** 83,91 ****
+      [Test]
+      method IntDouble;
+!     [Test, Ignore('Test not implemented')]
+      method IntTDateTime;
+      [Test]
+      method FracDouble;
+!     [Test, Ignore('Test not implemented')]
+      method FracTDateTime;
+      [Test]
+--- 84,92 ----
+      [Test]
+      method IntDouble;
+!     [Test, Ignore('Test not implemented')] 
+      method IntTDateTime;
+      [Test]
+      method FracDouble;
+!     [Test, Ignore('Test not implemented')] 
+      method FracTDateTime;
+      [Test]
+***************
+*** 107,117 ****
+      [Test]
+      method SetLength;
+!     [Test, Ignore('Test not implemented')]
+      method Write;
+!     [Test, Ignore('Test not implemented')]
+      method WriteLn;
+!     [Test, Ignore('Test not implemented')]
+      method Read;
+!     [Test, Ignore('Test not implemented')]
+      method ReadLn;
+      [Test]
+--- 108,118 ----
+      [Test]
+      method SetLength;
+!     [Test, Ignore('Test not implemented')] 
+      method Write;
+!     [Test, Ignore('Test not implemented')] 
+      method WriteLn;
+!     [Test, Ignore('Test not implemented')] 
+      method Read;
+!     [Test, Ignore('Test not implemented')] 
+      method ReadLn;
+      [Test]
+***************
+*** 358,363 ****
+  method SystemTests.TruncTDateTime; 
+  begin
+!   var D:TDateTime := new TDateTime(2005, 01, 01, 23, 0, 0, 0);
+!   NUnit.Framework.Assert.AreEqual(D.ToInt32(nil), ShineOn.RTL.System.Trunc(D));
+  end;
+  
+--- 359,365 ----
+  method SystemTests.TruncTDateTime; 
+  begin
+!   var D:TDateTime := new TDateTime(2005, 01, 01, 23, 0, 0, 0);  
+!   var D2: Double := D;
+!   NUnit.Framework.Assert.AreEqual(Math.Truncate(D2), ShineOn.RTL.System.Trunc(D));
+  end;
+  
+***************
+*** 426,430 ****
+  begin
+    var D:TDateTime := new TDateTime(DateTime.Today);
+!   NUnit.Framework.Assert.AreEqual(d, ShineOn.RTL.System.Abs(d));
+  end;
+  
+--- 428,435 ----
+  begin
+    var D:TDateTime := new TDateTime(DateTime.Today);
+!   //NUnit.Framework.Assert.AreEqual(d, ShineOn.RTL.System.Abs(-d));
+!   //NUnit.Framework.Assert.AreNotEqual(d, ShineOn.RTL.System.Abs(-d));
+!   NUnit.Framework.Assert.AreNotSame(d, ShineOn.RTL.System.Abs(-d));
+!   
+  end;
+  
+***************
+*** 464,469 ****
+  begin
+    var S:String := ShineOn.RTL.System.StringOfChar('A', 1);
+!   var S2:String := 'A';
+!   NUnit.Framework.Assert.AreEqual(S2, S);
+    S := ShineOn.RTL.System.StringOfChar('A', 2);
+    NUnit.Framework.Assert.AreEqual('AA', S);
+--- 469,473 ----
+  begin
+    var S:String := ShineOn.RTL.System.StringOfChar('A', 1);
+!   NUnit.Framework.Assert.AreEqual(String('A'), S);    
+    S := ShineOn.RTL.System.StringOfChar('A', 2);
+    NUnit.Framework.Assert.AreEqual('AA', S);
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000052.html">[Shineon-checkins] ShineOn/NUnit TestIniFiles.pas,1.2,1.3
+</A></li>
+	<LI>Next message: <A HREF="000054.html">[Shineon-checkins] ShineOn/NUnit TestSysUtils.pas,1.2,1.3
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#53">[ date ]</a>
+              <a href="thread.html#53">[ thread ]</a>
+              <a href="subject.html#53">[ subject ]</a>
+              <a href="author.html#53">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.1,1.2
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20TestSystem.pas%2C1.1%2C1.2&In-Reply-To=%3C200506281126.j5SBQ7I06744%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000031.html">
+   <LINK REL="Next"  HREF="000033.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.1,1.2</H1>
+    <B>peter3</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20TestSystem.pas%2C1.1%2C1.2&In-Reply-To=%3C200506281126.j5SBQ7I06744%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.1,1.2">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Tue Jun 28 13:26:07 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000031.html">[Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.11,1.12
+</A></li>
+        <LI>Next message: <A HREF="000033.html">[Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.12,1.13
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#32">[ date ]</a>
+              <a href="thread.html#32">[ thread ]</a>
+              <a href="subject.html#32">[ subject ]</a>
+              <a href="author.html#32">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/NUnit
+In directory sheep:/tmp/cvs-serv14809/NUnit
+
+Modified Files:
+	TestSystem.pas 
+Log Message:
+- Delete should work as in Delphi (without errors when Index and/or Count is beyond limits)
+- A few tests for Delete
+
+Index: TestSystem.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/TestSystem.pas,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** TestSystem.pas	31 May 2005 08:38:50 -0000	1.1
+--- TestSystem.pas	28 Jun 2005 11:26:05 -0000	1.2
+***************
+*** 26,30 ****
+      method Concat;
+      [Test]
+!     method Delete;
+      [Test]
+      method Insert;
+--- 26,44 ----
+      method Concat;
+      [Test]
+!     method Delete1;
+!     [Test]
+!     method Delete2;
+!     [Test]
+!     method Delete3;
+!     [Test]
+!     method Delete4;
+!     [Test]
+!     method Delete5;
+!     [Test]
+!     method Delete6;
+!     [Test]
+!     method Delete7;
+!     [Test]
+!     method Delete8;
+      [Test]
+      method Insert;
+***************
+*** 115,121 ****
+  end;
+  
+! method SystemTests.Delete; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 129,189 ----
+  end;
+  
+! method SystemTests.Delete1; 
+  begin
+!   var S:string := 'TestString'; 
+!   ShineOn.RTL.System.Delete(S, 0, 0); // if Count &lt;= 0 then nothing should happen
+!   NUnit.Framework.Assert.AreEqual(S, 'TestString');
+! end;
+! 
+! method SystemTests.Delete2; 
+! begin
+!   var S:string := 'TestString'; 
+!   ShineOn.RTL.System.Delete(S, S.Length, 0); // if Count &lt;= 0 then nothing should happen
+!   NUnit.Framework.Assert.AreEqual(S, 'TestString');
+! end;
+! 
+! method SystemTests.Delete3; 
+! begin
+!   var S:string := 'TestString'; 
+!   ShineOn.RTL.System.Delete(S, 0, 1); 
+!   NUnit.Framework.Assert.AreEqual(S, 'estString');
+! end;
+! 
+! 
+! method SystemTests.Delete4; 
+! begin
+!   var S:string := 'TestString'; 
+!   ShineOn.RTL.System.Delete(S, S.Length - 1, 1);
+!   NUnit.Framework.Assert.AreEqual(S, 'TestStrin');
+! end;
+! 
+! 
+! method SystemTests.Delete5; 
+! begin
+!   var S:string := 'TestString'; 
+!   ShineOn.RTL.System.Delete(S, S.Length, 1); // if Index + Count &gt;= S.Length then nothing should happen
+!   NUnit.Framework.Assert.AreEqual(S, 'TestString');
+! end;
+! 
+! 
+! method SystemTests.Delete6; 
+! begin
+!   var S:string := 'TestString'; 
+!   ShineOn.RTL.System.Delete(S, -1, -1); // if Index or Count are &lt; 0 then nothing should happen
+!   NUnit.Framework.Assert.AreEqual(S, 'TestString');
+! end;
+! 
+! method SystemTests.Delete7; 
+! begin
+!   var S:string := 'TestString'; 
+!   ShineOn.RTL.System.Delete(S, 4, 3); 
+!   NUnit.Framework.Assert.AreEqual(S, 'Testing');
+! end;
+! 
+! method SystemTests.Delete8; 
+! begin
+!   var S:string := 'TestString'; 
+!   ShineOn.RTL.System.Delete(S, 4, 10000); 
+!   NUnit.Framework.Assert.AreEqual(S, 'Test');
+  end;
+  
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000031.html">[Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.11,1.12
+</A></li>
+	<LI>Next message: <A HREF="000033.html">[Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.12,1.13
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#32">[ date ]</a>
+              <a href="thread.html#32">[ thread ]</a>
+              <a href="subject.html#32">[ subject ]</a>
+              <a href="author.html#32">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

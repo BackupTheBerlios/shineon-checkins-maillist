@@ -1,0 +1,1036 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/ShineOn.RTL Types.pas,1.17,1.18
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2006-April/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20Types.pas%2C1.17%2C1.18&In-Reply-To=%3C200604091116.k39BGNt28681%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000063.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/ShineOn.RTL Types.pas,1.17,1.18</H1>
+    <B>msgclb</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20Types.pas%2C1.17%2C1.18&In-Reply-To=%3C200604091116.k39BGNt28681%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/ShineOn.RTL Types.pas,1.17,1.18">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Sun Apr  9 13:16:23 CEST 2006</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000063.html">[Shineon-checkins] ShineOn/ShineOn.RTL.Win32 Registry.pas,1.4,1.5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#62">[ date ]</a>
+              <a href="thread.html#62">[ thread ]</a>
+              <a href="subject.html#62">[ subject ]</a>
+              <a href="author.html#62">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv10432/ShineOn.RTL
+
+Modified Files:
+	Types.pas 
+Log Message:
+Updated TDateTime form class to record
+
+Index: Types.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Types.pas,v
+retrieving revision 1.17
+retrieving revision 1.18
+diff -C2 -d -r1.17 -r1.18
+*** Types.pas	16 Mar 2006 18:36:59 -0000	1.17
+--- Types.pas	9 Apr 2006 11:16:43 -0000	1.18
+***************
+*** 13,16 ****
+--- 13,17 ----
+  // 2005-06-04   :   Lloyd Kinsella    : More complete implementation of TDateTime
+  // 2006-03-16   :   Jeroen Vandezande : changed Integer to Word of some var's in TryEncodeDateTime &amp; TryEncodeDate
++ // 2006-04-09   :   Corwin Burgess  : changed TDateTime form class to record
+  
+  namespace ShineOn.RTL;
+***************
+*** 238,270 ****
+    // TODO: handle negative values
+    EDateTimeException = public class(Exception);
+!   TDateTime = public class(System.Object, IFormattable, IComparable, IConvertible)
+    private
+      FValue: System.DateTime;
+    public
+!     constructor Create;
+!     constructor Create(const ADateTime: TDateTime);
+!     constructor Create(const ADateTime: System.DateTime);
+!     constructor Create(const ADays: Double);
+!     constructor Create(const ATime: Int64);
+      constructor Create(const AYear, AMonth, ADay, AHour, AMinute, ASecond, AMSec: Word);
+! 
+      function ToString: string; override;
+      function ToDateTime: DateTime;
+  
+!     class function Parse(const Value: string): TDateTime;
+!     class function Parse(const Value: string; Provider: IFormatProvider): TDateTime;
+!     class function Parse(const Value: string; Provider: IFormatProvider; Style: System.Globalization.DateTimeStyles): TDateTime;
+  
+      function Year: Integer;
+      function Month: Integer;
+      function Day: Integer;
+- 
+      function Hour: Integer;
+      function Minute: Integer;
+      function Second: Integer;
+      function MSec: Integer;
+-     
+      function Ticks: Int64;
+- 
+      function DayOfYear: Integer;
+      function DayOfMonth: Integer;
+--- 239,267 ----
+    // TODO: handle negative values
+    EDateTimeException = public class(Exception);
+!   TDateTime = public record (IFormattable, IComparable, IConvertible)
+    private
+      FValue: System.DateTime;
++     class var FMinValue, FMaxValue: System.DateTime;
+    public
+!     class constructor Create;
+!     constructor Create(const AValue: Double);
+!     constructor Create(const ADays: Integer);
+      constructor Create(const AYear, AMonth, ADay, AHour, AMinute, ASecond, AMSec: Word);
+!         
+      function ToString: string; override;
+      function ToDateTime: DateTime;
+  
+!     class function Parse(const AValue: string): TDateTime;
+!     class function Parse(const AValue: string; Provider: IFormatProvider): TDateTime;
+!     class function Parse(const AValue: string; Provider: IFormatProvider; Style: System.Globalization.DateTimeStyles): TDateTime;
+  
+      function Year: Integer;
+      function Month: Integer;
+      function Day: Integer;
+      function Hour: Integer;
+      function Minute: Integer;
+      function Second: Integer;
+      function MSec: Integer;
+      function Ticks: Int64;
+      function DayOfYear: Integer;
+      function DayOfMonth: Integer;
+***************
+*** 275,308 ****
+      class function Date: TDateTime;
+  
+!     class function IsLeapYear(Year: Word): Boolean;
+!     class function DaysInMonth(Year, Month: Word): Word;
+      class function Now: TDateTime;
+  
+!     class procedure DecodeDate(const Value: TDateTime; out Year, Month, Day: Word);
+!     class function DecodeDate(const Value: TDateTime; out Year, Month, Day, DOW: Word): Boolean;
+!     class procedure DecodeTime(const Value: TDateTime; out Hour, Minute, Second, MSec: Word);
+!     class procedure DecodeDateTime(const Value: TDateTime; out Year, Month, Day, Hour, Minute, Second, MSec: Word);
+!     class function EncodeDate(Year, Month, Day: Word): TDateTime;
+!     class function EncodeTime(Hour, Minute, Second, MSec: Word): TDateTime;
+!     class function EncodeDateTime(const Year, Month, Day, Hour, Minute, Second, MSec: Word): TDateTime;
+!     class function TryEncodeDate(Year, Month, Day: Word; out Rslt: TDateTime): Boolean;
+!     class function TryEncodeTime(Hour, Minute, Second, MSec: Word; out Rslt: TDateTime): Boolean;
+!     class function TryEncodeDateTime(const Year, Month, Day, Hour, Minute, Second, MSec: Word; out Rslt: TDateTime): Boolean;
+  
+!     function ReplaceDate(Year, Month, Day: Word): TDateTime;
+!     function ReplaceDate(const Date: TDateTime): TDateTime;
+!     function ReplaceTime(Hour, Minute, Second, MSec: Word): TDateTime;
+!     function ReplaceTime(const Time: TDateTime): TDateTime;
+!     function AddMonth(Months: Integer): TDateTime;
+  
+      class function MinValue: TDateTime;
+      class function MaxValue: TDateTime;
+  
+!     class function Trunc(const Value: TDateTime): Int64;
+!     class function Frac(const Value: TDateTime): Double;
+!     class function Round(const Value: TDateTime): Int64;
+  
+!     class operator Minus(const Value: TDateTime): TDateTime;
+!     class operator Plus(const Value: TDateTime): TDateTime;
+  
+      class operator Add(const Left, Right: TDateTime): TDateTime;
+--- 272,309 ----
+      class function Date: TDateTime;
+  
+!     class function IsLeapYear(AYear: Word): Boolean;
+!     class function DaysInMonth(AYear, AMonth: Word): Word;
+      class function Now: TDateTime;
+  
+!     class function TheDate: TDateTime; 
+!     class function TheTime: TDateTime;
+!     class function TheYear: Word;
+  
+!     class procedure DecodeDate(const AValue: TDateTime; out AYear, AMonth, ADay: Word);
+!     class function DecodeDate(const AValue: TDateTime; out AYear, AMonth, ADay, DOW: Word): Boolean;
+!     class procedure DecodeTime(const AValue: TDateTime; out AHour, AMinute, ASecond, AMSec: Word);
+!     class procedure DecodeDateTime(const AValue: TDateTime; out AYear, AMonth, ADay, AHour, AMinute, ASecond, AMSec: Word);
+!     class function EncodeDate(AYear, AMonth, ADay: Word): TDateTime;
+!     class function EncodeTime(AHour, AMinute, ASecond, AMSec: Word): TDateTime;
+!     class function EncodeDateTime(const AYear, AMonth, ADay, AHour, AMinute, ASecond, AMSec: Word): TDateTime;
+!     class function TryEncodeDate(AYear, AMonth, ADay: Word; out Rslt: TDateTime): Boolean;
+!     class function TryEncodeTime(AHour, AMinute, ASecond, AMSec: Word; out Rslt: TDateTime): Boolean;
+!     class function TryEncodeDateTime(const AYear, AMonth, ADay, AHour, AMinute, ASecond, AMSec: Word; out Rslt: TDateTime): Boolean;
+! 
+!     function ReplaceDate(AYear, AMonth, ADay: Word): TDateTime;
+!     function ReplaceDate(const ADate: TDateTime): TDateTime;
+!     function ReplaceTime(AHour, AMinute, ASecond, AMSec: Word): TDateTime;
+!     function ReplaceTime(const ATime: TDateTime): TDateTime;
+!     function AddMonth(AMonths: Integer): TDateTime;
+  
+      class function MinValue: TDateTime;
+      class function MaxValue: TDateTime;
+  
+!     class function Trunc(const AValue: TDateTime): Int64;
+!     class function Frac(const AValue: TDateTime): Double;
+!     class function Round(const AValue: TDateTime): Int64;
+  
+!     class operator Minus(const AValue: TDateTime): TDateTime;
+!     class operator Plus(const AValue: TDateTime): TDateTime;
+  
+      class operator Add(const Left, Right: TDateTime): TDateTime;
+***************
+*** 320,330 ****
+      class operator GreaterOrEqual(const Left, Right: TDateTime): Boolean;
+  
+!     class operator Implicit(const Value: Integer): TDateTime;
+!     class operator Implicit(const Value: Int64): TDateTime;
+!     class operator Implicit(const Value: Double): TDateTime;
+!     class operator Implicit(const Value: TDateTime): Double;
+!     class operator Implicit(const Value: System.DateTime): TDateTime;
+!     class operator Implicit(const Value: TDateTime): System.DateTime;
+!     class operator Implicit(const Value: TDateTime): TDateTime;
+  
+      // IFormattable
+--- 321,330 ----
+      class operator GreaterOrEqual(const Left, Right: TDateTime): Boolean;
+  
+!     class operator Implicit(const AValue: Integer): TDateTime;
+!     class operator Implicit(const AValue: Int64): TDateTime;
+!     class operator Implicit(const AValue: Double): TDateTime;
+!     class operator Implicit(const AValue: TDateTime): Double;
+!     class operator Implicit(const AValue: System.DateTime): TDateTime;
+!     class operator Implicit(const AValue: TDateTime): System.DateTime;
+  
+      // IFormattable
+***************
+*** 332,336 ****
+  
+      // IComparable
+!     function CompareTo(Value: System.Object): Integer;
+  
+      // IConvertible
+--- 332,336 ----
+  
+      // IComparable
+!     function CompareTo(AValue: System.Object): Integer;
+  
+      // IConvertible
+***************
+*** 396,399 ****
+--- 396,414 ----
+                                            [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]];
+  
++   DaysPerWeek = 7;
++   WeeksPerFortnight = 2;
++   MonthsPerYear = 12;
++   YearsPerDecade = 10;
++   YearsPerCentury = 100;
++   YearsPerMillennium = 1000;
++ 
++   DayMonday = 1;
++   DayTuesday = 2;
++   DayWednesday = 3;
++   DayThursday = 4;
++   DayFriday = 5;
++   DaySaturday = 6;
++   DaySunday = 7;
++ 
+    HoursPerDay = 24;
+    MinsPerHour = 60;
+***************
+*** 404,407 ****
+--- 419,434 ----
+    MSecsPerDay = SecsPerDay * MSecsPerSec;
+    
++   OneHour = 1 / HoursPerDay;
++   OneMinute = 1 / MinsPerDay;
++   OneSecond = 1 / SecsPerDay;
++   OneMillisecond = 1 / MSecsPerDay;
++      
++   DaysPerYear: array [0..1] of Word = [365, 366];
++            
++   {var RecodeLeaveFieldAsIs:Word := High(Word);}
++   LFAI = $FF00; // Less typing, readable code
++     
++   DOWMap: array [1..7] of Word = [7, 1, 2, 3, 4, 5, 6];
++   
+    TicksPerDay: Int64 = 864000000000;
+  
+***************
+*** 418,450 ****
+  end;
+  
+! function DateTimeToDouble(const Value: DateTime): Double;
+! begin
+!   Result := Value.ToOADate;
+! end;
+! 
+! function DoubleToDateTime(const Value: Double): DateTime;
+  begin
+!   Result := DateTime.FromOADate(Value);
+  end;
+  
+! constructor TDateTime.Create;
+  begin
+!   inherited Create;
+!   FValue := System.DateTime.Now;
+  end;
+  
+! constructor TDateTime.Create(const ADateTime: TDateTime);
+  begin
+!   inherited Create;
+!   FValue := new DateTime(ADateTime.Ticks);
+  end;
+  
+! constructor TDateTime.Create(const ADateTime: System.DateTime);
+  begin
+    inherited Create;
+!   FValue := new DateTime(ADateTime.Ticks);
+  end;
+  
+! constructor TDateTime.Create(const ADays: Double);
+  begin
+    inherited Create;
+--- 445,471 ----
+  end;
+  
+! function DateTimeToDouble(const AValue: DateTime): Double;
+  begin
+!   Result := AValue.ToOADate;
+  end;
+  
+! function DoubleToDateTime(const AValue: Double): DateTime;
+  begin
+!   Result := DateTime.FromOADate(AValue);
+  end;
+  
+! class constructor TDateTime.Create;
+  begin
+!   FMinValue := System.DateTime.Create(100, 1, 1, 0, 0, 0, 0);
+!   FMaxValue := System.DateTime.Create(9999, 12, 31, 23, 59, 59, 999);
+  end;
+  
+! constructor TDateTime.Create(const AValue: Double);
+  begin
+    inherited Create;
+!   FValue := DoubleToDateTime(AValue);
+  end;
+  
+! constructor TDateTime.Create(const ADays: Integer);
+  begin
+    inherited Create;
+***************
+*** 452,461 ****
+  end;
+  
+- constructor TDateTime.Create(const ATime: Int64);
+- begin
+-   inherited Create;
+-   FValue := new DateTime(ATime);
+- end;
+- 
+  constructor TDateTime.Create(const AYear, AMonth, ADay, AHour, AMinute, ASecond, AMSec: Word);
+  begin
+--- 473,476 ----
+***************
+*** 474,490 ****
+  end;
+  
+! class function TDateTime.Parse(const Value: string): TDateTime;
+  begin
+!   Result := new TDateTime(DateTime.Parse(Value));
+  end;
+  
+! class function TDateTime.Parse(const Value: string; Provider: IFormatProvider): TDateTime;
+  begin
+!   Result := new TDateTime(DateTime.Parse(Value,Provider));
+  end;
+  
+! class function TDateTime.Parse(const Value: string; Provider: IFormatProvider; Style: System.Globalization.DateTimeStyles): TDateTime;
+  begin
+!   Result := new TDateTime(DateTime.Parse(Value,Provider,Style));
+  end;
+  
+--- 489,505 ----
+  end;
+  
+! class function TDateTime.Parse(const AValue: string): TDateTime;
+  begin
+!   Result.FValue := System.DateTime.Parse(AValue);
+  end;
+  
+! class function TDateTime.Parse(const AValue: string; Provider: IFormatProvider): TDateTime;
+  begin
+!   Result.FValue := System.DateTime.Parse(AValue, Provider);
+  end;
+  
+! class function TDateTime.Parse(const AValue: string; Provider: IFormatProvider; Style: System.Globalization.DateTimeStyles): TDateTime;
+  begin
+!   Result.FValue := System.DateTime.Parse(AValue, Provider, Style);
+  end;
+  
+***************
+*** 554,634 ****
+  end;
+  
+! class function TDateTime.IsLeapYear(Year: Word): Boolean;
+  begin
+!   Result := DateTime.IsLeapYear(Year);
+  end;
+  
+! class function TDateTime.DaysInMonth(Year, Month: Word): Word;
+  var
+    Offset: Integer;
+  begin
+!   if DateTime.IsLeapYear(Year) then
+      Offset := 1
+    else
+      Offset := 0;
+      
+!   Result := MonthDays[Offset][Month];
+  end;
+  
+  class function TDateTime.Now: TDateTime;
+  begin
+!   Result := new TDateTime;
+  end;
+  
+  class function TDateTime.Time: TDateTime;
+  begin
+!   Result := TDateTime.Frac(Now);
+  end;
+  
+  class function TDateTime.Date: TDateTime;
+  begin
+!   Result := TDateTime.Trunc(Now);
+  end;
+  
+! class procedure TDateTime.DecodeDate(const Value: TDateTime; out Year, Month, Day: Word);
+  begin
+!   Year := Value.Year;
+!   Month := Value.Month;
+!   Day := Value.Day;
+  end;
+  
+! class function TDateTime.DecodeDate(const Value: TDateTime; out Year, Month, Day, DOW: Word): Boolean;
+  begin
+!   Year := Value.Year;
+!   Month := Value.Month;
+!   Day := Value.Day;
+!   DOW := Value.DayOfWeek;
+  end;
+  
+! class procedure TDateTime.DecodeTime(const Value: TDateTime; out Hour, Minute, Second, MSec: Word);
+  begin
+!   Hour := Value.Hour;
+!   Minute := Value.Minute;
+!   Second := Value.Second;
+!   MSec := Value.MSec;
+  end;
+  
+! class procedure TDateTime.DecodeDateTime(const Value: TDateTime; out Year, Month, Day, Hour, Minute, Second, MSec: Word);
+  begin
+!   TDateTime.DecodeDate(Value,Year,Month,Day);
+!   TDateTime.DecodeTime(Value,Hour,Minute,Second,MSec);
+  end;
+  
+! class function TDateTime.EncodeDate(Year, Month, Day: Word): TDateTime;
+  begin
+!   Result := new TDateTime(Year,Month,Day,0,0,0,0);
+  end;
+  
+! class function TDateTime.EncodeTime(Hour, Minute, Second, MSec: Word): TDateTime;
+  begin
+!   Result := new TDateTime(1,1,1,Hour,Minute,Second,MSec);
+  end;
+  
+! class function TDateTime.EncodeDateTime(const Year, Month, Day, Hour, Minute, Second, MSec: Word): TDateTime;
+  begin
+!   Result := new TDateTime(Year,Month,Day,Hour,Minute,Second,MSec);
+  end;
+  
+! class function TDateTime.TryEncodeDate(Year, Month, Day: Word; out Rslt: TDateTime): Boolean;
+  var
+    Offset, DIM: word;
+--- 569,672 ----
+  end;
+  
+! class function TDateTime.IsLeapYear(AYear: Word): Boolean;
+  begin
+!   Result := DateTime.IsLeapYear(AYear);
+  end;
+  
+! class function TDateTime.DaysInMonth(AYear, AMonth: Word): Word;
+  var
+    Offset: Integer;
+  begin
+!   if DateTime.IsLeapYear(AYear) then
+      Offset := 1
+    else
+      Offset := 0;
+      
+!   Result := MonthDays[Offset][AMonth];
+  end;
+  
+  class function TDateTime.Now: TDateTime;
+  begin
+!   Result.FValue := System.DateTime.Now;
+! end;
+! 
+! class function TDateTime.TheDate: TDateTime;
+! begin
+!   Result := Now.Date;
+! end;
+! 
+! class function TDateTime.TheTime: TDateTime;
+! begin
+!   Result := Now.Time;
+! end;
+! 
+! class function TDateTime.TheYear: Word;
+! begin
+!   Result := Now.Year;
+  end;
+  
+  class function TDateTime.Time: TDateTime;
+  begin
+!   var LHour, LMinute, LSecond, LMSec: Word;
+! 
+!   var T:DateTime := DateTime.Now;
+!   Console.Out.WriteLine('TDateTime.Time T Now: {0}', T);
+!     
+!   DecodeTime(T, LHour, LMinute, LSecond, LMSec);
+! 
+!   Result := EncodeTime(LHour, LMinute, LSecond, LMSec);
+  end;
+  
+  class function TDateTime.Date: TDateTime;
+  begin
+!   var D:DateTime := System.DateTime.Now;  
+!   Result.FValue := D.Date;
+  end;
+  
+! class procedure TDateTime.DecodeDate(const AValue: TDateTime; out AYear, AMonth, ADay: Word);
+  begin
+!   AYear := AValue.Year;
+!   AMonth := AValue.Month;
+!   ADay := AValue.Day;
+  end;
+  
+! class function TDateTime.DecodeDate(const AValue: TDateTime; out AYear, AMonth, ADay, DOW: Word): Boolean;
+  begin
+!   AYear := AValue.Year;
+!   AMonth := AValue.Month;
+!   ADay := AValue.Day;
+!   DOW := AValue.DayOfWeek;
+  end;
+  
+! class procedure TDateTime.DecodeTime(const AValue: TDateTime; out AHour, AMinute, ASecond, AMSec: Word);
+  begin
+!   AHour := AValue.Hour;
+!   AMinute := AValue.Minute;
+!   ASecond := AValue.Second;
+!   AMSec := AValue.MSec;
+  end;
+  
+! class procedure TDateTime.DecodeDateTime(const AValue: TDateTime; out AYear, AMonth, ADay, AHour, AMinute, ASecond, AMSec: Word);
+  begin
+!   TDateTime.DecodeDate(AValue,AYear,AMonth,ADay);
+!   TDateTime.DecodeTime(AValue,AHour,AMinute,ASecond,AMSec);
+  end;
+  
+! class function TDateTime.EncodeDate(AYear, AMonth, ADay: Word): TDateTime;
+  begin
+!   Result := new TDateTime(AYear,AMonth,ADay,0,0,0,0);
+  end;
+  
+! class function TDateTime.EncodeTime(AHour, AMinute, ASecond, AMSec: Word): TDateTime;
+  begin
+!   Result := new TDateTime(100,1,1,AHour,AMinute,ASecond,AMSec);
+  end;
+  
+! class function TDateTime.EncodeDateTime(const AYear, AMonth, ADay, AHour, AMinute, ASecond, AMSec: Word): TDateTime;
+  begin
+!   Result := new TDateTime(AYear,AMonth,ADay,AHour,AMinute,ASecond,AMSec);
+  end;
+  
+! class function TDateTime.TryEncodeDate(AYear, AMonth, ADay: Word; out Rslt: TDateTime): Boolean;
+  var
+    Offset, DIM: word;
+***************
+*** 636,671 ****
+    Result := False;
+    
+!   if (Year &lt; 1) or (Year &gt; 9999) then Exit;
+!   if (Month &lt; 1) or (Month &gt; 12) then Exit;
+    
+!   if DateTime.IsLeapYear(Year) then
+      Offset := 1
+    else
+      Offset := 0;
+      
+!   DIM := MonthDays[Offset][Month];
+    
+!   if (Day &lt; 1) or (Day &gt; DIM) then Exit;
+    
+!   Rslt := EncodeDate(Year,Month,Day);
+    
+    Result := True;
+  end;
+  
+! class function TDateTime.TryEncodeTime(Hour, Minute, Second, MSec: Word; out Rslt: TDateTime): Boolean;
+  begin
+    Result := False;
+    
+!   if (Hour &lt; 0) or (Hour &gt; 12) then Exit;
+!   if (Minute &lt; 0) or (Minute &gt; 59) then Exit;
+!   if (Second &lt; 0) or (Second &gt; 59) then Exit;
+!   if (MSec &lt; 0) or (MSec &gt; 999) then Exit;
+    
+!   Rslt := EncodeTime(Hour,Minute,Second,MSec);
+    
+    Result := True;
+  end;
+  
+! class function TDateTime.TryEncodeDateTime(const Year, Month, Day, Hour, Minute, Second, MSec: Word; out Rslt: TDateTime): Boolean;
+  var
+    Offset, DIM: word;
+--- 674,709 ----
+    Result := False;
+    
+!   if (AYear &lt; 100) or (AYear &gt; 9999) then Exit;
+!   if (AMonth &lt; 1) or (AMonth &gt; 12) then Exit;
+    
+!   if DateTime.IsLeapYear(AYear) then
+      Offset := 1
+    else
+      Offset := 0;
+      
+!   DIM := MonthDays[Offset][AMonth];
+    
+!   if (ADay &lt; 1) or (ADay &gt; DIM) then Exit;
+    
+!   Rslt := EncodeDate(AYear,AMonth,ADay);
+    
+    Result := True;
+  end;
+  
+! class function TDateTime.TryEncodeTime(AHour, AMinute, ASecond, AMSec: Word; out Rslt: TDateTime): Boolean;
+  begin
+    Result := False;
+    
+!   if (AHour &lt; 0) or (AHour &gt; 12) then Exit;
+!   if (AMinute &lt; 0) or (AMinute &gt; 59) then Exit;
+!   if (ASecond &lt; 0) or (ASecond &gt; 59) then Exit;
+!   if (AMSec &lt; 0) or (AMSec &gt; 999) then Exit;
+    
+!   Rslt := EncodeTime(AHour,AMinute,ASecond,AMSec);
+    
+    Result := True;
+  end;
+  
+! class function TDateTime.TryEncodeDateTime(const AYear, AMonth, ADay, AHour, AMinute, ASecond, AMSec: Word; out Rslt: TDateTime): Boolean;
+  var
+    Offset, DIM: word;
+***************
+*** 673,761 ****
+    Result := False;
+    
+!   if (Year &lt; 1) or (Year &gt; 9999) then Exit;
+!   if (Month &lt; 1) or (Month &gt; 12) then Exit;
+    
+!   if DateTime.IsLeapYear(Year) then
+      Offset := 1
+    else
+      Offset := 0;
+      
+!   DIM := MonthDays[Offset][Month];
+    
+!   if (Day &lt; 1) or (Day &gt; DIM) then Exit;
+    
+!   if (Hour &lt; 0) or (Hour &gt; 12) then Exit;
+!   if (Minute &lt; 0) or (Minute &gt; 59) then Exit;
+!   if (Second &lt; 0) or (Second &gt; 59) then Exit;
+!   if (MSec &lt; 0) or (MSec &gt; 999) then Exit;
+    
+!   Rslt := EncodeDateTime(Year,Month,Day,Hour,Minute,Second,MSec);
+    
+    Result := True;
+  end;
+  
+! function TDateTime.ReplaceDate(Year, Month, Day: Word): TDateTime;
+  begin
+!   Result := new TDateTime(Year,Month,Day,Hour,Minute,Second,MSec);
+  end;
+  
+! function TDateTime.ReplaceDate(const Date: TDate): TDateTime;
+  begin
+!   Result := ReplaceDate(Date.Year,Date.Month,Date.Day);
+! end;
+  
+- function TDateTime.ReplaceTime(Hour, Minute, Second, MSec: Word): TDateTime;
+- begin
+-   Result := new TDateTime(Year,Month,Day,Hour,Minute,Second,MSec);
+  end;
+  
+! function TDateTime.ReplaceTime(const Time: TTime): TDateTime;
+  begin
+!   Result := new TDateTime(Year,Month,Day,Time.Hour,Time.Minute,Time.Second,Time.MSec);
+  end;
+  
+! function TDateTime.AddMonth(Months: Integer): TDateTime;
+  var
+!   NewDate: DateTime;
+  begin
+!   NewDate := ToDateTime;
+!   NewDate.AddMonths(Months);
+  
+!   Result := new TDateTime(NewDate);
+  end;
+  
+  class function TDateTime.MinValue: TDateTime;
+  begin
+!   Result := new TDateTime(MinDateTimeAsDouble);
+  end;
+  
+  class function TDateTime.MaxValue: TDateTime;
+  begin
+!   Result := new TDateTime(MaxDateTimeAsDouble);
+  end;
+  
+! class function TDateTime.Trunc(const Value: TDateTime): Int64;
+  begin
+!   Result := ShineOn.RTL.System.Trunc(Value);
+  end;
+  
+! class function TDateTime.Frac(const Value: TDateTime): Double;
+  begin
+!   Result := ShineOn.RTL.System.Frac(Value);
+  end;
+  
+! class function TDateTime.Round(const Value: TDateTime): Int64;
+  begin
+!   Result := ShineOn.RTL.System.Round(Value);
+  end;
+  
+! class operator TDateTime.Minus(const Value: TDateTime): TDateTime;
+  begin
+!   Result := new TDateTime(-DateTimeToDouble(Value));
+  end;
+  
+! class operator TDateTime.Plus(const Value: TDateTime): TDateTime;
+  begin
+!   Result := new TDateTime(Value);
+  end;
+  
+--- 711,809 ----
+    Result := False;
+    
+!   if (AYear &lt; 100) or (AYear &gt; 9999) then Exit;
+!   if (AMonth &lt; 1) or (AMonth &gt; 12) then Exit;
+    
+!   if DateTime.IsLeapYear(AYear) then
+      Offset := 1
+    else
+      Offset := 0;
+      
+!   DIM := MonthDays[Offset][AMonth];
+    
+!   if (ADay &lt; 1) or (ADay &gt; DIM) then Exit;
+    
+!   if (AHour &lt; 0) or (AHour &gt; 12) then Exit;
+!   if (AMinute &lt; 0) or (AMinute &gt; 59) then Exit;
+!   if (ASecond &lt; 0) or (ASecond &gt; 59) then Exit;
+!   if (AMSec &lt; 0) or (AMSec &gt; 999) then Exit;
+    
+!   Rslt := EncodeDateTime(AYear,AMonth,ADay,AHour,AMinute,ASecond,AMSec);
+    
+    Result := True;
+  end;
+  
+! function TDateTime.ReplaceDate(AYear, AMonth, ADay: Word): TDateTime;
+! var
+!   LHour, LMinute, LSecond, LMilliSecond: Word;
+  begin
+!   DecodeTime(Self, LHour, LMinute, LSecond, LMilliSecond);
+!   Result := EncodeDateTime(AYear, AMonth, ADay, LHour, LMinute, LSecond, LMilliSecond);
+  end;
+  
+! function TDateTime.ReplaceDate(const ADate: TDateTime): TDateTime;
+! var
+!   LYear, LMonth, LDay: Word;
+  begin
+!   DecodeDate(ADate, LYear, LMonth, LDay);
+!   Result := ReplaceDate(LYear, LMonth, LDay);
+  
+  end;
+  
+! function TDateTime.ReplaceTime(AHour, AMinute, ASecond, AMSec: Word): TDateTime;
+! var
+!   LYear, LMonth, LDay: Word;
+  begin
+!   DecodeDate(Self, LYear, LMonth, LDay);
+!   Result := EncodeDateTime(LYear, LMonth, LDay, AHour, AMinute, ASecond, AMSec);
+! 
+  end;
+  
+! function TDateTime.ReplaceTime(const ATime: TDateTime): TDateTime;
+  var
+!   LHour, LMinute, LSecond, LMilliSecond: Word;
+  begin
+!   DecodeTime(ATime, LHour, LMinute, LSecond, LMilliSecond);
+!   Result := ReplaceTime(LHour, LMinute, LSecond, LMilliSecond);
+  
+! end;
+! 
+! function TDateTime.AddMonth(AMonths: Integer): TDateTime;
+! begin
+!   Result.FValue := FValue.AddMonths(AMonths);
+  end;
+  
+  class function TDateTime.MinValue: TDateTime;
+  begin
+!   Result.FValue := FMinValue;
+  end;
+  
+  class function TDateTime.MaxValue: TDateTime;
+  begin
+!   Result.FValue := FMaxValue;
+  end;
+  
+! class function TDateTime.Trunc(const AValue: TDateTime): Int64;
+  begin
+!   Result := ShineOn.RTL.System.Trunc(AValue);
+  end;
+  
+! class function TDateTime.Frac(const AValue: TDateTime): Double;
+  begin
+!   Result := ShineOn.RTL.System.Frac(AValue);
+  end;
+  
+! class function TDateTime.Round(const AValue: TDateTime): Int64;
+  begin
+!   Result := ShineOn.RTL.System.Round(AValue);
+  end;
+  
+! class operator TDateTime.Minus(const AValue: TDateTime): TDateTime;
+  begin
+!   Result := new TDateTime(-DateTimeToDouble(AValue));
+  end;
+  
+! class operator TDateTime.Plus(const AValue: TDateTime): TDateTime;
+  begin
+!   Result := new TDateTime(AValue);
+  end;
+  
+***************
+*** 769,773 ****
+    LeftDateTime.AddTicks(RightDateTime.Ticks);
+  
+!   Result := new TDateTime(LeftDateTime);
+  end;
+  
+--- 817,821 ----
+    LeftDateTime.AddTicks(RightDateTime.Ticks);
+  
+!   Result := TDateTime(LeftDateTime);
+  end;
+  
+***************
+*** 783,787 ****
+    LeftDateTime.AddTicks(RightDateTime.Ticks);
+  
+!   Result := new TDateTime(LeftDateTime);
+  end;
+  
+--- 831,835 ----
+    LeftDateTime.AddTicks(RightDateTime.Ticks);
+  
+!   Result := TDateTime(LeftDateTime);
+  end;
+  
+***************
+*** 795,799 ****
+    LeftDateTime.AddTicks(RightDateTime.Ticks);
+  
+!   Result := new TDateTime(RightDateTime);
+  end;
+  
+--- 843,847 ----
+    LeftDateTime.AddTicks(RightDateTime.Ticks);
+  
+!   Result := TDateTime(RightDateTime);
+  end;
+  
+***************
+*** 808,812 ****
+    Buffer := new TimeSpan(RightDateTime.Ticks);
+  
+!   Result := new TDateTime(LeftDateTime.Subtract(Buffer));
+  end;
+  
+--- 856,860 ----
+    Buffer := new TimeSpan(RightDateTime.Ticks);
+  
+!   Result := TDateTime(LeftDateTime.Subtract(Buffer));
+  end;
+  
+***************
+*** 823,827 ****
+    Buffer := LeftDateTime.Subtract(Span);
+  
+!   Result := new TDateTime(Buffer);
+  end;
+  
+--- 871,875 ----
+    Buffer := LeftDateTime.Subtract(Span);
+  
+!   Result := TDateTime(Buffer);
+  end;
+  
+***************
+*** 832,836 ****
+    LeftDateTime := Left.ToDateTime;
+  
+!   Result := new TDateTime(LeftDateTime.Subtract(Right));
+  end;
+  
+--- 880,884 ----
+    LeftDateTime := Left.ToDateTime;
+  
+!   Result := TDateTime(LeftDateTime.Subtract(Right));
+  end;
+  
+***************
+*** 901,937 ****
+  end;
+  
+! class operator TDateTime.Implicit(const Value: Integer): TDateTime;
+! begin
+!   Result := new TDateTime(Value);
+! end;
+! 
+! class operator TDateTime.Implicit(const Value: Int64): TDateTime;
+  begin
+!   Result := new TDateTime(Value);
+  end;
+  
+! class operator TDateTime.Implicit(const Value: Double): TDateTime;
+  begin
+!   Result := new TDateTime(Value);
+  end;
+  
+! class operator TDateTime.Implicit(const Value: TDateTime): Double;
+  begin
+!   Result := DateTimeToDouble(Value);
+  end;
+  
+! class operator TDateTime.Implicit(const Value: System.DateTime): TDateTime;
+  begin
+!   Result := new TDateTime(Value);
+  end;
+  
+! class operator TDateTime.Implicit(const Value: TDateTime): System.DateTime;
+  begin
+!   Result := new TDateTime(Value).ToDateTime;
+  end;
+  
+! class operator TDateTime.Implicit(const Value: TDateTime): TDateTime;
+  begin
+!   Result := new TDateTime(Value);
+  end;
+  
+--- 949,980 ----
+  end;
+  
+! class operator TDateTime.Implicit(const AValue: Integer): TDateTime;
+  begin
+!   Result := DoubleToDateTime(AValue);
+  end;
+  
+! class operator TDateTime.Implicit(const AValue: Int64): TDateTime;
+  begin
+!   Result := DoubleToDateTime(AValue);
+  end;
+  
+! class operator TDateTime.Implicit(const AValue: Double): TDateTime;
+  begin
+!   Result := DoubleToDateTime(AValue);
+  end;
+  
+! class operator TDateTime.Implicit(const AValue: TDateTime): Double;
+  begin
+!   Result := DateTimeToDouble(AValue);
+  end;
+  
+! class operator TDateTime.Implicit(const AValue: System.DateTime): TDateTime;
+  begin
+!   Result.FValue := AValue;
+  end;
+  
+! class operator TDateTime.Implicit(const AValue: TDateTime): System.DateTime;
+  begin
+!   Result := AValue.FValue;
+  end;
+  
+***************
+*** 943,949 ****
+  
+  // IComparable
+! function TDateTime.CompareTo(Value: System.Object): Integer;
+  begin
+!   Result := FValue.CompareTo(Value);
+  end;
+  
+--- 986,992 ----
+  
+  // IComparable
+! function TDateTime.CompareTo(AValue: System.Object): Integer;
+  begin
+!   Result := FValue.CompareTo(AValue);
+  end;
+  
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000063.html">[Shineon-checkins] ShineOn/ShineOn.RTL.Win32 Registry.pas,1.4,1.5
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#62">[ date ]</a>
+              <a href="thread.html#62">[ thread ]</a>
+              <a href="subject.html#62">[ subject ]</a>
+              <a href="author.html#62">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/ShineOn.RTL Types.pas,1.13,1.14
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20Types.pas%2C1.13%2C1.14&In-Reply-To=%3C200506282358.j5SNwOI32575%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000039.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/ShineOn.RTL Types.pas,1.13,1.14</H1>
+    <B>peter3</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20Types.pas%2C1.13%2C1.14&In-Reply-To=%3C200506282358.j5SNwOI32575%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/ShineOn.RTL Types.pas,1.13,1.14">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Wed Jun 29 01:58:24 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000039.html">[Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.2,1.3
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#40">[ date ]</a>
+              <a href="thread.html#40">[ thread ]</a>
+              <a href="subject.html#40">[ subject ]</a>
+              <a href="author.html#40">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv24781/ShineOn.RTL
+
+Modified Files:
+	Types.pas 
+Log Message:
+
+
+Index: Types.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Types.pas,v
+retrieving revision 1.13
+retrieving revision 1.14
+diff -C2 -d -r1.13 -r1.14
+*** Types.pas	28 Jun 2005 23:32:07 -0000	1.13
+--- Types.pas	28 Jun 2005 23:58:20 -0000	1.14
+***************
+*** 1049,1052 ****
+--- 1049,1053 ----
+  
+  { AnsiString }
++ 
+  method AnsiString.get_Chars(Index:integer): Char;
+  require
+***************
+*** 1110,1114 ****
+    Result := Left.ToString &gt;= Right.ToString;
+  end;
+- 
+  
+  class operator AnsiString.Implicit(const Value: string): AnsiString; 
+--- 1111,1114 ----
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000039.html">[Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.2,1.3
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#40">[ date ]</a>
+              <a href="thread.html#40">[ thread ]</a>
+              <a href="subject.html#40">[ subject ]</a>
+              <a href="author.html#40">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

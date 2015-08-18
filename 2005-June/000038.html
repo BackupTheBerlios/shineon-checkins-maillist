@@ -1,0 +1,722 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.14,1.15 Types.pas,1.12,1.13
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20System.pas%2C1.14%2C1.15%20Types.pas%2C1.12%2C1.13&In-Reply-To=%3C200506282332.j5SNWAI32159%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000037.html">
+   <LINK REL="Next"  HREF="000039.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.14,1.15 Types.pas,1.12,1.13</H1>
+    <B>peter3</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/ShineOn.RTL%20System.pas%2C1.14%2C1.15%20Types.pas%2C1.12%2C1.13&In-Reply-To=%3C200506282332.j5SNWAI32159%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.14,1.15 Types.pas,1.12,1.13">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Wed Jun 29 01:32:10 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000037.html">[Shineon-checkins] ShineOn ShineOn.2003.sln,1.2,1.3
+</A></li>
+        <LI>Next message: <A HREF="000039.html">[Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.2,1.3
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#38">[ date ]</a>
+              <a href="thread.html#38">[ thread ]</a>
+              <a href="subject.html#38">[ subject ]</a>
+              <a href="author.html#38">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/ShineOn.RTL
+In directory sheep:/tmp/cvs-serv7783/ShineOn.RTL
+
+Modified Files:
+	System.pas Types.pas 
+Log Message:
+- some simplifications in TDateTime
+- added inc, dec, succ and pred for char type
+- Copy didn't do the right thing (Sourcce and S were mixed up)
+- alternate implementation of StringOfChar
+- Val now returns (in Code) the index (+1) of any error
+- Added and implemented several new tests
+
+Index: System.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/System.pas,v
+retrieving revision 1.14
+retrieving revision 1.15
+diff -C2 -d -r1.14 -r1.15
+*** System.pas	28 Jun 2005 13:29:37 -0000	1.14
+--- System.pas	28 Jun 2005 23:32:07 -0000	1.15
+***************
+*** 22,25 ****
+--- 22,26 ----
+  
+  uses
++   System.Text,
+    System.Globalization;
+      
+***************
+*** 43,46 ****
+--- 44,48 ----
+      class procedure Val(S:string; var V:Double; var Code: Integer);
+  
++ 
+      class function Ord(Value:Char):integer;
+      class function Ord(Value:Boolean):integer;
+***************
+*** 50,55 ****
+--- 52,64 ----
+      class procedure Dec(var Value:integer);
+      class procedure Dec(var Value:integer; Amount:integer);
++     class procedure Inc(var Value:Char);
++     class procedure Inc(var Value:Char; Amount:integer);
++     class procedure Dec(var Value:Char);
++     class procedure Dec(var Value:Char; Amount:integer);
++ 
+      class function Pred(Value:Integer):Integer;
++     class function Pred(Value:Char):Char;
+      class function Succ(Value:Integer):Integer;
++     class function Succ(Value:Char):Char;
+  
+      class function Round(Value:Double):Integer;
+***************
+*** 93,96 ****
+--- 102,110 ----
+  procedure Str(X:Double; Width:integer;Decimals:integer;var S:string);public;
+  procedure Val(S:string; var V:Double; var Code: Integer);public;
++ procedure Inc(var Value:Char); public;
++ procedure Inc(var Value:Char;Amount:integer); public;
++ procedure Dec(var Value:Char); public;
++ procedure Dec(var Value:Char;Amount:integer); public;
++ 
+  function Ord(Value:Char):integer;public;
+  function Ord(Value:Boolean):integer;public;
+***************
+*** 100,104 ****
+--- 114,120 ----
+  procedure Dec(var Value:integer; Amount:integer);public;
+  function Pred(Value:Integer):Integer;public;
++ function Pred(Value:Char):Char;public;
+  function Succ(Value:Integer):Integer;public;
++ function Succ(Value:Char):Char;public;
+  function Round(Value:Double):Integer;public;
+  function Round(Value:TDateTime):Integer;public;
+***************
+*** 158,170 ****
+  class procedure System.Insert(Source: string; var S: string; Index: Integer);
+  begin
+!   S := Source.Substring(0, Index) + S + Source.Substring(Index + 1);
+  end;
+  
+  class function System.Copy(Source:string; StartIndex, Length: Integer):string;
+  begin
+!   if Source = nil then
+      Result := ''
+!   else
+!     Result := Source.Substring(StartIndex, Length)
+  end;
+  
+--- 174,193 ----
+  class procedure System.Insert(Source: string; var S: string; Index: Integer);
+  begin
+!   S := S.Substring(0, Index) + Source + S.Substring(Index);
+  end;
+  
+  class function System.Copy(Source:string; StartIndex, Length: Integer):string;
+  begin
+!   if (Source = nil) or (StartIndex &gt;= Source.Length) or (Length &lt; 1) then
+      Result := ''
+!   else 
+!   begin
+!     if StartIndex + Length &gt;= Source.Length then
+!       Result := Source.Substring(StartIndex)
+!     else if Length &gt; 0 then
+!       Result := Source.Substring(StartIndex, Length)
+!     else
+!       Result := '';
+!   end;
+  end;
+  
+***************
+*** 180,192 ****
+  
+  class function System.StringOfChar ( RepeatCharacter : Char; RepeatCount : Integer ) : string; 
+- var
+-   TempArray: Array of Char;
+  begin
+!   TempArray := New Char[RepeatCount];
+!   for i:Integer := 0 to RepeatCount -1 do
+    begin
+!     Temparray[i] := RepeatCharacter;
+    end;
+-   result := new String(TempArray);
+  end;
+  
+--- 203,213 ----
+  
+  class function System.StringOfChar ( RepeatCharacter : Char; RepeatCount : Integer ) : string; 
+  begin
+!   with SB:StringBuilder := new StringBuilder do
+    begin
+!     for i:integer := 0 to RepeatCount - 1 do
+!       SB.Append(RepeatCharacter);
+!     Result := SB.ToString;
+    end;
+  end;
+  
+***************
+*** 197,219 ****
+  
+  class procedure System.Val(S:string; var V:Double; var Code: Integer);
+  begin
+    // TODO: should we use NumberFormatInfo.CurrentInfo here?
+    if not Double.TryParse(S, NumberStyles.Any, NumberFormatInfo.InvariantInfo, V) then
+!     Code := 1
+!   else
+!     Code := 0;
+! end;
+! 
+! class function System.Ord(Value:Char):integer;
+! begin
+!   Result := integer(Value);
+! end;
+! 
+! class function System.Ord(Value:Boolean):integer;
+! begin
+!   if Value then
+!     Result := 1
+!   else
+!     Result := 0;
+  end;
+  
+--- 218,237 ----
+  
+  class procedure System.Val(S:string; var V:Double; var Code: Integer);
++ const
++   SNumeric:string = '0123456789.+-eE';
+  begin
+    // TODO: should we use NumberFormatInfo.CurrentInfo here?
++   Code := 0;
+    if not Double.TryParse(S, NumberStyles.Any, NumberFormatInfo.InvariantInfo, V) then
+!   begin
+!     // find first non-numeric value
+!     for i:integer := 0 to S.Length - 1 do
+!       if SNumeric.IndexOf(S[i]) &lt; 0 then
+!       begin
+!         Code := i + 1; // since Val in Delphi sets Code = 0 on success, we add an additional 1 to the result here as well
+!         Exit;
+!       end;
+!     Code := S.Length;
+!   end;
+  end;
+  
+***************
+*** 238,241 ****
+--- 256,292 ----
+  end;
+  
++ class procedure System.Inc(var Value:Char); 
++ begin
++   Value := Char(Integer(Value) + 1);
++ end;
++ 
++ class procedure System.Inc(var Value:Char; Amount:integer); 
++ begin
++   Value := Char(Integer(Value) + Amount);
++ end;
++ 
++ class procedure System.Dec(var Value:Char); 
++ begin
++   Value := Char(Integer(Value) - 1);
++ end;
++ 
++ class procedure System.Dec(var Value:Char; Amount:integer); 
++ begin
++   Value := Char(Integer(Value) - Amount);
++ end;
++ 
++ class function System.Ord(Value:Char):integer;
++ begin
++   Result := integer(Value);
++ end;
++ 
++ class function System.Ord(Value:Boolean):integer;
++ begin
++   if Value then
++     Result := 1
++   else
++     Result := 0;
++ end;
++ 
+  class function System.Pred(Value:Integer):Integer;
+  begin
+***************
+*** 248,251 ****
+--- 299,313 ----
+  end;
+  
++ class function System.Pred(Value:Char): Char; 
++ begin
++   Result := Char(Integer(Value) - 1);
++ end;
++ 
++ 
++ class function System.Succ(Value:Char): Char; 
++ begin
++   Result := Char(Integer(Value) + 1);
++ end;
++ 
+  class function System.Round(Value:Double):Integer;
+  begin
+***************
+*** 254,262 ****
+  
+  class function System.Round(Value: TDateTime): Integer;
+- var
+-   Buffer: Double;
+  begin
+!   Buffer := Value;
+!   Result := Integer(Buffer);
+  end;
+    
+--- 316,321 ----
+  
+  class function System.Round(Value: TDateTime): Integer;
+  begin
+!   Result := Integer(Math.Round(Value));
+  end;
+    
+***************
+*** 447,450 ****
+--- 506,529 ----
+    ShineOn.RTL.System.Val(S, V, Code);
+  end;
++ 
++ procedure Inc(var Value:Char); 
++ begin
++   ShineOn.RTL.System.Inc(Value);
++ end;
++ 
++ procedure Inc(var Value:Char; Amount:integer); 
++ begin
++   ShineOn.RTL.System.Inc(Value, Amount);
++ end;
++ 
++ procedure Dec(var Value:Char); 
++ begin
++   ShineOn.RTL.System.Dec(Value);
++ end;
++ 
++ procedure Dec(var Value:Char; Amount:integer); 
++ begin
++   ShineOn.RTL.System.Dec(Value, Amount);
++ end;
+    
+  function Ord(Value:Char):integer;
+***************
+*** 483,486 ****
+--- 562,570 ----
+  end;
+    
++ function Pred(Value:Char):Char;
++ begin
++   Result := ShineOn.RTL.System.Pred(Value);
++ end;
++ 
+  function Succ(Value:Integer):Integer;
+  begin
+***************
+*** 488,491 ****
+--- 572,579 ----
+  end;
+     
++ function Succ(Value:Char):Char;
++ begin
++   Result := ShineOn.RTL.System.Succ(Value);
++ end;
+  
+  function Round(Value:Double):Integer;
+***************
+*** 595,596 ****
+--- 683,687 ----
+    
+  end.
++ 
++ 
++ 
+
+Index: Types.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/ShineOn.RTL/Types.pas,v
+retrieving revision 1.12
+retrieving revision 1.13
+diff -C2 -d -r1.12 -r1.13
+*** Types.pas	28 Jun 2005 14:54:35 -0000	1.12
+--- Types.pas	28 Jun 2005 23:32:07 -0000	1.13
+***************
+*** 235,238 ****
+--- 235,239 ----
+    TTime = TDateTime;
+  
++   // TODO: handle negative values
+    TDateTime = public class(System.Object, IFormattable, IComparable, IConvertible)
+    private
+***************
+*** 298,301 ****
+--- 299,303 ----
+  
+      class function Trunc(const Value: TDateTime): Int64;
++     class function Frac(const Value: TDateTime): Double;
+      class function Round(const Value: TDateTime): Int64;
+  
+***************
+*** 449,453 ****
+  begin
+    inherited Create;
+!   
+    FValue := DoubleToDateTime(AValue);
+  end;
+--- 451,455 ----
+  begin
+    inherited Create;
+! 
+    FValue := DoubleToDateTime(AValue);
+  end;
+***************
+*** 482,486 ****
+  function TDateTime.ToDateTime: DateTime;
+  begin
+!   Result := new DateTime(Year,Month,Day,Hour,Minute,Second,MSec);
+  end;
+  
+--- 484,488 ----
+  function TDateTime.ToDateTime: DateTime;
+  begin
+!   Result := FValue;
+  end;
+  
+***************
+*** 747,775 ****
+  
+  class function TDateTime.Trunc(const Value: TDateTime): Int64;
+- var
+-   ValAsDbl: double;
+  begin
+!   ValAsDbl := DateTimeToDouble(Value.ToDateTime);
+!   Result := Convert.ToInt64(ValAsDbl);
+  end;
+  
+  class function TDateTime.Round(const Value: TDateTime): Int64;
+- var
+-   ValAsDbl: double;
+  begin
+!   ValAsDbl := DateTimeToDouble(Value.ToDateTime);
+!   Result := Convert.ToInt64(ValAsDbl);
+  end;
+  
+  class operator TDateTime.Minus(const Value: TDateTime): TDateTime;
+  begin
+!   // TODO: Not sure what use these would be for a date/time - LK
+!   NotImplemented;
+  end;
+  
+  class operator TDateTime.Plus(const Value: TDateTime): TDateTime;
+  begin
+!   // TODO: Not sure what use these would be for a date/time - LK
+!   NotImplemented;
+  end;
+  
+--- 749,774 ----
+  
+  class function TDateTime.Trunc(const Value: TDateTime): Int64;
+  begin
+!   Result := ShineOn.RTL.System.Trunc(Value);
+! end;
+! 
+! class function TDateTime.Frac(const Value: TDateTime): Double;
+! begin
+!   Result := ShineOn.RTL.System.Frac(Value);
+  end;
+  
+  class function TDateTime.Round(const Value: TDateTime): Int64;
+  begin
+!   Result := ShineOn.RTL.System.Round(Value);
+  end;
+  
+  class operator TDateTime.Minus(const Value: TDateTime): TDateTime;
+  begin
+!   Result := new TDateTime(-DateTimeToDouble(Value));
+  end;
+  
+  class operator TDateTime.Plus(const Value: TDateTime): TDateTime;
+  begin
+!   Result := new TDateTime(Value);
+  end;
+  
+***************
+*** 932,936 ****
+  class operator TDateTime.Implicit(const Value: TDateTime): Double;
+  begin
+!   Result := new TDateTime(Value.ToDateTime);
+  end;
+  
+--- 931,935 ----
+  class operator TDateTime.Implicit(const Value: TDateTime): Double;
+  begin
+!   Result := DateTimeToDouble(Value);
+  end;
+  
+***************
+*** 942,951 ****
+  class operator TDateTime.Implicit(const Value: TDateTime): System.DateTime;
+  begin
+!   Result := Value.ToDateTime;
+  end;
+  
+  class operator TDateTime.Implicit(const Value: TDateTime): TDateTime;
+  begin
+!   Result := new TDateTime(Value.Year,Value.Month,Value.Day,Value.Hour,Value.Minute,Value.Second,Value.MSec);
+  end;
+  
+--- 941,950 ----
+  class operator TDateTime.Implicit(const Value: TDateTime): System.DateTime;
+  begin
+!   Result := new TDateTime(Value).ToDateTime;
+  end;
+  
+  class operator TDateTime.Implicit(const Value: TDateTime): TDateTime;
+  begin
+!   Result := new TDateTime(Value);
+  end;
+  
+***************
+*** 965,1069 ****
+  function TDateTime.GetTypeCode: TypeCode;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToInt16(Provider: IFormatProvider): SmallInt;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToInt32(Provider: IFormatProvider): Integer;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToSingle(Provider: IFormatProvider): Single;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToDouble(Provider: IFormatProvider): Double;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToDateTime(Provider: IFormatProvider): DateTime;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToBoolean(Provider: IFormatProvider): Boolean;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToDecimal(Provider: IFormatProvider): Decimal;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToSByte(Provider: IFormatProvider): ShortInt;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToByte(Provider: IFormatProvider): Byte;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToUInt16(Provider: IFormatProvider): Word;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToUInt32(Provider: IFormatProvider): LongWord;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToInt64(Provider: IFormatProvider): Int64;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToUInt64(Provider: IFormatProvider): UInt64;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToString(Provider: IFormatProvider): string;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToChar(Provider: IFormatProvider): Char;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  function TDateTime.ToType(Typ: System.Type; Provider: IFormatProvider): System.Object;
+  begin
+!   // TODO: Should this be implemented? - LK
+!   NotImplemented;
+  end;
+  
+  
+  method AnsiString.get_Chars(Index:integer): Char;
+  require
+--- 964,1052 ----
+  function TDateTime.GetTypeCode: TypeCode;
+  begin
+!   Result := TypeCode.DateTime;
+  end;
+  
+  function TDateTime.ToInt16(Provider: IFormatProvider): SmallInt;
+  begin
+!   Result := Convert.ToInt16(FValue, Provider);
+  end;
+  
+  function TDateTime.ToInt32(Provider: IFormatProvider): Integer;
+  begin
+!   Result := Convert.ToInt32(FValue, Provider);
+  end;
+  
+  function TDateTime.ToSingle(Provider: IFormatProvider): Single;
+  begin
+!   Result := Convert.ToSingle(FValue, Provider);
+  end;
+  
+  function TDateTime.ToDouble(Provider: IFormatProvider): Double;
+  begin
+!   Result := Convert.ToDouble(FValue, Provider);
+  end;
+  
+  function TDateTime.ToDateTime(Provider: IFormatProvider): DateTime;
+  begin
+!   Result := Convert.ToDateTime(FValue, Provider);
+  end;
+  
+  function TDateTime.ToBoolean(Provider: IFormatProvider): Boolean;
+  begin
+!   Result := Convert.ToBoolean(FValue, Provider);
+  end;
+  
+  function TDateTime.ToDecimal(Provider: IFormatProvider): Decimal;
+  begin
+!   Result := Convert.ToDecimal(FValue, Provider);
+  end;
+  
+  function TDateTime.ToSByte(Provider: IFormatProvider): ShortInt;
+  begin
+!   Result := Convert.ToSByte(FValue, Provider);
+  end;
+  
+  function TDateTime.ToByte(Provider: IFormatProvider): Byte;
+  begin
+!   Result := Convert.ToByte(FValue, Provider);
+  end;
+  
+  function TDateTime.ToUInt16(Provider: IFormatProvider): Word;
+  begin
+!   Result := Convert.ToUInt16(FValue, Provider);
+  end;
+  
+  function TDateTime.ToUInt32(Provider: IFormatProvider): LongWord;
+  begin
+!   Result := Convert.ToUInt32(FValue, Provider);
+  end;
+  
+  function TDateTime.ToInt64(Provider: IFormatProvider): Int64;
+  begin
+!   Result := Convert.ToInt64(FValue, Provider);
+  end;
+  
+  function TDateTime.ToUInt64(Provider: IFormatProvider): UInt64;
+  begin
+!   Result := Convert.ToUInt64(FValue, Provider);
+  end;
+  
+  function TDateTime.ToString(Provider: IFormatProvider): string;
+  begin
+!   Result := Convert.ToString(FValue, Provider);
+  end;
+  
+  function TDateTime.ToChar(Provider: IFormatProvider): Char;
+  begin
+!   Result := Convert.ToChar(FValue, Provider);
+  end;
+  
+  function TDateTime.ToType(Typ: System.Type; Provider: IFormatProvider): System.Object;
+  begin
+!   Result := Convert.ChangeType(FValue, Typ, Provider);
+  end;
+  
+  
++ { AnsiString }
+  method AnsiString.get_Chars(Index:integer): Char;
+  require
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000037.html">[Shineon-checkins] ShineOn ShineOn.2003.sln,1.2,1.3
+</A></li>
+	<LI>Next message: <A HREF="000039.html">[Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.2,1.3
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#38">[ date ]</a>
+              <a href="thread.html#38">[ thread ]</a>
+              <a href="subject.html#38">[ subject ]</a>
+              <a href="author.html#38">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

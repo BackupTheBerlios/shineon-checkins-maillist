@@ -1,0 +1,791 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/NUnit TestClasses.pas,1.2,1.3
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2006-March/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20TestClasses.pas%2C1.2%2C1.3&In-Reply-To=%3C200603171522.k2HFMab16304%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000046.html">
+   <LINK REL="Next"  HREF="000048.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/NUnit TestClasses.pas,1.2,1.3</H1>
+    <B>loonquawl</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20TestClasses.pas%2C1.2%2C1.3&In-Reply-To=%3C200603171522.k2HFMab16304%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/NUnit TestClasses.pas,1.2,1.3">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Fri Mar 17 16:22:36 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000046.html">[Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.5,1.6
+</A></li>
+        <LI>Next message: <A HREF="000048.html">[Shineon-checkins] ShineOn/NUnit TestContnrs.pas,1.2,1.3
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#47">[ date ]</a>
+              <a href="thread.html#47">[ thread ]</a>
+              <a href="subject.html#47">[ subject ]</a>
+              <a href="author.html#47">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/NUnit
+In directory sheep:/tmp/cvs-serv19874/NUnit
+
+Modified Files:
+	TestClasses.pas 
+Log Message:
+Added the [Test, Ignore('Test not implemented')]  attribute to not implemented test methods.
+
+Index: TestClasses.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/TestClasses.pas,v
+retrieving revision 1.2
+retrieving revision 1.3
+diff -C2 -d -r1.2 -r1.3
+*** TestClasses.pas	18 Jul 2005 13:09:31 -0000	1.2
+--- TestClasses.pas	17 Mar 2006 14:23:55 -0000	1.3
+***************
+*** 12,18 ****
+  interface
+  uses
+    Nunit.Framework,
+    ShineOn.RTL;
+!   
+  type
+    [TestFixture]
+--- 12,19 ----
+  interface
+  uses
++   System.IO,
+    Nunit.Framework,
+    ShineOn.RTL;
+!     
+  type
+    [TestFixture]
+***************
+*** 23,35 ****
+      [TearDown]
+      method TearDown;override;
+!     [Test]
+      method ClassType;
+!     [Test]
+      method ClassName;
+!     [Test]
+      method ClassNameIs;
+!     [Test]
+      method ClassParent;
+!     [Test]
+      method ClassInfo;
+    end;
+--- 24,36 ----
+      [TearDown]
+      method TearDown;override;
+!     [Test, Ignore('Test not implemented')] 
+      method ClassType;
+!     [Test, Ignore('Test not implemented')] 
+      method ClassName;
+!     [Test, Ignore('Test not implemented')] 
+      method ClassNameIs;
+!     [Test, Ignore('Test not implemented')] 
+      method ClassParent;
+!     [Test, Ignore('Test not implemented')] 
+      method ClassInfo;
+    end;
+***************
+*** 43,87 ****
+      method TearDown;override;
+  
+!     [Test]
+      method Add;
+!     [Test]
+      method Clear;
+!     [Test]
+      method Delete;
+!     [Test]
+      method Exchange;
+!     [Test]
+      method Expand;
+!     [Test]
+      method Extract;
+!     [Test]
+      method First;
+!     [Test]
+      method GetEnumerator;
+!     [Test]
+      method IndexOf;
+!     [Test]
+      method Insert;
+!     [Test]
+      method Last;
+!     [Test]
+      method Move;
+!     [Test]
+      method Remove;
+!     [Test]
+      method Pack;
+!     [Test]
+      method Sort;
+!     [Test]
+      method Assign1;
+!     [Test]
+      method Assign2;
+!     [Test]
+      method Assign3;
+!     [Test]
+      method Capacity;
+!     [Test]
+      method Count;
+!     [Test]
+      method Items;
+    end;
+--- 44,88 ----
+      method TearDown;override;
+  
+!     [Test, Ignore('Test not implemented')] 
+      method Add;
+!     [Test, Ignore('Test not implemented')] 
+      method Clear;
+!     [Test, Ignore('Test not implemented')] 
+      method Delete;
+!     [Test, Ignore('Test not implemented')] 
+      method Exchange;
+!     [Test, Ignore('Test not implemented')] 
+      method Expand;
+!     [Test, Ignore('Test not implemented')] 
+      method Extract;
+!     [Test, Ignore('Test not implemented')] 
+      method First;
+!     [Test, Ignore('Test not implemented')] 
+      method GetEnumerator;
+!     [Test, Ignore('Test not implemented')] 
+      method IndexOf;
+!     [Test, Ignore('Test not implemented')] 
+      method Insert;
+!     [Test, Ignore('Test not implemented')] 
+      method Last;
+!     [Test, Ignore('Test not implemented')] 
+      method Move;
+!     [Test, Ignore('Test not implemented')] 
+      method Remove;
+!     [Test, Ignore('Test not implemented')] 
+      method Pack;
+!     [Test, Ignore('Test not implemented')] 
+      method Sort;
+!     [Test, Ignore('Test not implemented')] 
+      method Assign1;
+!     [Test, Ignore('Test not implemented')] 
+      method Assign2;
+!     [Test, Ignore('Test not implemented')] 
+      method Assign3;
+!     [Test, Ignore('Test not implemented')] 
+      method Capacity;
+!     [Test, Ignore('Test not implemented')] 
+      method Count;
+!     [Test, Ignore('Test not implemented')] 
+      method Items;
+    end;
+***************
+*** 94,126 ****
+      [TearDown]
+      method TearDown;override;
+!     [Test]
+      method Clear;
+!     [Test]
+      method Delete;
+!     [Test]
+      method Exchange;
+!     [Test]
+      method Expand;
+!     [Test]
+      method First;
+!     [Test]
+      method IndexOf;
+!     [Test]
+      method Add;
+!     [Test]
+      method Insert;
+!     [Test]
+      method Last;
+!     [Test]
+      method Remove;
+!     [Test]
+      method Lock;
+!     [Test]
+      method Unlock;
+!     [Test]
+      method Capacity;
+!     [Test]
+      method Count;
+!     [Test]
+      method Items;
+    end;
+--- 95,127 ----
+      [TearDown]
+      method TearDown;override;
+!     [Test, Ignore('Test not implemented')] 
+      method Clear;
+!     [Test, Ignore('Test not implemented')] 
+      method Delete;
+!     [Test, Ignore('Test not implemented')] 
+      method Exchange;
+!     [Test, Ignore('Test not implemented')] 
+      method Expand;
+!     [Test, Ignore('Test not implemented')] 
+      method First;
+!     [Test, Ignore('Test not implemented')] 
+      method IndexOf;
+!     [Test, Ignore('Test not implemented')] 
+      method Add;
+!     [Test, Ignore('Test not implemented')] 
+      method Insert;
+!     [Test, Ignore('Test not implemented')] 
+      method Last;
+!     [Test, Ignore('Test not implemented')] 
+      method Remove;
+!     [Test, Ignore('Test not implemented')] 
+      method Lock;
+!     [Test, Ignore('Test not implemented')] 
+      method Unlock;
+!     [Test, Ignore('Test not implemented')] 
+      method Capacity;
+!     [Test, Ignore('Test not implemented')] 
+      method Count;
+!     [Test, Ignore('Test not implemented')] 
+      method Items;
+    end;
+***************
+*** 134,142 ****
+      method TearDown;override;
+  
+!     [Test]
+      method OpenBit;
+!     [Test]
+      method Bits;
+!     [Test]
+      method Size;
+    end;
+--- 135,143 ----
+      method TearDown;override;
+  
+!     [Test, Ignore('Test not implemented')] 
+      method OpenBit;
+!     [Test, Ignore('Test not implemented')] 
+      method Bits;
+!     [Test, Ignore('Test not implemented')] 
+      method Size;
+    end;
+***************
+*** 150,156 ****
+      method TearDown;override;
+  
+!     [Test]
+      method Assign;
+!     [Test]
+      method GetNamePath;
+    end;
+--- 151,157 ----
+      method TearDown;override;
+  
+!     [Test, Ignore('Test not implemented')] 
+      method Assign;
+!     [Test, Ignore('Test not implemented')] 
+      method GetNamePath;
+    end;
+***************
+*** 164,249 ****
+      method TearDown;override;
+  
+!     [Test]
+      method Add;
+!     [Test]
+      method AddObject;
+!     [Test]
+      method Append;
+!     [Test]
+      method AddStrings;
+!     [Test]
+      method Assign;
+!     [Test]
+      method BeginUpdate;
+!     [Test]
+      method Clear;
+!     [Test]
+      method Delete;
+!     [Test]
+      method EndUpdate;
+!     [Test]
+      method Equals;
+!     [Test]
+      method Exchange;
+!     [Test]
+      method GetText;
+!     [Test]
+      method IndexOf;
+!     [Test]
+      method IndexOfName;
+!     [Test]
+      method IndexOfObject;
+!     [Test]
+      method Insert;
+!     [Test]
+      method InsertObject;
+!     [Test]
+      method LoadFromFile;
+!     [Test]
+      method LoadFromStream;
+!     [Test]
+      method Move;
+!     [Test]
+      method SaveToFile;
+!     [Test]
+      method SaveToStream;
+!     [Test]
+      method SetText;
+!     [Test]
+      method Capacity;
+!     [Test]
+      method CommaText;
+!     [Test]
+      method Count;
+!     [Test]
+      method Delimiter;
+!     [Test]
+      method DelimitedText;
+!     [Test]
+      method Names;
+!     [Test]
+      method Objects;
+!     [Test]
+      method QuoteChar;
+!     [Test]
+      method Values;
+!     [Test]
+      method Strings;
+!     [Test]
+      method Text;
+  
+!     [Test]
+      method Sort;
+!     [Test]
+      method CustomSort;
+!     [Test]
+      method Duplicates;
+!     [Test]
+      method Sorted;
+!     [Test]
+      method CaseSensitive;
+    end;
+  
+- 
+    [TestFixture]
+    THandleStreamTests = public class(TestCase)
+--- 165,249 ----
+      method TearDown;override;
+  
+!     [Test, Ignore('Test not implemented')] 
+      method Add;
+!     [Test, Ignore('Test not implemented')] 
+      method AddObject;
+!     [Test, Ignore('Test not implemented')] 
+      method Append;
+!     [Test, Ignore('Test not implemented')] 
+      method AddStrings;
+!     [Test, Ignore('Test not implemented')] 
+      method Assign;
+!     [Test, Ignore('Test not implemented')] 
+      method BeginUpdate;
+!     [Test, Ignore('Test not implemented')] 
+      method Clear;
+!     [Test, Ignore('Test not implemented')] 
+      method Delete;
+!     [Test, Ignore('Test not implemented')] 
+      method EndUpdate;
+!     [Test, Ignore('Test not implemented')] 
+      method Equals;
+!     [Test, Ignore('Test not implemented')] 
+      method Exchange;
+!     [Test, Ignore('Test not implemented')] 
+      method GetText;
+!     [Test, Ignore('Test not implemented')] 
+      method IndexOf;
+!     [Test, Ignore('Test not implemented')] 
+      method IndexOfName;
+!     [Test, Ignore('Test not implemented')] 
+      method IndexOfObject;
+!     [Test, Ignore('Test not implemented')] 
+      method Insert;
+!     [Test, Ignore('Test not implemented')] 
+      method InsertObject;
+!     [Test, Ignore('Test not implemented')] 
+      method LoadFromFile;
+!     [Test, Ignore('Test not implemented')] 
+      method LoadFromStream;
+!     [Test, Ignore('Test not implemented')] 
+      method Move;
+!     [Test, Ignore('Test not implemented')] 
+      method SaveToFile;
+!     [Test, Ignore('Test not implemented')] 
+      method SaveToStream;
+!     [Test, Ignore('Test not implemented')] 
+      method SetText;
+!     [Test, Ignore('Test not implemented')] 
+      method Capacity;
+!     [Test, Ignore('Test not implemented')] 
+      method CommaText;
+!     [Test, Ignore('Test not implemented')] 
+      method Count;
+!     [Test, Ignore('Test not implemented')] 
+      method Delimiter;
+!     [Test, Ignore('Test not implemented')] 
+      method DelimitedText;
+!     [Test, Ignore('Test not implemented')] 
+      method Names;
+!     [Test, Ignore('Test not implemented')] 
+      method Objects;
+!     [Test, Ignore('Test not implemented')] 
+      method QuoteChar;
+!     [Test, Ignore('Test not implemented')] 
+      method Values;
+!     [Test, Ignore('Test not implemented')] 
+      method Strings;
+!     [Test, Ignore('Test not implemented')] 
+      method Text;
+  
+!     [Test, Ignore('Test not implemented')] 
+      method Sort;
+!     [Test, Ignore('Test not implemented')] 
+      method CustomSort;
+!     [Test, Ignore('Test not implemented')] 
+      method Duplicates;
+!     [Test, Ignore('Test not implemented')] 
+      method Sorted;
+!     [Test, Ignore('Test not implemented')] 
+      method CaseSensitive;
+    end;
+  
+    [TestFixture]
+    THandleStreamTests = public class(TestCase)
+***************
+*** 254,270 ****
+      method TearDown;override;
+  
+!     [Test]
+      method Read;
+!     [Test]
+      method Write;
+!     [Test]
+      method SeekSeekOrigin;
+!     [Test]
+      method SeekInteger;
+!     [Test]
+      method CopyFrom;
+!     [Test]
+      method Position;
+!     [Test]
+      method Size;
+    end;
+--- 254,270 ----
+      method TearDown;override;
+  
+!     [Test, Ignore('Test not implemented')] 
+      method Read;
+!     [Test, Ignore('Test not implemented')] 
+      method Write;
+!     [Test, Ignore('Test not implemented')] 
+      method SeekSeekOrigin;
+!     [Test, Ignore('Test not implemented')] 
+      method SeekInteger;
+!     [Test, Ignore('Test not implemented')] 
+      method CopyFrom;
+!     [Test, Ignore('Test not implemented')] 
+      method Position;
+!     [Test, Ignore('Test not implemented')] 
+      method Size;
+    end;
+***************
+*** 272,275 ****
+--- 272,284 ----
+    [TestFixture]
+    TFileStreamTests = public class(TestCase)
++   private
++     const fmCreate = $FFFF; // Classes
++     const fmOpenRead = $0000; // SysUtils
++     const fmOpenWrite = $0001; // SysUtils
++     const fmOpenReadWrite = $0002; // SysUtils    
++     var Mode : System.IO.FileMode;
++ 
++     var FFilename : String;
++     var tmpFile : TFileStream;
+    public
+      [Setup]
+***************
+*** 278,294 ****
+      method TearDown;override;
+  
+!     [Test]
+      method Read;
+!     [Test]
+      method Write;
+!     [Test]
+      method SeekSeekOrigin;
+!     [Test]
+      method SeekInteger;
+!     [Test]
+      method CopyFrom;
+!     [Test]
+      method Position;
+!     [Test]
+      method Size;
+  
+--- 287,303 ----
+      method TearDown;override;
+  
+!     [Test, Ignore('Test not implemented')] 
+      method Read;
+!     [Test, Ignore('Test not implemented')] 
+      method Write;
+!     [Test, Ignore('Test not implemented')] 
+      method SeekSeekOrigin;
+!     [Test, Ignore('Test not implemented')] 
+      method SeekInteger;
+!     [Test, Ignore('Test not implemented')] 
+      method CopyFrom;
+!     [Test, Ignore('Test not implemented')] 
+      method Position;
+!     [Test, Ignore('Test not implemented')] 
+      method Size;
+  
+***************
+*** 303,330 ****
+      method TearDown;override;
+  
+!     [Test]
+      method Read;
+!     [Test]
+      method Write;
+!     [Test]
+      method SeekSeekOrigin;
+!     [Test]
+      method SeekInteger;
+!     [Test]
+      method CopyFrom;
+!     [Test]
+      method Position;
+!     [Test]
+      method Size;
+  
+!     [Test]
+      method SaveToStream;
+!     [Test]
+      method SaveToFile;
+!     [Test]
+      method Clear;
+!     [Test]
+      method LoadFromStream;
+!     [Test]
+      method LoadFromFile;
+    end;
+--- 312,339 ----
+      method TearDown;override;
+  
+!     [Test, Ignore('Test not implemented')] 
+      method Read;
+!     [Test, Ignore('Test not implemented')] 
+      method Write;
+!     [Test, Ignore('Test not implemented')] 
+      method SeekSeekOrigin;
+!     [Test, Ignore('Test not implemented')] 
+      method SeekInteger;
+!     [Test, Ignore('Test not implemented')] 
+      method CopyFrom;
+!     [Test, Ignore('Test not implemented')] 
+      method Position;
+!     [Test, Ignore('Test not implemented')] 
+      method Size;
+  
+!     [Test, Ignore('Test not implemented')] 
+      method SaveToStream;
+!     [Test, Ignore('Test not implemented')] 
+      method SaveToFile;
+!     [Test, Ignore('Test not implemented')] 
+      method Clear;
+!     [Test, Ignore('Test not implemented')] 
+      method LoadFromStream;
+!     [Test, Ignore('Test not implemented')] 
+      method LoadFromFile;
+    end;
+***************
+*** 338,359 ****
+      method TearDown;override;
+  
+!     [Test]
+      method Read;
+!     [Test]
+      method Write;
+!     [Test]
+      method SeekSeekOrigin;
+!     [Test]
+      method SeekInteger;
+!     [Test]
+      method CopyFrom;
+!     [Test]
+      method Position;
+!     [Test]
+      method Size;
+  
+!     [Test]
+      method ReadString;
+!     [Test]
+      method WriteString;
+    end;
+--- 347,368 ----
+      method TearDown;override;
+  
+!     [Test, Ignore('Test not implemented')] 
+      method Read;
+!     [Test, Ignore('Test not implemented')] 
+      method Write;
+!     [Test, Ignore('Test not implemented')] 
+      method SeekSeekOrigin;
+!     [Test, Ignore('Test not implemented')] 
+      method SeekInteger;
+!     [Test, Ignore('Test not implemented')] 
+      method CopyFrom;
+!     [Test, Ignore('Test not implemented')] 
+      method Position;
+!     [Test, Ignore('Test not implemented')] 
+      method Size;
+  
+!     [Test, Ignore('Test not implemented')] 
+      method ReadString;
+!     [Test, Ignore('Test not implemented')] 
+      method WriteString;
+    end;
+***************
+*** 367,383 ****
+      method TearDown;override;
+  
+!     [Test]
+      method Read;
+!     [Test]
+      method Write;
+!     [Test]
+      method SeekSeekOrigin;
+!     [Test]
+      method SeekInteger;
+!     [Test]
+      method CopyFrom;
+!     [Test]
+      method Position;
+!     [Test]
+      method Size;
+    end;
+--- 376,392 ----
+      method TearDown;override;
+  
+!     [Test, Ignore('Test not implemented')] 
+      method Read;
+!     [Test, Ignore('Test not implemented')] 
+      method Write;
+!     [Test, Ignore('Test not implemented')] 
+      method SeekSeekOrigin;
+!     [Test, Ignore('Test not implemented')] 
+      method SeekInteger;
+!     [Test, Ignore('Test not implemented')] 
+      method CopyFrom;
+!     [Test, Ignore('Test not implemented')] 
+      method Position;
+!     [Test, Ignore('Test not implemented')] 
+      method Size;
+    end;
+***************
+*** 391,414 ****
+      method TearDown;override;
+  
+!     [Test]
+      method Resume;
+!     [Test]
+      method Suspend;
+!     [Test]
+      method Terminate;
+!     [Test]
+      method WaitFor;
+  
+!     [Test]
+      method FatalException;
+!     [Test]
+      method FreeOnTerminate;
+!     [Test]
+      method Handle;
+!     [Test]
+      method Priority;
+!     [Test]
+      method Suspended;
+!     [Test]
+      method ThreadID;
+    end;
+--- 400,423 ----
+      method TearDown;override;
+  
+!     [Test, Ignore('Test not implemented')] 
+      method Resume;
+!     [Test, Ignore('Test not implemented')] 
+      method Suspend;
+!     [Test, Ignore('Test not implemented')] 
+      method Terminate;
+!     [Test, Ignore('Test not implemented')] 
+      method WaitFor;
+  
+!     [Test, Ignore('Test not implemented')] 
+      method FatalException;
+!     [Test, Ignore('Test not implemented')] 
+      method FreeOnTerminate;
+!     [Test, Ignore('Test not implemented')] 
+      method Handle;
+!     [Test, Ignore('Test not implemented')] 
+      method Priority;
+!     [Test, Ignore('Test not implemented')] 
+      method Suspended;
+!     [Test, Ignore('Test not implemented')] 
+      method ThreadID;
+    end;
+***************
+*** 939,942 ****
+--- 948,952 ----
+  method TFileStreamTests.TearDown; 
+  begin
++   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000046.html">[Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.5,1.6
+</A></li>
+	<LI>Next message: <A HREF="000048.html">[Shineon-checkins] ShineOn/NUnit TestContnrs.pas,1.2,1.3
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#47">[ date ]</a>
+              <a href="thread.html#47">[ thread ]</a>
+              <a href="subject.html#47">[ subject ]</a>
+              <a href="author.html#47">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

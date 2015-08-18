@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/NUnit TestIniFiles.pas,1.4,1.5
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2006-March/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20TestIniFiles.pas%2C1.4%2C1.5&In-Reply-To=%3C200603270607.k2R672t30307%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000060.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/NUnit TestIniFiles.pas,1.4,1.5</H1>
+    <B>msgclb</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20TestIniFiles.pas%2C1.4%2C1.5&In-Reply-To=%3C200603270607.k2R672t30307%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/NUnit TestIniFiles.pas,1.4,1.5">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Mon Mar 27 08:07:02 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000060.html">[Shineon-checkins] ShineOn/ShineOn.RTL IniFiles.pas,1.7,1.8
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#61">[ date ]</a>
+              <a href="thread.html#61">[ thread ]</a>
+              <a href="subject.html#61">[ subject ]</a>
+              <a href="author.html#61">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/NUnit
+In directory sheep:/tmp/cvs-serv87/NUnit
+
+Modified Files:
+	TestIniFiles.pas 
+Log Message:
+ Added test for ValueExists, DeleteKey, ReadSectionValues, ReadSections and EraseSection.
+
+Index: TestIniFiles.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/TestIniFiles.pas,v
+retrieving revision 1.4
+retrieving revision 1.5
+diff -C2 -d -r1.4 -r1.5
+*** TestIniFiles.pas	21 Mar 2006 16:24:27 -0000	1.4
+--- TestIniFiles.pas	27 Mar 2006 06:07:25 -0000	1.5
+***************
+*** 23,26 ****
+--- 23,31 ----
+  // 2006-03-21   :   Corwin Burgess  : Added TIniFilesTests.GetStrings.
+  // 2006-03-21   :   Corwin Burgess  : Added TIniFilesTests.SetStrings.
++ // 2006-03-27   :   Corwin Burgess  : Added TIniFilesTests.ValueExists.
++ // 2006-03-27   :   Corwin Burgess  : Added TIniFilesTests.DeleteKey.
++ // 2006-03-27   :   Corwin Burgess  : Added TIniFilesTests.ReadSectionValues.
++ // 2006-03-27   :   Corwin Burgess  : Added TIniFilesTests.ReadSections.
++ // 2006-03-27   :   Corwin Burgess  : Added TIniFilesTests.EraseSection.
+  
+  // $Id$
+***************
+*** 53,57 ****
+      [Test, Ignore('Test not implemented')] 
+      method Rename;
+!     [Test, Ignore('Test not implemented')] 
+      method SectionExists;
+      [Test] 
+--- 58,62 ----
+      [Test, Ignore('Test not implemented')] 
+      method Rename;
+!     [Test] 
+      method SectionExists;
+      [Test] 
+***************
+*** 89,103 ****
+      [Test] 
+      method ReadSection;
+!     [Test, Ignore('Test not implemented')] 
+      method ReadSections;
+!     [Test, Ignore('Test not implemented')] 
+      method ReadSectionValues;
+!     [Test, Ignore('Test not implemented')] 
+      method EraseSection;
+!     [Test, Ignore('Test not implemented')] 
+      method DeleteKey;
+      [Test] 
+      method UpdateFile;
+!     [Test, Ignore('Test not implemented')] 
+      method ValueExists;
+    end;
+--- 94,108 ----
+      [Test] 
+      method ReadSection;
+!     [Test] 
+      method ReadSections;
+!     [Test] 
+      method ReadSectionValues;
+!     [Test] 
+      method EraseSection;
+!     [Test] 
+      method DeleteKey;
+      [Test] 
+      method UpdateFile;
+!     [Test] 
+      method ValueExists;
+    end;
+***************
+*** 165,169 ****
+  method TIniFilesTests.SectionExists; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 170,177 ----
+  method TIniFilesTests.SectionExists; 
+  begin
+!   if IniFile.SectionExists('Test') then
+!     NUnit.Framework.Assert.IsTrue(true, 'Section Exists')
+!   else
+!     NUnit.Framework.Assert.IsTrue(false, 'Section Exists Failed');
+  end;
+  
+***************
+*** 343,362 ****
+  method TIniFilesTests.ReadSections; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method TIniFilesTests.ReadSectionValues; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method TIniFilesTests.EraseSection; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method TIniFilesTests.DeleteKey; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 351,421 ----
+  method TIniFilesTests.ReadSections; 
+  begin
+!   Var I: Integer;
+!   Var T:TStringList;
+!   Var S:String;
+!   try
+!     T := new TStringlist;
+!     IniFile.ReadSections(T);
+!     // if S Count equal 0 then somethings wrong! 
+!     NUnit.Framework.Assert.AreNotEqual(0, T.Count);
+!     if T.Count &gt; 0 then
+!     begin    
+!       S := T[0];
+!       NUnit.Framework.Assert.AreEqual('Test', S);
+!     end
+!     else
+!       NUnit.Framework.Assert.AreEqual('Unkown', S);
+!   finally
+!     T.Free;
+!   end;
+  end;
+  
+  method TIniFilesTests.ReadSectionValues; 
+  begin
+!   Var I: Integer;
+!   Var T:TStringList;
+!   Var S:String;
+!   try
+!     T := new TStringlist;
+!     IniFile.ReadSectionValues('Test', T);
+!     // if S Count equal 0 then somethings wrong! 
+!     NUnit.Framework.Assert.AreNotEqual(0, T.Count);
+!     if T.Count &gt; 0 then
+!     begin    
+!       S := T[0];
+!       NUnit.Framework.Assert.AreEqual('String=TextData', S);
+!     end
+!     else
+!       NUnit.Framework.Assert.AreEqual('Unknown=Value', S);
+!   finally
+!     T.Free;
+!   end;
+  end;
+  
+  method TIniFilesTests.EraseSection; 
+  begin
+!   var S:String;
+!   IniFile.WriteString('NewTest','NewString','NewTextData');
+!   IniFile.UpdateFile;
+!   S := IniFile.ReadString('NewTest','NewString','');
+!   NUnit.Framework.Assert.AreEqual('NewTextData', S);
+!   IniFile.EraseSection('NewTest');
+!   if IniFile.SectionExists('NewTest') then
+!     NUnit.Framework.Assert.IsTrue(false, 'EraseSection Failed')
+!   else
+!     NUnit.Framework.Assert.IsTrue(true, 'EraseSection Worked');
+! 
+  end;
+  
+  method TIniFilesTests.DeleteKey; 
+  begin
+!   var S:String;
+!   IniFile.WriteString('NewTest','NewString','NewTextData');
+!   IniFile.UpdateFile;
+!   S := IniFile.ReadString('NewTest','NewString','');
+!   NUnit.Framework.Assert.AreEqual('NewTextData', S);
+!   IniFile.DeleteKey('NewTest','NewString');
+!   S := IniFile.ReadString('NewTest','NewString','');
+!   NUnit.Framework.Assert.AreNotEqual('NewTextData', S);
+  end;
+  
+***************
+*** 372,376 ****
+  method TIniFilesTests.ValueExists; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 431,445 ----
+  method TIniFilesTests.ValueExists; 
+  begin
+!   var S:String;
+!   if IniFile.ValueExists('Test','String') then
+!   begin  
+!     S := IniFile.ReadString('Test','String','');
+!     NUnit.Framework.Assert.AreEqual('TextData', S);
+!   end
+!   else
+!   begin
+!     S := IniFile.ReadString('Test','String','');
+!     NUnit.Framework.Assert.AreNotEqual('TextData', S);
+!   end;
+  end;
+  
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000060.html">[Shineon-checkins] ShineOn/ShineOn.RTL IniFiles.pas,1.7,1.8
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#61">[ date ]</a>
+              <a href="thread.html#61">[ thread ]</a>
+              <a href="subject.html#61">[ subject ]</a>
+              <a href="author.html#61">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>

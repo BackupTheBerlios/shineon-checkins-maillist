@@ -1,0 +1,525 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.2,1.3
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/shineon-checkins/2005-June/index.html" >
+   <LINK REL="made" HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20TestSystem.pas%2C1.2%2C1.3&In-Reply-To=%3C200506282332.j5SNWcI32166%40bat.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000038.html">
+   <LINK REL="Next"  HREF="000040.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.2,1.3</H1>
+    <B>peter3</B> 
+    <A HREF="mailto:shineon-checkins%40lists.berlios.de?Subject=Re%3A%20%5BShineon-checkins%5D%20ShineOn/NUnit%20TestSystem.pas%2C1.2%2C1.3&In-Reply-To=%3C200506282332.j5SNWcI32166%40bat.berlios.de%3E"
+       TITLE="[Shineon-checkins] ShineOn/NUnit TestSystem.pas,1.2,1.3">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Wed Jun 29 01:32:38 CEST 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000038.html">[Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.14,1.15 Types.pas,1.12,1.13
+</A></li>
+        <LI>Next message: <A HREF="000040.html">[Shineon-checkins] ShineOn/ShineOn.RTL Types.pas,1.13,1.14
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#39">[ date ]</a>
+              <a href="thread.html#39">[ thread ]</a>
+              <a href="subject.html#39">[ subject ]</a>
+              <a href="author.html#39">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/shineon/ShineOn/NUnit
+In directory sheep:/tmp/cvs-serv7783/NUnit
+
+Modified Files:
+	TestSystem.pas 
+Log Message:
+- some simplifications in TDateTime
+- added inc, dec, succ and pred for char type
+- Copy didn't do the right thing (Sourcce and S were mixed up)
+- alternate implementation of StringOfChar
+- Val now returns (in Code) the index (+1) of any error
+- Added and implemented several new tests
+
+Index: TestSystem.pas
+===================================================================
+RCS file: /cvsroot/shineon/ShineOn/NUnit/TestSystem.pas,v
+retrieving revision 1.2
+retrieving revision 1.3
+diff -C2 -d -r1.2 -r1.3
+*** TestSystem.pas	28 Jun 2005 11:26:05 -0000	1.2
+--- TestSystem.pas	28 Jun 2005 23:32:03 -0000	1.3
+***************
+*** 54,64 ****
+      method OrdBool;
+      [Test]
+!     method Inc;
+      [Test]
+!     method IncAmount;
+      [Test]
+!     method Dec;
+      [Test]
+!     method DecAmount;
+      [Test]
+      method Pred;
+--- 54,64 ----
+      method OrdBool;
+      [Test]
+!     method IncTest;
+      [Test]
+!     method IncAmountTest;
+      [Test]
+!     method DecTest;
+      [Test]
+!     method DecAmountTest;
+      [Test]
+      method Pred;
+***************
+*** 107,110 ****
+--- 107,112 ----
+      [Test]
+      method ReadLn;
++     [Test]
++     method StringOfChar;
+    end;
+  
+***************
+*** 121,130 ****
+  method SystemTests.Pos; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.Concat; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 123,145 ----
+  method SystemTests.Pos; 
+  begin
+!   //               0         1         2
+!   //               012345678901234567890
+!   var S:String := 'This is a TestString';
+!   ShineOn.RTL.System.Pos(',', S);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos(',', S), -1);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos('This', S), 0);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos('his', S), 1);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos('is', S), 2);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos('s is', S), 3);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos(' ', S), 4);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos('is a', S), 5);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos('a Test', S), 8);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos('TestString', S), 10);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pos('teststring', S), -1);
+  end;
+  
+  method SystemTests.Concat; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Concat('Test','String'), 'Test' + 'String');
+  end;
+  
+***************
+*** 190,199 ****
+  method SystemTests.Insert; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.Copy; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 205,224 ----
+  method SystemTests.Insert; 
+  begin
+!  var S:String := 'TestString';
+!  ShineOn.RTL.System.Insert(' ', S, 4);
+!  NUnit.Framework.Assert.AreEqual(S, 'Test String');
+! 
+!  ShineOn.RTL.System.Insert(' ', S, 0);
+!  NUnit.Framework.Assert.AreEqual(S, ' Test String');
+! 
+!  ShineOn.RTL.System.Insert(' ', S, S.Length);
+!  NUnit.Framework.Assert.AreEqual(S, ' Test String ');
+  end;
+  
+  method SystemTests.Copy; 
+  begin
+!   NUnit.Framework.Assert.AreEqual('TestString',ShineOn.RTL.System.Copy('TestString', 0, MaxInt));
+!   NUnit.Framework.Assert.AreEqual('',ShineOn.RTL.System.Copy('TestString', 0, 0));
+!   NUnit.Framework.Assert.AreEqual('Test',ShineOn.RTL.System.Copy('TestString', 0, 4));
+  end;
+  
+***************
+*** 204,274 ****
+  
+  method SystemTests.Val; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.OrdChar; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.OrdBool; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+! method SystemTests.Inc; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+! method SystemTests.IncAmount; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+! method SystemTests.Dec; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+! method SystemTests.DecAmount; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.Pred; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.Succ; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.RoundDouble; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.RoundTDateTime; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.TruncDouble; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.TruncTDateTime; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.IntDouble; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 229,361 ----
+  
+  method SystemTests.Val; 
++ var S:String;V:Double; C:integer;
+  begin
+!   S := '11.5';
+!   ShineOn.RTL.System.Val(S, V, C);
+!   NUnit.Framework.Assert.AreEqual(V, 11.5);
+!   NUnit.Framework.Assert.AreEqual(0, C);
+!   
+!   S := '11T5'; // Val should not adjust to locale settings (i.e decimal separator should always be '.')
+!   ShineOn.RTL.System.Val(S, V, C);
+!   NUnit.Framework.Assert.AreEqual(3, C);  // remember, &quot;C&quot; is 1-based (0 == success)!
+  end;
+  
+  method SystemTests.OrdChar; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Ord('a'), Convert.ToInt32('a'));
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Ord('A'), Convert.ToInt32('A'));
+  end;
+  
+  method SystemTests.OrdBool; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Ord(false), 0);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Ord(true), 1);
+  end;
+  
+! method SystemTests.IncTest; 
+  begin
+!   var i:integer := 1;
+!   ShineOn.RTL.System.Inc(i);
+!   NUnit.Framework.Assert.AreEqual(i, 2);
+!   i := 0;
+!   ShineOn.RTL.System.Inc(i);
+!   NUnit.Framework.Assert.AreEqual(i, 1);
+!   i := -1;
+!   ShineOn.RTL.System.Inc(i);
+!   NUnit.Framework.Assert.AreEqual(i, 0);
+  end;
+  
+! method SystemTests.IncAmountTest; 
+  begin
+!   var i:integer := 1;
+!   ShineOn.RTL.System.Inc(i, 1);
+!   NUnit.Framework.Assert.AreEqual(i, 2);
+!   i := -1;
+!   ShineOn.RTL.System.Inc(i, 1);
+!   NUnit.Framework.Assert.AreEqual(i, 0);
+!   i := -1;
+!   ShineOn.RTL.System.Inc(i, 0);
+!   NUnit.Framework.Assert.AreEqual(i, -1);
+!   i := -1;
+!   ShineOn.RTL.System.Inc(i, -2);
+!   NUnit.Framework.Assert.AreEqual(i, -3);
+  end;
+  
+! method SystemTests.DecTest; 
+  begin
+!   var i:integer := 2;
+!   ShineOn.RTL.System.Dec(i);
+!   NUnit.Framework.Assert.AreEqual(i, 1);
+!   i := 0;
+!   ShineOn.RTL.System.Dec(i);
+!   NUnit.Framework.Assert.AreEqual(i, -1);
+!   i := -1;
+!   ShineOn.RTL.System.Dec(i);
+!   NUnit.Framework.Assert.AreEqual(i, -2);
+  end;
+  
+! method SystemTests.DecAmountTest; 
+  begin
+!   var i:integer := 2;
+!   ShineOn.RTL.System.Dec(i, 1);
+!   NUnit.Framework.Assert.AreEqual(i, 1);
+!   i := -1;
+!   ShineOn.RTL.System.Dec(i, 1);
+!   NUnit.Framework.Assert.AreEqual(i, -2);
+! 
+!   i := -1;
+!   ShineOn.RTL.System.Dec(i, 0);
+!   NUnit.Framework.Assert.AreEqual(i, -1);
+!   i := -1;
+!   ShineOn.RTL.System.Dec(i, -2);
+!   NUnit.Framework.Assert.AreEqual(i, 1);
+  end;
+  
+  method SystemTests.Pred; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pred(2), 1);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Pred(-2), -3);
+  end;
+  
+  method SystemTests.Succ; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Succ(1), 2);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Succ(-1), 0);
+  end;
+  
+  method SystemTests.RoundDouble; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Round(1.4), 1);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Round(1.5), 2);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Round(1.6), 2);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Round(-1.4), -1);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Round(-1.5), -2);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Round(-1.6), -2);
+  end;
+  
+  method SystemTests.RoundTDateTime; 
+  begin
+!   var D:TDateTime := new TDateTime(2005, 01, 01, 8, 0, 0, 0);
+!   NUnit.Framework.Assert.AreEqual(D.ToInt32(nil), ShineOn.RTL.System.Round(D));
+!   D := new TDateTime(2005, 01, 01, 12, 1, 0, 0);
+!   NUnit.Framework.Assert.AreEqual(D.ToInt32(nil) + 1, ShineOn.RTL.System.Round(D));
+  end;
+  
+  method SystemTests.TruncDouble; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Trunc(1.5), 1);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Trunc(-1.5), -1);
+  end;
+  
+  method SystemTests.TruncTDateTime; 
+  begin
+!   var D:TDateTime := new TDateTime(2005, 01, 01, 23, 0, 0, 0);
+!   NUnit.Framework.Assert.AreEqual(D.ToInt32(nil), ShineOn.RTL.System.Trunc(D));
+  end;
+  
+  method SystemTests.IntDouble; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Int(1.5), 1.0);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Int(-1.5), -1.0);
+  end;
+  
+***************
+*** 280,284 ****
+  method SystemTests.FracDouble; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 367,372 ----
+  method SystemTests.FracDouble; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Frac(1.5), 0.5);
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Frac(-1.5), -0.5);
+  end;
+  
+***************
+*** 290,334 ****
+  method SystemTests.Odd; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.Sqrt; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.SqrExtended; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.SqrInteger; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.AbsInteger; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.AbsDouble; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.AbsTDateTime; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.Exp; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+  method SystemTests.SetLength; 
+  begin
+!   NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
+  end;
+  
+--- 378,434 ----
+  method SystemTests.Odd; 
+  begin
+!   var i:integer := 0;
+!   while i &lt; 255 do
+!   begin
+!     NUnit.Framework.Assert.IsFalse(ShineOn.RTL.System.Odd(i));
+!     i := i + 1;
+!     NUnit.Framework.Assert.IsTrue(ShineOn.RTL.System.Odd(i));
+!     i := i + 1;
+!   end;
+  end;
+  
+  method SystemTests.Sqrt; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(3, ShineOn.RTL.System.Sqrt(9));
+  end;
+  
+  method SystemTests.SqrExtended; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(3.0 * 3.0, ShineOn.RTL.System.Sqr(3.0));
+  end;
+  
+  method SystemTests.SqrInteger; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(3 * 3, ShineOn.RTL.System.Sqr(3));
+  end;
+  
+  method SystemTests.AbsInteger; 
+  begin
+!   var i:integer := 1;
+!   NUnit.Framework.Assert.AreEqual(integer(i), ShineOn.RTL.System.Abs(integer(-i)));
+  end;
+  
+  method SystemTests.AbsDouble; 
+  begin
+!   var D:double := 2.0;
+!   NUnit.Framework.Assert.AreEqual(double(d), ShineOn.RTL.System.Abs(double(-d)));
+  end;
+  
+  method SystemTests.AbsTDateTime; 
+  begin
+!   var D:TDateTime := new TDateTime(DateTime.Today);
+!   NUnit.Framework.Assert.AreEqual(d, ShineOn.RTL.System.Abs(-d));
+  end;
+  
+  method SystemTests.Exp; 
+  begin
+!   NUnit.Framework.Assert.AreEqual(ShineOn.RTL.System.Exp(1.0), Math.E);
+  end;
+  
+  method SystemTests.SetLength; 
+  begin
+!   var S:String := 'This is a string';
+!   ShineOn.RTL.System.SetLength(S, 4);
+!   NUnit.Framework.Assert.AreEqual(S, 'This');
+  end;
+  
+***************
+*** 351,354 ****
+--- 451,460 ----
+  begin
+    NUnit.Framework.Assert.IsTrue(false, 'Not implemented');
++ end;
++ 
++ method SystemTests.StringOfChar; 
++ begin
++   var S:String := ShineOn.RTL.System.StringOfChar('A', 2);
++   NUnit.Framework.Assert.AreEqual(S, 'AA');
+  end;
+  
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000038.html">[Shineon-checkins] ShineOn/ShineOn.RTL System.pas,1.14,1.15 Types.pas,1.12,1.13
+</A></li>
+	<LI>Next message: <A HREF="000040.html">[Shineon-checkins] ShineOn/ShineOn.RTL Types.pas,1.13,1.14
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#39">[ date ]</a>
+              <a href="thread.html#39">[ thread ]</a>
+              <a href="subject.html#39">[ subject ]</a>
+              <a href="author.html#39">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/shineon-checkins">More information about the Shineon-checkins
+mailing list</a><br>
+</body></html>
